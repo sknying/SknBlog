@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { useMemo, useState } from "react";
+import type { FormEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-data";
 
 type ViewMode = "grid" | "list";
@@ -11,6 +12,8 @@ type SortMode = "newest" | "oldest" | "category";
 type PostsIndexProps = {
   posts: Post[];
 };
+
+const CUSTOM_CATEGORY_KEY = "sknblog.customCategories";
 
 function getDateScore(date: string) {
   const [month, day] = date.split(".").map(Number);
@@ -21,8 +24,41 @@ export function PostsIndex({ posts }: PostsIndexProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [category, setCategory] = useState("全部");
   const [sortMode, setSortMode] = useState<SortMode>("newest");
+  const [customCategoryInput, setCustomCategoryInput] = useState("");
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
+  const [categoryMessage, setCategoryMessage] = useState("还没创建分类。");
+  const [hasLoadedCustomCategories, setHasLoadedCustomCategories] = useState(false);
 
-  const categories = useMemo(() => ["全部", ...Array.from(new Set(posts.map((post) => post.tag)))], [posts]);
+  useEffect(() => {
+    const stored = window.localStorage.getItem(CUSTOM_CATEGORY_KEY);
+
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+
+        if (Array.isArray(parsed)) {
+          setCustomCategories(parsed.filter((item): item is string => typeof item === "string"));
+        }
+      } catch {
+        setCategoryMessage("旧分类坏了。已忽略。");
+      }
+    }
+
+    setHasLoadedCustomCategories(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedCustomCategories) {
+      return;
+    }
+
+    window.localStorage.setItem(CUSTOM_CATEGORY_KEY, JSON.stringify(customCategories));
+  }, [customCategories, hasLoadedCustomCategories]);
+
+  const categories = useMemo(
+    () => ["全部", ...Array.from(new Set([...posts.map((post) => post.tag), ...customCategories]))],
+    [customCategories, posts]
+  );
 
   const visiblePosts = useMemo(() => {
     const filtered = category === "全部" ? posts : posts.filter((post) => post.tag === category);
@@ -39,6 +75,34 @@ export function PostsIndex({ posts }: PostsIndexProps) {
       return getDateScore(right.date) - getDateScore(left.date);
     });
   }, [category, posts, sortMode]);
+
+  function createCategory(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const nextCategory = customCategoryInput.trim().replace(/\s+/g, " ");
+
+    if (!nextCategory) {
+      setCategoryMessage("先写个名字。");
+      return;
+    }
+
+    if (nextCategory.length > 12) {
+      setCategoryMessage("名字太长了。");
+      return;
+    }
+
+    if (categories.includes(nextCategory)) {
+      setCategory(nextCategory);
+      setCategoryMessage("已有这个分类。");
+      setCustomCategoryInput("");
+      return;
+    }
+
+    setCustomCategories((current) => [...current, nextCategory]);
+    setCategory(nextCategory);
+    setCategoryMessage(`已创建 ${nextCategory}。`);
+    setCustomCategoryInput("");
+  }
 
   return (
     <main className="archive-shell">
@@ -107,27 +171,53 @@ export function PostsIndex({ posts }: PostsIndexProps) {
               </button>
             ))}
           </div>
+          <form className="category-create" onSubmit={createCategory}>
+            <label htmlFor="category-name">创建分类</label>
+            <div>
+              <input
+                id="category-name"
+                type="text"
+                maxLength={12}
+                value={customCategoryInput}
+                onChange={(event) => setCustomCategoryInput(event.target.value)}
+                placeholder="比如：Rust"
+              />
+              <button type="submit">
+                <Icon icon="solar:add-circle-linear" aria-hidden="true" />
+                创建
+              </button>
+            </div>
+            <p role="status">{categoryMessage}</p>
+          </form>
         </div>
       </section>
 
       <section className={`archive-posts ${viewMode}`} aria-live="polite">
-        {visiblePosts.map((post) => (
-          <article className="archive-card" key={post.slug}>
-            <div className="archive-card-mark" aria-hidden="true">
-              <Icon icon="solar:document-text-linear" />
-            </div>
-            <div className="archive-card-main">
-              <span>
-                {post.tag} / {post.date} / {post.read}
-              </span>
-              <h2>{post.title}</h2>
-              <p>{post.summary}</p>
-            </div>
-            <Link href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
-              <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-            </Link>
-          </article>
-        ))}
+        {visiblePosts.length > 0 ? (
+          visiblePosts.map((post) => (
+            <article className="archive-card" key={post.slug}>
+              <div className="archive-card-mark" aria-hidden="true">
+                <Icon icon="solar:document-text-linear" />
+              </div>
+              <div className="archive-card-main">
+                <span>
+                  {post.tag} / {post.date} / {post.read}
+                </span>
+                <h2>{post.title}</h2>
+                <p>{post.summary}</p>
+              </div>
+              <Link href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
+                <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
+              </Link>
+            </article>
+          ))
+        ) : (
+          <div className="archive-empty">
+            <Icon icon="solar:folder-open-linear" aria-hidden="true" />
+            <h2>这个分类还空着。</h2>
+            <p>先记着。以后再塞文章。</p>
+          </div>
+        )}
       </section>
     </main>
   );
