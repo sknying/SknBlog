@@ -1,0 +1,280 @@
+:focus-visible {
+  outline: 3px solid rgba(67, 211, 176, 0.72);
+  outline-offset: 3px;
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translate3d(0, 18px, 0);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes surface-arrive {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+@keyframes meteor {
+  from {
+    transform: translate3d(0, 0, 0) rotate(-24deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(420px, 860px, 0) rotate(-24deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .site-shell {
+    padding-inline: 14px;
+  }
+
+  .topbar {
+    grid-template-columns: 1fr auto;
+  }
+
+  .topbar nav {
+    grid-column: 1 / -1;
+    order: 3;
+    overflow-x: auto;
+  }
+
+  .hero,
+  .section-head,
+  .post-board,
+  .lab-strip,
+  .about-band,
+  .article-hero,
+  .article-layout,
+  .archive-hero,
+  .archive-controls,
+  .archive-posts.grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy {
+    padding-bottom: 0;
+  }
+
+  .hero-panel {
+    transform: none;
+  }
+
+  .hero-image {
+    min-height: 360px;
+  }
+
+  .status-strip {
+    right: 12px;
+  }
+
+  .filter-row {
+    justify-content: flex-start;
+  }
+
+  .post-card,
+  .post-card.featured {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .post-media,
+  .post-card.featured .post-media {
+    min-height: 230px;
+  }
+
+  .lab-list article:first-child {
+    transform: none;
+  }
+
+  .lab-list article:last-child {
+    width: 100%;
+  }
+
+  .article-title-block {
+    padding-bottom: 0;
+  }
+
+  .article-cover {
+    min-height: 340px;
+  }
+
+  .article-sidebar {
+    position: sticky;
+    top: 12px;
+    z-index: 10;
+    max-height: min(70dvh, 520px);
+  }
+
+  .article-rail {
+    display: none;
+  }
+
+  .article-pager {
+    grid-template-columns: 1fr;
+  }
+
+  .article-pager a:last-child {
+    text-align: left;
+  }
+
+  .archive-hero p {
+    max-width: 620px;
+  }
+
+  .archive-layout-control,
+  .archive-sort-control,
+  .archive-tag-control {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .archive-search-control {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .archive-control-group:not(.archive-search-control) .archive-control-panel {
+    width: min(100%, calc(100vw - 28px));
+  }
+
+  .archive-posts.grid .archive-card:first-child {
+    min-height: 184px;
+  }
+
+  .archive-posts.grid .archive-card:nth-child(3n),
+  .archive-posts.grid .archive-card:nth-child(3n):hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .write-link {
+    width: 44px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  h1 {
+    font-size: 42px;
+  }
+
+  .hero-actions,
+  .primary-action,
+  .ghost-action {
+    width: 100%;
+  }
+
+  .status-strip,
+  .lab-list,
+  .subscribe div,
+  .article-pager {
+    grid-template-columns: 1fr;
+  }
+
+  .status-strip {
+    position: static;
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .cursor-trail {
+    display: none;
+  }
+
+  .article-shell {
+    padding-inline: 14px;
+  }
+
+  .article-topbar {
+    align-items: stretch;
+  }
+
+  .article-back {
+    width: 44px;
+    padding: 0;
+    font-size: 0;
+  }
+
+  .article-title-block h1 {
+    font-size: 42px;
+  }
+
+  .article-cover {
+    min-height: 260px;
+  }
+
+  .article-mini-map a {
+    min-width: 40px;
+  }
+
+  .archive-shell {
+    padding-inline: 14px;
+  }
+
+  .archive-hero h1 {
+    font-size: 42px;
+  }
+
+  .archive-card {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-search-form {
+    grid-template-columns: 1fr;
+  }
+
+  .archive-card-mark {
+    width: 44px;
+    height: 44px;
+  }
+
+  .archive-card > a {
+    width: 100%;
+  }
+
+  .section-actions {
+    justify-items: start;
+  }
+
+  .filter-row {
+    justify-content: flex-start;
+  }
+
+  .tag-create div {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .cursor-trail,
+  .meteor-field {
+    display: none;
+  }
+}
