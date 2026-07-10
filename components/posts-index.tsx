@@ -24,7 +24,7 @@ function getDateScore(date: string) {
 
 export function PostsIndex({ posts }: PostsIndexProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [selectedTag, setSelectedTag] = useState(ALL_TAG);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [customTagInput, setCustomTagInput] = useState("");
   const [customTags, setCustomTags] = useState<string[]>([]);
@@ -62,7 +62,7 @@ export function PostsIndex({ posts }: PostsIndexProps) {
   const tags = useMemo(() => [ALL_TAG, ...Array.from(new Set([...postTags, ...customTags]))], [customTags, postTags]);
 
   const visiblePosts = useMemo(() => {
-    const filtered = selectedTag === ALL_TAG ? posts : posts.filter((post) => post.tags.includes(selectedTag));
+    const filtered = selectedTags.length === 0 ? posts : posts.filter((post) => post.tags.some((tag) => selectedTags.includes(tag)));
 
     return [...filtered].sort((left, right) => {
       if (sortMode === "oldest") {
@@ -75,7 +75,16 @@ export function PostsIndex({ posts }: PostsIndexProps) {
 
       return getDateScore(right.date) - getDateScore(left.date);
     });
-  }, [posts, selectedTag, sortMode]);
+  }, [posts, selectedTags, sortMode]);
+
+  function toggleTag(tag: string) {
+    if (tag === ALL_TAG) {
+      setSelectedTags([]);
+      return;
+    }
+
+    setSelectedTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
+  }
 
   function createTag(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -93,14 +102,14 @@ export function PostsIndex({ posts }: PostsIndexProps) {
     }
 
     if (tags.includes(nextTag)) {
-      setSelectedTag(nextTag);
+      setSelectedTags((current) => (current.includes(nextTag) ? current : [...current, nextTag]));
       setTagMessage("已有这个标签。");
       setCustomTagInput("");
       return;
     }
 
     setCustomTags((current) => [...current, nextTag]);
-    setSelectedTag(nextTag);
+    setSelectedTags((current) => [...current, nextTag]);
     setTagMessage(`已创建 ${nextTag}。`);
     setCustomTagInput("");
   }
@@ -111,7 +120,7 @@ export function PostsIndex({ posts }: PostsIndexProps) {
     }
 
     setCustomTags((current) => current.filter((item) => item !== tag));
-    setSelectedTag((current) => (current === tag ? ALL_TAG : current));
+    setSelectedTags((current) => current.filter((item) => item !== tag));
     setTagMessage(`已删除 ${tag}。`);
   }
 
@@ -174,14 +183,15 @@ export function PostsIndex({ posts }: PostsIndexProps) {
         </div>
 
         <div className="archive-control-group archive-tag-control">
-          <span>标签</span>
+          <span>标签{selectedTags.length > 0 ? ` / 已选 ${selectedTags.length}` : ""}</span>
           <div className="tag-chips" aria-label="文章标签">
             {tags.map((item) => {
               const isCustom = customTags.includes(item);
+              const isSelected = item === ALL_TAG ? selectedTags.length === 0 : selectedTags.includes(item);
 
               return (
-                <span className={selectedTag === item ? "tag-chip active" : "tag-chip"} key={item}>
-                  <button className="tag-chip-filter" type="button" onClick={() => setSelectedTag(item)}>
+                <span className={isSelected ? "tag-chip active" : "tag-chip"} key={item}>
+                  <button className="tag-chip-filter" type="button" onClick={() => toggleTag(item)} aria-pressed={isSelected}>
                     {item}
                   </button>
                   {isCustom ? (

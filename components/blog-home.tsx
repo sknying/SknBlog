@@ -83,12 +83,21 @@ function PostImage({ post, index }: { post: Post; index: number }) {
 }
 
 export function BlogHome() {
-  const [active, setActive] = useState(ALL_TAG);
+  const [activeTags, setActiveTags] = useState<string[]>([]);
   const [subscribed, setSubscribed] = useState(false);
   const visiblePosts = useMemo(
-    () => (active === ALL_TAG ? posts : posts.filter((post) => post.tags.includes(active))),
-    [active]
+    () => (activeTags.length === 0 ? posts : posts.filter((post) => post.tags.some((tag) => activeTags.includes(tag)))),
+    [activeTags]
   );
+
+  function toggleTag(tag: string) {
+    if (tag === ALL_TAG) {
+      setActiveTags([]);
+      return;
+    }
+
+    setActiveTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
+  }
 
   return (
     <main className="site-shell">
@@ -189,9 +198,10 @@ export function BlogHome() {
               {filters.map((filter) => (
                 <button
                   key={filter}
-                  className={active === filter ? "active" : ""}
+                  className={(filter === ALL_TAG ? activeTags.length === 0 : activeTags.includes(filter)) ? "active" : ""}
                   type="button"
-                  onClick={() => setActive(filter)}
+                  onClick={() => toggleTag(filter)}
+                  aria-pressed={filter === ALL_TAG ? activeTags.length === 0 : activeTags.includes(filter)}
                 >
                   {filter}
                 </button>
