@@ -3,11 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { useEffect, useMemo, useState } from "react";
-import { getPrimaryTag, getTagLabel, posts, type Post } from "@/lib/blog-data";
+import { useEffect, useState } from "react";
+import { getPostTimeLabel, getPrimaryTag, getTagLabel, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
-
-const ALL_TAG = "全部";
 
 const snippets = [
   { label: "已写", value: "42 篇" },
@@ -83,23 +81,8 @@ function PostImage({ post, index }: { post: Post; index: number }) {
 }
 
 export function BlogHome() {
-  const [activeTags, setActiveTags] = useState<string[]>([]);
   const [subscribed, setSubscribed] = useState(false);
-  const { posts: taggedPosts, tags } = usePostTagState(posts);
-  const filters = useMemo(() => [ALL_TAG, ...tags], [tags]);
-  const visiblePosts = useMemo(
-    () => (activeTags.length === 0 ? taggedPosts : taggedPosts.filter((post) => activeTags.every((tag) => post.tags.includes(tag)))),
-    [activeTags, taggedPosts]
-  );
-
-  function toggleTag(tag: string) {
-    if (tag === ALL_TAG) {
-      setActiveTags([]);
-      return;
-    }
-
-    setActiveTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
-  }
+  const { posts: visiblePosts } = usePostTagState(posts);
 
   return (
     <main className="site-shell">
@@ -196,19 +179,6 @@ export function BlogHome() {
         <div className="section-head">
           <h2 id="posts-title">这周先看这些。</h2>
           <div className="section-actions">
-            <div className="filter-row" aria-label="文章标签筛选">
-              {filters.map((filter) => (
-                <button
-                  key={filter}
-                  className={(filter === ALL_TAG ? activeTags.length === 0 : activeTags.includes(filter)) ? "active" : ""}
-                  type="button"
-                  onClick={() => toggleTag(filter)}
-                  aria-pressed={filter === ALL_TAG ? activeTags.length === 0 : activeTags.includes(filter)}
-                >
-                  {filter}
-                </button>
-              ))}
-            </div>
             <Link className="section-more" href="/posts">
               更多
               <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
@@ -224,9 +194,10 @@ export function BlogHome() {
               </div>
               <div className="post-body">
                 <span className="post-meta">
-                  {getTagLabel(post)} / {post.date} / {post.read}
+                  {getPostTimeLabel(post)}
                 </span>
                 <h3>{post.title}</h3>
+                <span className="post-tags">{getTagLabel(post)}</span>
                 <p>{post.summary}</p>
                 <Link href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
                   读这篇

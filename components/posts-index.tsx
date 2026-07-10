@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Icon } from "@iconify/react";
 import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
-import { getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
+import { getPostTimeLabel, getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
 type ViewMode = "grid" | "list";
@@ -225,10 +225,9 @@ export function PostsIndex({ posts }: PostsIndexProps) {
                 <Icon icon="solar:document-text-linear" />
               </div>
               <div className="archive-card-main">
-                <span>
-                  {getTagLabel(post)} / {post.date} / {post.read}
-                </span>
+                <span className="archive-card-time">{getPostTimeLabel(post)}</span>
                 <h2>{post.title}</h2>
+                <span className="archive-card-tags">{getTagLabel(post)}</span>
                 <p>{post.summary}</p>
               </div>
               <Link href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>

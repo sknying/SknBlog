@@ -23,6 +23,7 @@ export type Post = {
   slug: string;
   title: string;
   tags: string[];
+  publishedAt: string;
   date: string;
   read: string;
   summary: string;
@@ -37,6 +38,7 @@ export const posts: Post[] = [
     slug: "next-cache-notes",
     title: "Next 缓存别硬猜",
     tags: ["Next.js", "缓存", "排查"],
+    publishedAt: "2026-07-09T01:20:00+08:00",
     date: "07.09",
     read: "8 分钟",
     summary: "把路由缓存拆开看。少一点玄学。",
@@ -77,6 +79,7 @@ export const posts: Post[] = [
     slug: "markdown-rendering-notes",
     title: "Markdown 渲染小坑",
     tags: ["Markdown", "渲染", "文档"],
+    publishedAt: "2026-07-06T23:40:00+08:00",
     date: "07.06",
     read: "6 分钟",
     summary: "代码块、引用、标题锚点。都别糊。",
@@ -114,6 +117,7 @@ export const posts: Post[] = [
     slug: "glass-ui-readable",
     title: "玻璃 UI 不等于透明",
     tags: ["Design", "Glass UI", "可读性"],
+    publishedAt: "2026-06-28T21:15:00+08:00",
     date: "06.28",
     read: "5 分钟",
     summary: "先保证可读。再谈氛围。",
@@ -149,6 +153,7 @@ export const posts: Post[] = [
     slug: "admin-publish-flow",
     title: "管理员发文流程",
     tags: ["Admin", "发布", "Markdown"],
+    publishedAt: "2026-06-21T10:30:00+08:00",
     date: "06.21",
     read: "7 分钟",
     summary: "从本地 Markdown 到线上页面。",
@@ -193,4 +198,9 @@ export function getPrimaryTag(post: Pick<Post, "tags">) {
 
 export function getTagLabel(post: Pick<Post, "tags">) {
   return post.tags.length > 0 ? post.tags.join(" / ") : "未标记";
+}
+
+export function getPostTimeLabel(post: Pick<Post, "publishedAt" | "date">) {
+  const matched = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(post.publishedAt);
+  return matched ? `${matched[1]}/${matched[2]}/${matched[3]} ${matched[4]}:${matched[5]}` : post.date;
 }

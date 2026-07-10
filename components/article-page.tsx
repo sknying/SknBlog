@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useMemo, useState } from "react";
-import { getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
+import { getPostTimeLabel, getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
 type ArticlePageProps = {
@@ -68,9 +68,10 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
       <section className="article-hero">
         <div className="article-title-block">
           <span className="article-kicker">
-            {getTagLabel(article)} / {article.date} / {article.read}
+            {getPostTimeLabel(article)}
           </span>
           <h1>{article.title}</h1>
+          <span className="article-tags">{getTagLabel(article)}</span>
           <p>{article.intro}</p>
         </div>
         <aside className="article-cover">
