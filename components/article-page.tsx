@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { getPostTimeLabel, getPrimaryTag, type ArticleBlock, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
@@ -19,12 +19,149 @@ type OutlineItem = {
   level: 1 | 2;
 };
 
+const CODE_KEYWORDS = new Set([
+  "async",
+  "await",
+  "break",
+  "case",
+  "catch",
+  "class",
+  "const",
+  "default",
+  "else",
+  "export",
+  "extends",
+  "false",
+  "finally",
+  "for",
+  "from",
+  "function",
+  "if",
+  "import",
+  "in",
+  "interface",
+  "let",
+  "new",
+  "null",
+  "return",
+  "switch",
+  "true",
+  "try",
+  "type",
+  "undefined"
+]);
+
 function getBlockHeading(block: ArticleBlock) {
   if (block.type === "list" || block.type === "table") {
     return block.title;
   }
 
   return null;
+}
+
+function getCodeLanguage(title: string) {
+  const normalized = title.toLowerCase();
+
+  if (normalized.includes("frontmatter") || normalized.endsWith(".yml") || normalized.endsWith(".yaml")) {
+    return "yaml";
+  }
+
+  if (normalized.endsWith(".tsx")) {
+    return "tsx";
+  }
+
+  if (normalized.endsWith(".ts")) {
+    return "ts";
+  }
+
+  if (normalized.endsWith(".css")) {
+    return "css";
+  }
+
+  return "text";
+}
+
+function getLanguageLabel(language: string) {
+  if (language === "tsx") {
+    return "TSX";
+  }
+
+  if (language === "ts") {
+    return "TypeScript";
+  }
+
+  if (language === "css") {
+    return "CSS";
+  }
+
+  if (language === "yaml") {
+    return "YAML";
+  }
+
+  return "Text";
+}
+
+function getTokenClass(token: string, language: string) {
+  if (/^\/\/|^\/\*/.test(token)) {
+    return "comment";
+  }
+
+  if (/^["'`]/.test(token)) {
+    return "string";
+  }
+
+  if (/^\d/.test(token)) {
+    return "number";
+  }
+
+  if (language === "css" && /^[-a-zA-Z]+$/.test(token)) {
+    return "property";
+  }
+
+  if (CODE_KEYWORDS.has(token)) {
+    return "keyword";
+  }
+
+  if (/^[{}()[\].,;:=>-]+$/.test(token)) {
+    return "punctuation";
+  }
+
+  return null;
+}
+
+function highlightCodeLine(line: string, language: string, lineIndex: number) {
+  const matcher =
+    language === "css"
+      ? /(\/\*.*?\*\/|#[0-9a-fA-F]{3,8}\b|[-a-zA-Z]+(?=\s*:)|["'][^"']*["']|\b\d+(?:\.\d+)?(?:px|rem|em|%|vw|vh)?\b|[{}()[\].,;:=>-])/g
+      : /(\/\/.*|["'`][^"'`]*["'`]|\b\d+(?:\.\d+)?\b|\b[A-Za-z_$][\w$]*\b|[{}()[\].,;:=>-])/g;
+  const nodes = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = matcher.exec(line)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push(line.slice(lastIndex, match.index));
+    }
+
+    const token = match[0];
+    const tokenClass = getTokenClass(token, language);
+    nodes.push(
+      tokenClass ? (
+        <span className={`code-token ${tokenClass}`} key={`${lineIndex}-${match.index}`}>
+          {token}
+        </span>
+      ) : (
+        token
+      )
+    );
+    lastIndex = matcher.lastIndex;
+  }
+
+  if (lastIndex < line.length) {
+    nodes.push(line.slice(lastIndex));
+  }
+
+  return nodes.length > 0 ? nodes : "\u00A0";
 }
 
 function renderInlineText(text: string) {
@@ -102,6 +239,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
   const { posts } = usePostTagState(articleSource);
   const article = posts[0] ?? post;
   const [isOutlineOpen, setIsOutlineOpen] = useState(true);
+  const [activeOutlineId, setActiveOutlineId] = useState("article-title");
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
       { id: "article-title", label: article.title, level: 1 },
@@ -113,6 +251,34 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
     ],
     [article]
   );
+
+  useEffect(() => {
+    const elements = outlineItems.map((item) => document.getElementById(item.id)).filter((element): element is HTMLElement => Boolean(element));
+
+    if (elements.length === 0) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top)[0];
+
+        if (visibleEntry) {
+          setActiveOutlineId(visibleEntry.target.id);
+        }
+      },
+      {
+        rootMargin: "-24% 0px -62% 0px",
+        threshold: [0, 0.2, 0.6]
+      }
+    );
+
+    elements.forEach((element) => observer.observe(element));
+
+    return () => observer.disconnect();
+  }, [outlineItems]);
 
   return (
     <main className="article-shell">
@@ -172,7 +338,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
           {isOutlineOpen ? (
             <nav className="article-outline" id="article-outline-list">
               {outlineItems.map((item) => (
-                <a className={`level-${item.level}`} href={`#${item.id}`} key={item.id}>
+                <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} aria-current={activeOutlineId === item.id ? "location" : undefined}>
                   {item.label}
                 </a>
               ))}
@@ -207,8 +373,11 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
             }
 
             if (block.type === "code") {
+              const language = getCodeLanguage(block.title);
+              const codeLines = block.code.split("\n");
+
               return (
-                <figure className="article-code" id={id} key={id}>
+                <figure className={`article-code language-${language}`} id={id} key={id}>
                   <figcaption>
                     <span className="article-code-dots" aria-hidden="true">
                       <i />
@@ -217,9 +386,19 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
                     </span>
                     <Icon icon="solar:code-square-linear" aria-hidden="true" />
                     {block.title}
+                    <span className="article-code-language">{getLanguageLabel(language)}</span>
                   </figcaption>
                   <pre>
-                    <code>{block.code}</code>
+                    <code>
+                      {codeLines.map((line, lineIndex) => (
+                        <span className="code-line" key={`${id}-${lineIndex}`}>
+                          <span className="code-line-number" aria-hidden="true">
+                            {lineIndex + 1}
+                          </span>
+                          <span className="code-line-content">{highlightCodeLine(line, language, lineIndex)}</span>
+                        </span>
+                      ))}
+                    </code>
                   </pre>
                 </figure>
               );
