@@ -983,6 +983,7 @@ h1 {
   margin-top: 22px;
   font-size: clamp(46px, 8vw, 94px);
   line-height: 0.98;
+  scroll-margin-top: 120px;
 }
 
 .article-tags {
@@ -1078,23 +1079,104 @@ a.article-tag-pill:hover {
 
 .article-layout {
   display: grid;
-  grid-template-columns: minmax(220px, 0.34fr) minmax(0, 0.9fr);
-  gap: clamp(22px, 5vw, 70px);
-  width: min(1080px, 100%);
+  grid-template-columns: minmax(210px, 0.32fr) minmax(0, 0.88fr) minmax(140px, 0.22fr);
+  gap: clamp(18px, 4vw, 42px);
+  width: min(1280px, 100%);
   margin: clamp(54px, 8vw, 96px) auto 0;
   align-items: start;
 }
 
 .article-sidebar {
   position: sticky;
-  top: 110px;
+  top: 92px;
   display: grid;
-  gap: 12px;
+  gap: 14px;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 18px;
-  background: rgba(7, 19, 15, 0.68);
+  padding: 12px;
+  background:
+    radial-gradient(circle at 12% 0%, rgba(67, 211, 176, 0.12), transparent 10rem),
+    rgba(7, 19, 15, 0.72);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(18px);
+}
+
+.article-outline-toggle {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 1px solid rgba(225, 239, 223, 0.12);
+  border-radius: 8px;
+  padding: 0 12px;
+  color: var(--text);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.045);
+  transition: border-color 180ms ease, background 180ms ease;
+}
+
+.article-outline-toggle:hover {
+  border-color: rgba(67, 211, 176, 0.4);
+  background: rgba(67, 211, 176, 0.1);
+}
+
+.article-outline-toggle span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.article-outline-toggle > svg:last-child {
+  color: var(--muted);
+  transition: transform 180ms ease;
+}
+
+.article-outline-toggle[aria-expanded="true"] > svg:last-child {
+  transform: rotate(180deg);
+}
+
+.article-outline {
+  display: grid;
+  gap: 6px;
+}
+
+.article-outline a {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  border-left: 3px solid transparent;
+  border-radius: 7px;
+  padding: 0 10px;
+  color: var(--muted);
+  line-height: 1.35;
+  transition: color 180ms ease, border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.article-outline a:hover {
+  border-color: var(--accent-2);
+  color: var(--text);
+  background: rgba(67, 211, 176, 0.11);
+  transform: translateX(2px);
+}
+
+.article-outline .level-1 {
+  color: var(--text);
+  font-weight: 700;
+}
+
+.article-outline .level-2 {
+  margin-left: 12px;
+  font-size: 13px;
+}
+
+.article-sidebar-note {
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
 }
 
 .article-side-label {
@@ -1137,33 +1219,42 @@ a.article-tag-pill:hover {
 
 .article-content {
   display: grid;
-  gap: 26px;
+  gap: 28px;
+  border: 1px solid rgba(225, 239, 223, 0.15);
+  border-radius: 8px;
+  padding: clamp(22px, 4vw, 42px);
+  background:
+    radial-gradient(circle at 92% 4%, rgba(225, 154, 63, 0.11), transparent 14rem),
+    radial-gradient(circle at 6% 28%, rgba(67, 211, 176, 0.1), transparent 16rem),
+    rgba(7, 19, 15, 0.7);
+  box-shadow:
+    0 34px 92px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.045);
+  backdrop-filter: blur(16px);
 }
 
 .article-content > p,
 .article-list,
 .article-code,
 .article-content blockquote {
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(7, 19, 15, 0.58);
-  backdrop-filter: blur(14px);
+  scroll-margin-top: 120px;
 }
 
 .article-content > p {
-  padding: clamp(20px, 4vw, 30px);
   color: var(--muted);
   font-size: clamp(17px, 1.7vw, 20px);
   line-height: 1.9;
 }
 
 .article-list {
-  padding: clamp(20px, 4vw, 30px);
+  display: grid;
+  gap: 16px;
 }
 
 .article-list h2 {
-  margin-bottom: 18px;
+  margin: 0;
   font-size: clamp(26px, 4vw, 42px);
+  scroll-margin-top: 120px;
 }
 
 .article-list ul {
@@ -1195,6 +1286,12 @@ a.article-tag-pill:hover {
 
 .article-code {
   overflow: hidden;
+  border: 1px solid rgba(122, 162, 247, 0.22);
+  border-radius: 8px;
+  background: #24283b;
+  box-shadow:
+    0 22px 60px rgba(0, 0, 0, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .article-code figcaption {
@@ -1203,31 +1300,61 @@ a.article-tag-pill:hover {
   gap: 8px;
   min-height: 48px;
   padding: 0 16px;
-  border-bottom: 1px solid var(--line);
-  color: var(--accent-2);
-  background: rgba(255, 255, 255, 0.045);
+  border-bottom: 1px solid rgba(122, 162, 247, 0.18);
+  color: #7aa2f7;
+  background: #1f2335;
+}
+
+.article-code-dots {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-right: 6px;
+}
+
+.article-code-dots i {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #f7768e;
+}
+
+.article-code-dots i:nth-child(2) {
+  background: #e0af68;
+}
+
+.article-code-dots i:nth-child(3) {
+  background: #9ece6a;
 }
 
 .article-code pre {
   margin: 0;
   overflow-x: auto;
   padding: clamp(18px, 4vw, 28px);
-  color: var(--text);
+  color: #c0caf5;
+  background:
+    linear-gradient(90deg, rgba(122, 162, 247, 0.05), transparent 18rem),
+    #24283b;
   font-size: 15px;
   line-height: 1.8;
 }
 
+.article-code code {
+  font-family: var(--font-code);
+}
+
 .article-content blockquote {
+  position: relative;
   margin: 0;
-  padding: clamp(20px, 4vw, 32px);
-  border-color: rgba(225, 154, 63, 0.38);
+  border-left: 5px solid var(--accent);
+  padding: 4px 0 4px clamp(18px, 3vw, 28px);
 }
 
 .article-content blockquote p {
   color: var(--text);
-  font-family: var(--font-display), var(--font-body), sans-serif;
-  font-size: clamp(24px, 4vw, 40px);
-  line-height: 1.2;
+  font-size: clamp(19px, 2.2vw, 25px);
+  font-weight: 700;
+  line-height: 1.55;
 }
 
 .article-content cite {
@@ -1235,6 +1362,30 @@ a.article-tag-pill:hover {
   margin-top: 16px;
   color: var(--accent);
   font-style: normal;
+}
+
+.article-content a {
+  color: var(--accent-2);
+  text-decoration: underline;
+  text-decoration-color: rgba(67, 211, 176, 0.42);
+  text-underline-offset: 4px;
+}
+
+.article-content a:hover {
+  color: var(--accent);
+  text-decoration-color: rgba(225, 154, 63, 0.68);
+}
+
+.article-rail {
+  position: sticky;
+  top: 92px;
+  min-height: 320px;
+  border: 1px solid rgba(225, 239, 223, 0.08);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(225, 154, 63, 0.07), transparent 42%),
+    rgba(7, 19, 15, 0.28);
+  box-shadow: inset 1px 0 0 rgba(67, 211, 176, 0.08);
 }
 
 .article-pager {
@@ -1998,6 +2149,10 @@ a.article-tag-pill:hover {
 
   .article-sidebar {
     position: static;
+  }
+
+  .article-rail {
+    display: none;
   }
 
   .article-pager {

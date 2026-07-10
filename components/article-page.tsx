@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useMemo, useState } from "react";
-import { getPostTimeLabel, getPrimaryTag, type Post } from "@/lib/blog-data";
+import { getPostTimeLabel, getPrimaryTag, type ArticleBlock, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
 type ArticlePageProps = {
@@ -12,6 +12,20 @@ type ArticlePageProps = {
   previousPost?: Post;
   nextPost?: Post;
 };
+
+type OutlineItem = {
+  id: string;
+  label: string;
+  level: 1 | 2;
+};
+
+function getBlockHeading(block: ArticleBlock) {
+  if (block.type === "list") {
+    return block.title;
+  }
+
+  return null;
+}
 
 function ArticleHeroImage({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
@@ -44,6 +58,18 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
   const articleSource = useMemo(() => [post], [post]);
   const { posts } = usePostTagState(articleSource);
   const article = posts[0] ?? post;
+  const [isOutlineOpen, setIsOutlineOpen] = useState(true);
+  const outlineItems = useMemo<OutlineItem[]>(
+    () => [
+      { id: "article-title", label: article.title, level: 1 },
+      ...article.blocks.flatMap((block, index) => {
+        const heading = getBlockHeading(block);
+
+        return heading ? [{ id: `block-${index + 1}`, label: heading, level: 2 as const }] : [];
+      })
+    ],
+    [article]
+  );
 
   return (
     <main className="article-shell">
@@ -70,7 +96,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
           <span className="article-kicker">
             {getPostTimeLabel(article)}
           </span>
-          <h1>{article.title}</h1>
+          <h1 id="article-title">{article.title}</h1>
           <div className="article-tags" aria-label="文章标签">
             {article.tags.map((tag) => (
               <Link className="article-tag-pill" href={`/posts?tag=${encodeURIComponent(tag)}`} key={tag}>
@@ -86,16 +112,33 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
       </section>
 
       <section className="article-layout">
-        <aside className="article-sidebar" aria-label="文章信息">
-          <span className="article-side-label">当前状态</span>
-          <strong>{article.mood}</strong>
-          <p>{article.summary}</p>
-          <div className="article-mini-map">
-            {article.blocks.map((block, index) => (
-              <a key={`${block.type}-${index}`} href={`#block-${index + 1}`}>
-                0{index + 1}
-              </a>
-            ))}
+        <aside className="article-sidebar" aria-label="文章大纲">
+          <button
+            className="article-outline-toggle"
+            type="button"
+            onClick={() => setIsOutlineOpen((current) => !current)}
+            aria-expanded={isOutlineOpen}
+            aria-controls="article-outline-list"
+          >
+            <span>
+              <Icon icon="solar:list-check-linear" aria-hidden="true" />
+              文章大纲
+            </span>
+            <Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" />
+          </button>
+          {isOutlineOpen ? (
+            <nav className="article-outline" id="article-outline-list">
+              {outlineItems.map((item) => (
+                <a className={`level-${item.level}`} href={`#${item.id}`} key={item.id}>
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          ) : null}
+          <div className="article-sidebar-note">
+            <span className="article-side-label">当前状态</span>
+            <strong>{article.mood}</strong>
+            <p>{article.summary}</p>
           </div>
         </aside>
 
@@ -124,6 +167,11 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
               return (
                 <figure className="article-code" id={id} key={id}>
                   <figcaption>
+                    <span className="article-code-dots" aria-hidden="true">
+                      <i />
+                      <i />
+                      <i />
+                    </span>
                     <Icon icon="solar:code-square-linear" aria-hidden="true" />
                     {block.title}
                   </figcaption>
@@ -146,6 +194,8 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
             );
           })}
         </article>
+
+        <aside className="article-rail" aria-hidden="true" />
       </section>
 
       <nav className="article-pager" aria-label="文章导航">
