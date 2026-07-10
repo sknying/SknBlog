@@ -17,6 +17,23 @@ export type ArticleBlock =
       type: "list";
       title: string;
       items: string[];
+    }
+  | {
+      type: "image";
+      src: string;
+      alt: string;
+      caption?: string;
+    }
+  | {
+      type: "table";
+      title: string;
+      headers: string[];
+      rows: string[][];
+    }
+  | {
+      type: "math";
+      formula: string;
+      caption?: string;
     };
 
 export type Post = {
@@ -89,12 +106,34 @@ export const posts: Post[] = [
     blocks: [
       {
         type: "paragraph",
-        text: "一篇技术文档，最先被读到的不是观点。是标题、代码块和引用。它们乱了，读者就走了。"
+        text: "一篇技术文档，最先被读到的不是观点。是标题、`inline code`、代码块和引用。复杂度大概是 $O(n log n)$。可以跳到 [Next.js 文档](https://nextjs.org/docs) 查细节。"
       },
       {
         type: "list",
         title: "我会先处理这些",
         items: ["标题锚点要稳定。", "代码块要有语言名。", "引用别像普通段落。", "长表格别硬塞。"]
+      },
+      {
+        type: "image",
+        src: "https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg",
+        alt: "桌面上的代码编辑器与笔记",
+        caption: "嵌入图片要先留空间。别让正文跳。"
+      },
+      {
+        type: "table",
+        title: "渲染检查表",
+        headers: ["元素", "风险", "处理"],
+        rows: [
+          ["超链接", "颜色太跳", "用主题青绿"],
+          ["图片", "高度乱跳", "固定比例"],
+          ["表格", "移动端溢出", "横向滚动"],
+          ["公式", "像乱码", "单独成块"]
+        ]
+      },
+      {
+        type: "math",
+        formula: "\\sum_{i=1}^{n} i = n(n + 1) / 2",
+        caption: "数学公式先保证可读。之后再接 KaTeX。"
       },
       {
         type: "code",

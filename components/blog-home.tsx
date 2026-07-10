@@ -3,15 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
-
-const snippets = [
-  { label: "已写", value: "42 篇" },
-  { label: "草稿", value: "9 份" },
-  { label: "最长", value: "18 分钟" }
-];
 
 function MeteorCursor() {
   const [points, setPoints] = useState<Array<{ id: number; x: number; y: number }>>([]);
@@ -82,7 +76,14 @@ function PostImage({ post, index }: { post: Post; index: number }) {
 
 export function BlogHome() {
   const [subscribed, setSubscribed] = useState(false);
-  const { posts: visiblePosts } = usePostTagState(posts);
+  const { posts: visiblePosts, tags } = usePostTagState(posts);
+  const stats = useMemo(
+    () => [
+      { label: "文章", value: `${visiblePosts.length} 篇` },
+      { label: "标签", value: `${tags.length} 个` }
+    ],
+    [tags.length, visiblePosts.length]
+  );
 
   return (
     <main className="site-shell">
@@ -155,13 +156,10 @@ export function BlogHome() {
 };`}</code>
                 </pre>
               </div>
-              <div className="editor-orbit">
-                <Icon icon="solar:star-fall-bold-duotone" aria-hidden="true" />
-              </div>
             </div>
           </div>
           <div className="status-strip">
-            {snippets.map((item) => (
+            {stats.map((item) => (
               <span key={item.label}>
                 <b>{item.value}</b>
                 {item.label}

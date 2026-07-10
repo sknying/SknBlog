@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { getPostTimeLabel, getPrimaryTag, type ArticleBlock, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
@@ -20,11 +20,54 @@ type OutlineItem = {
 };
 
 function getBlockHeading(block: ArticleBlock) {
-  if (block.type === "list") {
+  if (block.type === "list" || block.type === "table") {
     return block.title;
   }
 
   return null;
+}
+
+function renderInlineText(text: string) {
+  const parts = [];
+  const pattern = /(`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)|\$([^$\n]+)\$)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+
+    if (match[2]) {
+      parts.push(
+        <code className="article-inline-code" key={`code-${match.index}`}>
+          {match[2]}
+        </code>
+      );
+    } else if (match[3] && match[4]) {
+      const isExternal = /^https?:\/\//.test(match[4]);
+
+      parts.push(
+        <a href={match[4]} key={`link-${match.index}`} rel={isExternal ? "noreferrer" : undefined} target={isExternal ? "_blank" : undefined}>
+          {match[3]}
+        </a>
+      );
+    } else if (match[5]) {
+      parts.push(
+        <span className="article-inline-math" key={`math-${match.index}`}>
+          {match[5]}
+        </span>
+      );
+    }
+
+    lastIndex = pattern.lastIndex;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.map((part, index) => (typeof part === "string" ? <Fragment key={`text-${index}`}>{part}</Fragment> : part));
 }
 
 function ArticleHeroImage({ post }: { post: Post }) {
@@ -149,7 +192,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
             if (block.type === "paragraph") {
               return (
                 <p id={id} key={id}>
-                  {block.text}
+                  {renderInlineText(block.text)}
                 </p>
               );
             }
@@ -178,6 +221,54 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
                   <pre>
                     <code>{block.code}</code>
                   </pre>
+                </figure>
+              );
+            }
+
+            if (block.type === "image") {
+              return (
+                <figure className="article-image-block" id={id} key={id}>
+                  <div className="article-image-frame">
+                    <Image src={block.src} alt={block.alt} fill sizes="(max-width: 900px) 92vw, 760px" unoptimized />
+                  </div>
+                  {block.caption ? <figcaption>{block.caption}</figcaption> : null}
+                </figure>
+              );
+            }
+
+            if (block.type === "table") {
+              return (
+                <section className="article-table-block" id={id} key={id}>
+                  <h2>{block.title}</h2>
+                  <div className="article-table-scroll">
+                    <table>
+                      <thead>
+                        <tr>
+                          {block.headers.map((header) => (
+                            <th key={header}>{header}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {block.rows.map((row, rowIndex) => (
+                          <tr key={`row-${rowIndex}`}>
+                            {row.map((cell, cellIndex) => (
+                              <td key={`${rowIndex}-${cellIndex}`}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              );
+            }
+
+            if (block.type === "math") {
+              return (
+                <figure className="article-math-block" id={id} key={id}>
+                  <div className="article-math-formula">{block.formula}</div>
+                  {block.caption ? <figcaption>{block.caption}</figcaption> : null}
                 </figure>
               );
             }
