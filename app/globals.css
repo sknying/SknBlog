@@ -1287,21 +1287,23 @@ h1 {
 
 .archive-controls {
   display: grid;
-  grid-template-columns: minmax(220px, 0.55fr) minmax(280px, 0.7fr);
-  gap: 14px;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 10px;
   width: min(1180px, 100%);
-  margin: clamp(36px, 7vw, 72px) auto 0;
+  margin: clamp(28px, 5vw, 52px) auto 0;
 }
 
 .archive-control-group {
   display: grid;
-  gap: 10px;
   align-content: start;
   border: 1px solid var(--line);
   border-radius: 8px;
-  padding: 14px;
   background: rgba(7, 19, 15, 0.62);
   backdrop-filter: blur(18px);
+}
+
+.archive-control-group.expanded {
+  background: rgba(7, 19, 15, 0.74);
 }
 
 .archive-control-group > span {
@@ -1309,8 +1311,116 @@ h1 {
   font-size: 13px;
 }
 
-.archive-tag-control {
+.archive-search-control.expanded,
+.archive-tag-control.expanded {
   grid-column: 1 / -1;
+}
+
+.archive-control-toggle {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 10px;
+  width: 100%;
+  min-height: 58px;
+  align-items: center;
+  border: 0;
+  padding: 10px 12px;
+  color: var(--text);
+  cursor: pointer;
+  text-align: left;
+  background: transparent;
+}
+
+.archive-control-toggle > span {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.archive-control-toggle small {
+  overflow: hidden;
+  max-width: 180px;
+  color: var(--muted);
+  font-size: 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.archive-control-toggle > svg:last-child {
+  color: var(--muted);
+  transition: transform 180ms ease;
+}
+
+.archive-control-toggle[aria-expanded="true"] > svg:last-child {
+  transform: rotate(180deg);
+}
+
+.archive-control-panel {
+  display: grid;
+  gap: 10px;
+  padding: 0 12px 12px;
+}
+
+.archive-control-panel label {
+  color: var(--accent);
+  font-size: 13px;
+}
+
+.archive-control-panel > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.archive-search-box {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.archive-search-box input {
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  color: var(--text);
+  outline: 0;
+  background: transparent;
+}
+
+.archive-search-box input::placeholder {
+  color: var(--soft);
+}
+
+.archive-search-box button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: var(--muted);
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.05);
+  transition: opacity 180ms ease, color 180ms ease, background 180ms ease;
+}
+
+.archive-search-box button:hover:not(:disabled) {
+  color: var(--text);
+  background: rgba(67, 211, 176, 0.14);
+}
+
+.archive-search-box button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
 }
 
 .segmented-control,
