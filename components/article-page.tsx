@@ -3,8 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
+import { usePostTagState } from "@/lib/tag-state";
 
 type ArticlePageProps = {
   post: Post;
@@ -40,6 +41,10 @@ function ArticleHeroImage({ post }: { post: Post }) {
 }
 
 export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) {
+  const articleSource = useMemo(() => [post], [post]);
+  const { posts } = usePostTagState(articleSource);
+  const article = posts[0] ?? post;
+
   return (
     <main className="article-shell">
       <div className="noise" aria-hidden="true" />
@@ -63,23 +68,23 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
       <section className="article-hero">
         <div className="article-title-block">
           <span className="article-kicker">
-            {getTagLabel(post)} / {post.date} / {post.read}
+            {getTagLabel(article)} / {article.date} / {article.read}
           </span>
-          <h1>{post.title}</h1>
-          <p>{post.intro}</p>
+          <h1>{article.title}</h1>
+          <p>{article.intro}</p>
         </div>
         <aside className="article-cover">
-          <ArticleHeroImage post={post} />
+          <ArticleHeroImage post={article} />
         </aside>
       </section>
 
       <section className="article-layout">
         <aside className="article-sidebar" aria-label="文章信息">
           <span className="article-side-label">当前状态</span>
-          <strong>{post.mood}</strong>
-          <p>{post.summary}</p>
+          <strong>{article.mood}</strong>
+          <p>{article.summary}</p>
           <div className="article-mini-map">
-            {post.blocks.map((block, index) => (
+            {article.blocks.map((block, index) => (
               <a key={`${block.type}-${index}`} href={`#block-${index + 1}`}>
                 0{index + 1}
               </a>
@@ -88,7 +93,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
         </aside>
 
         <article className="article-content">
-          {post.blocks.map((block, index) => {
+          {article.blocks.map((block, index) => {
             const id = `block-${index + 1}`;
 
             if (block.type === "paragraph") {

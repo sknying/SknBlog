@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import type { FormEvent } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
+import { usePostTagState } from "@/lib/tag-state";
 
 type ViewMode = "grid" | "list";
 type SortMode = "newest" | "oldest" | "tag";
@@ -14,8 +15,6 @@ type PostsIndexProps = {
 };
 
 const ALL_TAG = "全部";
-const CUSTOM_TAG_KEY = "sknblog.customTags";
-const LEGACY_CUSTOM_CATEGORY_KEY = "sknblog.customCategories";
 
 function getDateScore(date: string) {
   const [month, day] = date.split(".").map(Number);
@@ -27,47 +26,15 @@ export function PostsIndex({ posts }: PostsIndexProps) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [customTagInput, setCustomTagInput] = useState("");
-  const [customTags, setCustomTags] = useState<string[]>([]);
   const [tagMessage, setTagMessage] = useState("还没创建标签。");
-  const [hasLoadedCustomTags, setHasLoadedCustomTags] = useState(false);
+  const { addTag, deleteTags, posts: taggedPosts, tags: editableTags } = usePostTagState(posts);
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(CUSTOM_TAG_KEY) ?? window.localStorage.getItem(LEGACY_CUSTOM_CATEGORY_KEY);
+  const tags = useMemo(() => [ALL_TAG, ...editableTags], [editableTags]);
 
-    if (stored) {
-      try {
-        const parsed = JSON.parse(stored);
-
-        if (Array.isArray(parsed)) {
-          setCustomTags(parsed.filter((item): item is string => typeof item === "string"));
-        }
-      } catch {
-        setTagMessage("旧标签坏了。已忽略。");
-      }
-    }
-
-    setHasLoadedCustomTags(true);
-  }, []);
-
-  useEffect(() => {
-    if (!hasLoadedCustomTags) {
-      return;
-    }
-
-    window.localStorage.setItem(CUSTOM_TAG_KEY, JSON.stringify(customTags));
-  }, [customTags, hasLoadedCustomTags]);
-
-  const postTags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))), [posts]);
-
-  const tags = useMemo(() => [ALL_TAG, ...Array.from(new Set([...postTags, ...customTags]))], [customTags, postTags]);
-
-  const selectedCustomTags = useMemo(
-    () => selectedTags.filter((tag) => customTags.includes(tag)),
-    [customTags, selectedTags]
-  );
+  const selectedEditableTags = useMemo(() => selectedTags.filter((tag) => editableTags.includes(tag)), [editableTags, selectedTags]);
 
   const visiblePosts = useMemo(() => {
-    const filtered = selectedTags.length === 0 ? posts : posts.filter((post) => selectedTags.every((tag) => post.tags.includes(tag)));
+    const filtered = selectedTags.length === 0 ? taggedPosts : taggedPosts.filter((post) => selectedTags.every((tag) => post.tags.includes(tag)));
 
     return [...filtered].sort((left, right) => {
       if (sortMode === "oldest") {
@@ -80,7 +47,7 @@ export function PostsIndex({ posts }: PostsIndexProps) {
 
       return getDateScore(right.date) - getDateScore(left.date);
     });
-  }, [posts, selectedTags, sortMode]);
+  }, [selectedTags, sortMode, taggedPosts]);
 
   function toggleTag(tag: string) {
     if (tag === ALL_TAG) {
@@ -113,35 +80,35 @@ export function PostsIndex({ posts }: PostsIndexProps) {
       return;
     }
 
-    setCustomTags((current) => [...current, nextTag]);
+    addTag(nextTag);
     setSelectedTags((current) => [...current, nextTag]);
     setTagMessage(`已创建 ${nextTag}。`);
     setCustomTagInput("");
   }
 
-  function deleteCustomTag(tag: string) {
-    if (!window.confirm(`删除标签 ${tag}？`)) {
+  function deleteTag(tag: string) {
+    if (!window.confirm(`删除标签 ${tag}？会从文章里移除。`)) {
       return;
     }
 
-    setCustomTags((current) => current.filter((item) => item !== tag));
+    deleteTags([tag]);
     setSelectedTags((current) => current.filter((item) => item !== tag));
     setTagMessage(`已删除 ${tag}。`);
   }
 
-  function deleteSelectedCustomTags() {
-    if (selectedCustomTags.length === 0) {
-      setTagMessage("先选自定义标签。");
+  function deleteSelectedTags() {
+    if (selectedEditableTags.length === 0) {
+      setTagMessage("先选标签。");
       return;
     }
 
-    if (!window.confirm(`删除 ${selectedCustomTags.length} 个自定义标签？`)) {
+    if (!window.confirm(`删除 ${selectedEditableTags.length} 个标签？会从文章里移除。`)) {
       return;
     }
 
-    setCustomTags((current) => current.filter((tag) => !selectedCustomTags.includes(tag)));
-    setSelectedTags((current) => current.filter((tag) => !selectedCustomTags.includes(tag)));
-    setTagMessage(`已删除 ${selectedCustomTags.length} 个标签。`);
+    deleteTags(selectedEditableTags);
+    setSelectedTags((current) => current.filter((tag) => !selectedEditableTags.includes(tag)));
+    setTagMessage(`已删除 ${selectedEditableTags.length} 个标签。`);
   }
 
   return (
@@ -206,7 +173,6 @@ export function PostsIndex({ posts }: PostsIndexProps) {
           <span>标签{selectedTags.length > 0 ? ` / 已选 ${selectedTags.length}` : ""}</span>
           <div className="tag-chips" aria-label="文章标签">
             {tags.map((item) => {
-              const isCustom = customTags.includes(item);
               const isSelected = item === ALL_TAG ? selectedTags.length === 0 : selectedTags.includes(item);
 
               return (
@@ -214,8 +180,8 @@ export function PostsIndex({ posts }: PostsIndexProps) {
                   <button className="tag-chip-filter" type="button" onClick={() => toggleTag(item)} aria-pressed={isSelected}>
                     {item}
                   </button>
-                  {isCustom ? (
-                    <button className="tag-chip-delete" type="button" onClick={() => deleteCustomTag(item)} aria-label={`删除标签 ${item}`}>
+                  {item !== ALL_TAG ? (
+                    <button className="tag-chip-delete" type="button" onClick={() => deleteTag(item)} aria-label={`删除标签 ${item}`}>
                       <Icon icon="solar:trash-bin-minimalistic-linear" aria-hidden="true" />
                     </button>
                   ) : null}
@@ -224,10 +190,10 @@ export function PostsIndex({ posts }: PostsIndexProps) {
             })}
           </div>
           <div className="tag-bulk-actions">
-            <span>自定义已选 {selectedCustomTags.length}</span>
-            <button type="button" onClick={deleteSelectedCustomTags} disabled={selectedCustomTags.length === 0}>
+            <span>已选标签 {selectedEditableTags.length}</span>
+            <button type="button" onClick={deleteSelectedTags} disabled={selectedEditableTags.length === 0}>
               <Icon icon="solar:trash-bin-trash-linear" aria-hidden="true" />
-              批量删除
+              删除已选
             </button>
           </div>
           <form className="tag-create" onSubmit={createTag}>

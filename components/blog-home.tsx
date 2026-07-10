@@ -5,9 +5,9 @@ import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useEffect, useMemo, useState } from "react";
 import { getPrimaryTag, getTagLabel, posts, type Post } from "@/lib/blog-data";
+import { usePostTagState } from "@/lib/tag-state";
 
 const ALL_TAG = "全部";
-const filters = [ALL_TAG, ...Array.from(new Set(posts.flatMap((post) => post.tags)))];
 
 const snippets = [
   { label: "已写", value: "42 篇" },
@@ -85,9 +85,11 @@ function PostImage({ post, index }: { post: Post; index: number }) {
 export function BlogHome() {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [subscribed, setSubscribed] = useState(false);
+  const { posts: taggedPosts, tags } = usePostTagState(posts);
+  const filters = useMemo(() => [ALL_TAG, ...tags], [tags]);
   const visiblePosts = useMemo(
-    () => (activeTags.length === 0 ? posts : posts.filter((post) => activeTags.every((tag) => post.tags.includes(tag)))),
-    [activeTags]
+    () => (activeTags.length === 0 ? taggedPosts : taggedPosts.filter((post) => activeTags.every((tag) => post.tags.includes(tag)))),
+    [activeTags, taggedPosts]
   );
 
   function toggleTag(tag: string) {
