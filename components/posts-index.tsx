@@ -61,6 +61,11 @@ export function PostsIndex({ posts }: PostsIndexProps) {
 
   const tags = useMemo(() => [ALL_TAG, ...Array.from(new Set([...postTags, ...customTags]))], [customTags, postTags]);
 
+  const selectedCustomTags = useMemo(
+    () => selectedTags.filter((tag) => customTags.includes(tag)),
+    [customTags, selectedTags]
+  );
+
   const visiblePosts = useMemo(() => {
     const filtered = selectedTags.length === 0 ? posts : posts.filter((post) => post.tags.some((tag) => selectedTags.includes(tag)));
 
@@ -122,6 +127,21 @@ export function PostsIndex({ posts }: PostsIndexProps) {
     setCustomTags((current) => current.filter((item) => item !== tag));
     setSelectedTags((current) => current.filter((item) => item !== tag));
     setTagMessage(`已删除 ${tag}。`);
+  }
+
+  function deleteSelectedCustomTags() {
+    if (selectedCustomTags.length === 0) {
+      setTagMessage("先选自定义标签。");
+      return;
+    }
+
+    if (!window.confirm(`删除 ${selectedCustomTags.length} 个自定义标签？`)) {
+      return;
+    }
+
+    setCustomTags((current) => current.filter((tag) => !selectedCustomTags.includes(tag)));
+    setSelectedTags((current) => current.filter((tag) => !selectedCustomTags.includes(tag)));
+    setTagMessage(`已删除 ${selectedCustomTags.length} 个标签。`);
   }
 
   return (
@@ -202,6 +222,13 @@ export function PostsIndex({ posts }: PostsIndexProps) {
                 </span>
               );
             })}
+          </div>
+          <div className="tag-bulk-actions">
+            <span>自定义已选 {selectedCustomTags.length}</span>
+            <button type="button" onClick={deleteSelectedCustomTags} disabled={selectedCustomTags.length === 0}>
+              <Icon icon="solar:trash-bin-trash-linear" aria-hidden="true" />
+              批量删除
+            </button>
           </div>
           <form className="tag-create" onSubmit={createTag}>
             <label htmlFor="tag-name">创建标签</label>

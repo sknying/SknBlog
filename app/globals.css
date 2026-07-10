@@ -1376,6 +1376,49 @@ h1 {
   background: rgba(215, 80, 65, 0.18);
 }
 
+.tag-bulk-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.tag-bulk-actions span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.tag-bulk-actions button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid rgba(235, 106, 95, 0.34);
+  border-radius: 8px;
+  padding: 0 14px;
+  color: #ffd5c8;
+  cursor: pointer;
+  background: rgba(235, 106, 95, 0.12);
+  transition: opacity 180ms ease, background 180ms ease, border-color 180ms ease, transform 180ms ease;
+}
+
+.tag-bulk-actions button:hover:not(:disabled) {
+  border-color: rgba(235, 106, 95, 0.62);
+  background: rgba(235, 106, 95, 0.2);
+  transform: translateY(-1px);
+}
+
+.tag-bulk-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
 .tag-create {
   display: grid;
   gap: 10px;
