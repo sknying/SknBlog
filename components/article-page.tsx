@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useState } from "react";
-import type { Post } from "@/lib/blog-data";
+import { getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
 
 type ArticlePageProps = {
   post: Post;
@@ -16,10 +16,12 @@ function ArticleHeroImage({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
 
   if (failed) {
+    const primaryTag = getPrimaryTag(post);
+
     return (
-      <div className="article-hero-fallback" role="img" aria-label={`${post.tag} 文章封面`}>
+      <div className="article-hero-fallback" role="img" aria-label={`${primaryTag} 文章封面`}>
         <Icon icon="solar:document-text-linear" aria-hidden="true" />
-        <span>{post.tag}</span>
+        <span>{primaryTag}</span>
       </div>
     );
   }
@@ -61,7 +63,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
       <section className="article-hero">
         <div className="article-title-block">
           <span className="article-kicker">
-            {post.tag} / {post.date} / {post.read}
+            {getTagLabel(post)} / {post.date} / {post.read}
           </span>
           <h1>{post.title}</h1>
           <p>{post.intro}</p>

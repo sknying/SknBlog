@@ -4,9 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useEffect, useMemo, useState } from "react";
-import { posts, type Post } from "@/lib/blog-data";
+import { getPrimaryTag, getTagLabel, posts, type Post } from "@/lib/blog-data";
 
-const filters = ["全部", "Next.js", "Markdown", "Design", "Admin"];
+const ALL_TAG = "全部";
+const filters = [ALL_TAG, ...Array.from(new Set(posts.flatMap((post) => post.tags)))];
 
 const snippets = [
   { label: "已写", value: "42 篇" },
@@ -58,10 +59,12 @@ function PostImage({ post, index }: { post: Post; index: number }) {
   const sizes = index === 0 ? "(max-width: 900px) 92vw, 44vw" : "(max-width: 900px) 92vw, 24vw";
 
   if (failed) {
+    const primaryTag = getPrimaryTag(post);
+
     return (
-      <div className="post-image-fallback" role="img" aria-label={`${post.tag} fallback visual`}>
+      <div className="post-image-fallback" role="img" aria-label={`${primaryTag} fallback visual`}>
         <Icon icon="solar:gallery-wide-linear" aria-hidden="true" />
-        <span>{post.tag}</span>
+        <span>{primaryTag}</span>
       </div>
     );
   }
@@ -80,10 +83,10 @@ function PostImage({ post, index }: { post: Post; index: number }) {
 }
 
 export function BlogHome() {
-  const [active, setActive] = useState("全部");
+  const [active, setActive] = useState(ALL_TAG);
   const [subscribed, setSubscribed] = useState(false);
   const visiblePosts = useMemo(
-    () => (active === "全部" ? posts : posts.filter((post) => post.tag === active)),
+    () => (active === ALL_TAG ? posts : posts.filter((post) => post.tags.includes(active))),
     [active]
   );
 
@@ -181,17 +184,23 @@ export function BlogHome() {
         </div>
         <div className="section-head">
           <h2 id="posts-title">这周先看这些。</h2>
-          <div className="filter-row" aria-label="文章筛选">
-            {filters.map((filter) => (
-              <button
-                key={filter}
-                className={active === filter ? "active" : ""}
-                type="button"
-                onClick={() => setActive(filter)}
-              >
-                {filter}
-              </button>
-            ))}
+          <div className="section-actions">
+            <div className="filter-row" aria-label="文章标签筛选">
+              {filters.map((filter) => (
+                <button
+                  key={filter}
+                  className={active === filter ? "active" : ""}
+                  type="button"
+                  onClick={() => setActive(filter)}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+            <Link className="section-more" href="/posts">
+              更多
+              <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
+            </Link>
           </div>
         </div>
 
@@ -203,7 +212,7 @@ export function BlogHome() {
               </div>
               <div className="post-body">
                 <span className="post-meta">
-                  {post.tag} / {post.date} / {post.read}
+                  {getTagLabel(post)} / {post.date} / {post.read}
                 </span>
                 <h3>{post.title}</h3>
                 <p>{post.summary}</p>

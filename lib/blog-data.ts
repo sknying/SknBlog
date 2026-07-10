@@ -22,7 +22,7 @@ export type ArticleBlock =
 export type Post = {
   slug: string;
   title: string;
-  tag: string;
+  tags: string[];
   date: string;
   read: string;
   summary: string;
@@ -36,7 +36,7 @@ export const posts: Post[] = [
   {
     slug: "next-cache-notes",
     title: "Next 缓存别硬猜",
-    tag: "Next.js",
+    tags: ["Next.js", "缓存", "排查"],
     date: "07.09",
     read: "8 分钟",
     summary: "把路由缓存拆开看。少一点玄学。",
@@ -76,7 +76,7 @@ export const posts: Post[] = [
   {
     slug: "markdown-rendering-notes",
     title: "Markdown 渲染小坑",
-    tag: "Markdown",
+    tags: ["Markdown", "渲染", "文档"],
     date: "07.06",
     read: "6 分钟",
     summary: "代码块、引用、标题锚点。都别糊。",
@@ -113,7 +113,7 @@ export const posts: Post[] = [
   {
     slug: "glass-ui-readable",
     title: "玻璃 UI 不等于透明",
-    tag: "Design",
+    tags: ["Design", "Glass UI", "可读性"],
     date: "06.28",
     read: "5 分钟",
     summary: "先保证可读。再谈氛围。",
@@ -148,7 +148,7 @@ export const posts: Post[] = [
   {
     slug: "admin-publish-flow",
     title: "管理员发文流程",
-    tag: "Admin",
+    tags: ["Admin", "发布", "Markdown"],
     date: "06.21",
     read: "7 分钟",
     summary: "从本地 Markdown 到线上页面。",
@@ -171,7 +171,7 @@ export const posts: Post[] = [
         code: `---
 title: 管理员发文流程
 date: 2026-06-21
-tag: Admin
+tags: [Admin, 发布]
 ---`
       },
       {
@@ -185,4 +185,12 @@ tag: Admin
 
 export function getPostBySlug(slug: string) {
   return posts.find((post) => post.slug === slug);
+}
+
+export function getPrimaryTag(post: Pick<Post, "tags">) {
+  return post.tags[0] ?? "未标记";
+}
+
+export function getTagLabel(post: Pick<Post, "tags">) {
+  return post.tags.length > 0 ? post.tags.join(" / ") : "未标记";
 }
