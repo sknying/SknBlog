@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { Icon } from "@iconify/react";
-import type { FormEvent } from "react";
+import type { FormEvent, KeyboardEvent } from "react";
 import { useMemo, useState } from "react";
-import { getPostTimeLabel, getPrimaryTag, type Post } from "@/lib/blog-data";
+import { getPostTimeLabel, type Post } from "@/lib/blog-data";
 import { DEFAULT_TAG, usePostTagState } from "@/lib/tag-state";
 
 type ViewMode = "grid" | "list";
-type SortMode = "newest" | "oldest" | "tag";
-type ControlPanel = "search" | "layout" | "sort" | "tags";
+type SortMode = "newest" | "oldest";
+type ControlPanel = "layout" | "sort" | "tags";
 
 type PostsIndexProps = {
   posts: Post[];
@@ -28,77 +28,45 @@ function getSortLabel(sortMode: SortMode) {
     return "旧到新";
   }
 
-  if (sortMode === "tag") {
-    return "按标签";
-  }
-
   return "新到旧";
 }
 
-function parseSearchQuery(query: string) {
-  const tags: string[] = [];
-  const tagPattern = /(?:^|\s)(?:#|tag:)(?:"([^"]+)"|(\S+))/g;
-  const title = query
-    .replace(tagPattern, (_match, quotedTag: string | undefined, plainTag: string | undefined) => {
-      const tag = (quotedTag ?? plainTag ?? "").trim();
+function matchesPost(post: Post, title: string, tags: string[]) {
+  const normalizedTitle = title.toLowerCase();
+  const matchesTags = tags.length === 0 || tags.every((tag) => post.tags.includes(tag));
+  const matchesTitle = !normalizedTitle || post.title.toLowerCase().includes(normalizedTitle);
 
-      if (tag) {
-        tags.push(tag);
-      }
-
-      return " ";
-    })
-    .replace(/\s+/g, " ")
-    .trim();
-
-  return { title, tags: Array.from(new Set(tags)) };
+  return matchesTags && matchesTitle;
 }
 
 export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [selectedTags, setSelectedTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [sortMode, setSortMode] = useState<SortMode>("newest");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [openPanels, setOpenPanels] = useState<ControlPanel[]>(["search"]);
+  const [draftTitle, setDraftTitle] = useState("");
+  const [draftTags, setDraftTags] = useState<string[]>(initialTag ? [initialTag] : []);
+  const [committedTitle, setCommittedTitle] = useState("");
+  const [committedTags, setCommittedTags] = useState<string[]>(initialTag ? [initialTag] : []);
+  const [openPanels, setOpenPanels] = useState<ControlPanel[]>([]);
   const [customTagInput, setCustomTagInput] = useState("");
   const [tagMessage, setTagMessage] = useState("还没创建标签。");
+  const [searchNotice, setSearchNotice] = useState("");
   const { addTag, deleteTags, posts: taggedPosts, tags: editableTags } = usePostTagState(posts);
 
   const tags = useMemo(() => [ALL_TAG, ...editableTags], [editableTags]);
 
-  const selectedEditableTags = useMemo(
-    () => selectedTags.filter((tag) => editableTags.includes(tag) && tag !== DEFAULT_TAG),
-    [editableTags, selectedTags]
-  );
-
-  const parsedSearch = useMemo(() => parseSearchQuery(searchQuery), [searchQuery]);
-
-  const activeFilterTags = useMemo(
-    () => Array.from(new Set([...selectedTags, ...parsedSearch.tags])),
-    [parsedSearch.tags, selectedTags]
-  );
-
   const visiblePosts = useMemo(() => {
-    const normalizedTitle = parsedSearch.title.toLowerCase();
-    const filtered = taggedPosts.filter((post) => {
-      const matchesTags = activeFilterTags.length === 0 || activeFilterTags.every((tag) => post.tags.includes(tag));
-      const matchesTitle = !normalizedTitle || post.title.toLowerCase().includes(normalizedTitle);
-
-      return matchesTags && matchesTitle;
-    });
+    const filtered = taggedPosts.filter((post) => matchesPost(post, committedTitle, committedTags));
 
     return [...filtered].sort((left, right) => {
       if (sortMode === "oldest") {
         return getDateScore(left.date) - getDateScore(right.date);
       }
 
-      if (sortMode === "tag") {
-        return getPrimaryTag(left).localeCompare(getPrimaryTag(right), "zh-CN") || getDateScore(right.date) - getDateScore(left.date);
-      }
-
       return getDateScore(right.date) - getDateScore(left.date);
     });
-  }, [activeFilterTags, parsedSearch.title, sortMode, taggedPosts]);
+  }, [committedTags, committedTitle, sortMode, taggedPosts]);
+
+  const hasCommittedSearch = committedTitle.trim().length > 0 || committedTags.length > 0;
 
   function isPanelOpen(panel: ControlPanel) {
     return openPanels.includes(panel);
@@ -110,15 +78,36 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
 
   function toggleTag(tag: string) {
     if (tag === ALL_TAG) {
-      setSelectedTags([]);
+      setDraftTags([]);
       return;
     }
 
-    setSelectedTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
+    setDraftTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
   }
 
-  function removeSelectedTag(tag: string) {
-    setSelectedTags((current) => current.filter((item) => item !== tag));
+  function removeDraftTag(tag: string) {
+    setDraftTags((current) => current.filter((item) => item !== tag));
+  }
+
+  function submitSearch(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const nextTitle = draftTitle.trim();
+    const nextTags = [...draftTags];
+    const resultCount = taggedPosts.filter((post) => matchesPost(post, nextTitle, nextTags)).length;
+
+    setCommittedTitle(nextTitle);
+    setCommittedTags(nextTags);
+    setSearchNotice(resultCount === 0 ? "×未查到文章" : "");
+  }
+
+  function handleSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key !== "Backspace" || draftTitle.length > 0 || draftTags.length === 0) {
+      return;
+    }
+
+    event.preventDefault();
+    setDraftTags((current) => current.slice(0, -1));
   }
 
   function createTag(event: FormEvent<HTMLFormElement>) {
@@ -137,14 +126,14 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
     }
 
     if (tags.includes(nextTag)) {
-      setSelectedTags((current) => (current.includes(nextTag) ? current : [...current, nextTag]));
+      setDraftTags((current) => (current.includes(nextTag) ? current : [...current, nextTag]));
       setTagMessage("已有这个标签。");
       setCustomTagInput("");
       return;
     }
 
     addTag(nextTag);
-    setSelectedTags((current) => [...current, nextTag]);
+    setDraftTags((current) => [...current, nextTag]);
     setTagMessage(`已创建 ${nextTag}。`);
     setCustomTagInput("");
   }
@@ -160,23 +149,9 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
     }
 
     deleteTags([tag]);
-    setSelectedTags((current) => current.filter((item) => item !== tag));
+    setDraftTags((current) => current.filter((item) => item !== tag));
+    setCommittedTags((current) => current.filter((item) => item !== tag));
     setTagMessage(`已删除 ${tag}。`);
-  }
-
-  function deleteSelectedTags() {
-    if (selectedEditableTags.length === 0) {
-      setTagMessage("先选标签。");
-      return;
-    }
-
-    if (!window.confirm(`删除 ${selectedEditableTags.length} 个标签？会从文章里移除。`)) {
-      return;
-    }
-
-    deleteTags(selectedEditableTags);
-    setSelectedTags((current) => current.filter((tag) => !selectedEditableTags.includes(tag)));
-    setTagMessage(`已删除 ${selectedEditableTags.length} 个标签。`);
   }
 
   return (
@@ -208,50 +183,60 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
       </section>
 
       <section className="archive-controls" aria-label="文章筛选与排序">
-        <div className={isPanelOpen("search") ? "archive-control-group archive-search-control expanded" : "archive-control-group archive-search-control"}>
+        <div className={isPanelOpen("tags") ? "archive-control-group archive-tag-control expanded" : "archive-control-group archive-tag-control"}>
           <button
             className="archive-control-toggle"
             type="button"
-            onClick={() => togglePanel("search")}
-            aria-expanded={isPanelOpen("search")}
-            aria-controls="archive-search-panel"
+            onClick={() => togglePanel("tags")}
+            aria-expanded={isPanelOpen("tags")}
+            aria-controls="archive-tags-panel"
           >
             <span>
-              <Icon icon="solar:magnifer-linear" aria-hidden="true" />
-              搜索
+              <Icon icon="solar:tag-linear" aria-hidden="true" />
+              标签
             </span>
-            <small>{searchQuery || "标题 / #标签"}</small>
+            <small>{draftTags.length > 0 ? `已选 ${draftTags.length}` : `${editableTags.length} 个`}</small>
             <Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" />
           </button>
-          {isPanelOpen("search") ? (
-            <div className="archive-control-panel" id="archive-search-panel">
-              <label htmlFor="archive-search">标题搜索</label>
-              {selectedTags.length > 0 ? (
-                <div className="search-tag-chips" aria-label="已选搜索标签">
-                  {selectedTags.map((tag) => (
-                    <span className="search-tag-chip" key={tag}>
-                      {tag}
-                      <button type="button" onClick={() => removeSelectedTag(tag)} aria-label={`取消标签 ${tag}`}>
-                        <Icon icon="solar:close-circle-linear" aria-hidden="true" />
+          {isPanelOpen("tags") ? (
+            <div className="archive-control-panel" id="archive-tags-panel">
+              <div className="tag-chips" aria-label="文章标签">
+                {tags.map((item) => {
+                  const isSelected = item === ALL_TAG ? draftTags.length === 0 : draftTags.includes(item);
+                  const canDelete = item !== ALL_TAG && item !== DEFAULT_TAG;
+
+                  return (
+                    <span className={isSelected ? "tag-chip active" : "tag-chip"} key={item}>
+                      <button className="tag-chip-filter" type="button" onClick={() => toggleTag(item)} aria-pressed={isSelected}>
+                        {item}
                       </button>
+                      {canDelete ? (
+                        <button className="tag-chip-delete" type="button" onClick={() => deleteTag(item)} aria-label={`删除标签 ${item}`}>
+                          <Icon icon="solar:trash-bin-minimalistic-linear" aria-hidden="true" />
+                        </button>
+                      ) : null}
                     </span>
-                  ))}
-                </div>
-              ) : null}
-              <div className="archive-search-box">
-                <input
-                  id="archive-search"
-                  type="search"
-                  value={searchQuery}
-                  onChange={(event) => setSearchQuery(event.target.value)}
-                  placeholder='比如：缓存 #Next.js 或 tag:"Glass UI"'
-                />
-                <button type="button" onClick={() => setSearchQuery("")} disabled={!searchQuery}>
-                  <Icon icon="solar:close-circle-linear" aria-hidden="true" />
-                  清空
-                </button>
+                  );
+                })}
               </div>
-              <p>普通文字搜标题。#标签 或 tag:"标签名" 指定标签。</p>
+              <form className="tag-create" onSubmit={createTag}>
+                <label htmlFor="tag-name">创建标签</label>
+                <div>
+                  <input
+                    id="tag-name"
+                    type="text"
+                    maxLength={16}
+                    value={customTagInput}
+                    onChange={(event) => setCustomTagInput(event.target.value)}
+                    placeholder="比如：Rust"
+                  />
+                  <button type="submit">
+                    <Icon icon="solar:add-circle-linear" aria-hidden="true" />
+                    创建
+                  </button>
+                </div>
+                <p role="status">{tagMessage}</p>
+              </form>
             </div>
           ) : null}
         </div>
@@ -311,79 +296,46 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
                 <button className={sortMode === "oldest" ? "active" : ""} type="button" onClick={() => setSortMode("oldest")}>
                   旧到新
                 </button>
-                <button className={sortMode === "tag" ? "active" : ""} type="button" onClick={() => setSortMode("tag")}>
-                  按标签
-                </button>
               </div>
             </div>
           ) : null}
         </div>
 
-        <div className={isPanelOpen("tags") ? "archive-control-group archive-tag-control expanded" : "archive-control-group archive-tag-control"}>
-          <button
-            className="archive-control-toggle"
-            type="button"
-            onClick={() => togglePanel("tags")}
-            aria-expanded={isPanelOpen("tags")}
-            aria-controls="archive-tags-panel"
-          >
-            <span>
-              <Icon icon="solar:tag-linear" aria-hidden="true" />
-              标签
-            </span>
-            <small>{selectedTags.length > 0 ? `已选 ${selectedTags.length}` : `${editableTags.length} 个`}</small>
-            <Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" />
-          </button>
-          {isPanelOpen("tags") ? (
-            <div className="archive-control-panel" id="archive-tags-panel">
-              <div className="tag-chips" aria-label="文章标签">
-                {tags.map((item) => {
-                  const isSelected = item === ALL_TAG ? selectedTags.length === 0 : selectedTags.includes(item);
-                  const canDelete = item !== ALL_TAG && item !== DEFAULT_TAG;
-
-                  return (
-                    <span className={isSelected ? "tag-chip active" : "tag-chip"} key={item}>
-                      <button className="tag-chip-filter" type="button" onClick={() => toggleTag(item)} aria-pressed={isSelected}>
-                        {item}
-                      </button>
-                      {canDelete ? (
-                        <button className="tag-chip-delete" type="button" onClick={() => deleteTag(item)} aria-label={`删除标签 ${item}`}>
-                          <Icon icon="solar:trash-bin-minimalistic-linear" aria-hidden="true" />
-                        </button>
-                      ) : null}
-                    </span>
-                  );
-                })}
-              </div>
-              <div className="tag-bulk-actions">
-                <span>已选标签 {selectedEditableTags.length}</span>
-                <button type="button" onClick={deleteSelectedTags} disabled={selectedEditableTags.length === 0}>
-                  <Icon icon="solar:trash-bin-trash-linear" aria-hidden="true" />
-                  删除已选
-                </button>
-              </div>
-              <form className="tag-create" onSubmit={createTag}>
-                <label htmlFor="tag-name">创建标签</label>
-                <div>
-                  <input
-                    id="tag-name"
-                    type="text"
-                    maxLength={16}
-                    value={customTagInput}
-                    onChange={(event) => setCustomTagInput(event.target.value)}
-                    placeholder="比如：Rust"
-                  />
-                  <button type="submit">
-                    <Icon icon="solar:add-circle-linear" aria-hidden="true" />
-                    创建
+        <div className="archive-control-group archive-search-control">
+          <form className="archive-search-form" onSubmit={submitSearch} aria-label="搜索文章">
+            <div className="archive-search-box">
+              {draftTags.map((tag) => (
+                <span className="search-tag-chip" key={tag}>
+                  {tag}
+                  <button type="button" onClick={() => removeDraftTag(tag)} aria-label={`取消标签 ${tag}`}>
+                    <Icon icon="solar:close-circle-linear" aria-hidden="true" />
                   </button>
-                </div>
-                <p role="status">{tagMessage}</p>
-              </form>
+                </span>
+              ))}
+              <input
+                id="archive-search"
+                type="search"
+                value={draftTitle}
+                onChange={(event) => setDraftTitle(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                placeholder={draftTags.length > 0 ? "继续输入标题" : "输入标题，或点标签"}
+                aria-label="按标题搜索文章"
+              />
             </div>
-          ) : null}
+            <button className="archive-search-submit" type="submit">
+              <Icon icon="solar:check-circle-linear" aria-hidden="true" />
+              确认
+            </button>
+          </form>
         </div>
       </section>
+
+      {searchNotice ? (
+        <div className="archive-message" role="status" aria-live="polite">
+          <span aria-hidden="true">×</span>
+          未查到文章
+        </div>
+      ) : null}
 
       <section className={`archive-posts ${viewMode}`} aria-live="polite">
         {visiblePosts.length > 0 ? (
@@ -412,8 +364,8 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
         ) : (
           <div className="archive-empty">
             <Icon icon="solar:folder-open-linear" aria-hidden="true" />
-            <h2>这个标签还空着。</h2>
-            <p>先记着。以后再塞文章。</p>
+            <h2>{hasCommittedSearch ? "没搜到。" : "这个标签还空着。"}</h2>
+            <p>{hasCommittedSearch ? "换个词再试。" : "先记着。以后再塞文章。"}</p>
           </div>
         )}
       </section>
