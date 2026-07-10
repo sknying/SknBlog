@@ -67,7 +67,7 @@ export function PostsIndex({ posts }: PostsIndexProps) {
   );
 
   const visiblePosts = useMemo(() => {
-    const filtered = selectedTags.length === 0 ? posts : posts.filter((post) => post.tags.some((tag) => selectedTags.includes(tag)));
+    const filtered = selectedTags.length === 0 ? posts : posts.filter((post) => selectedTags.every((tag) => post.tags.includes(tag)));
 
     return [...filtered].sort((left, right) => {
       if (sortMode === "oldest") {

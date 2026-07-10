@@ -86,7 +86,7 @@ export function BlogHome() {
   const [activeTags, setActiveTags] = useState<string[]>([]);
   const [subscribed, setSubscribed] = useState(false);
   const visiblePosts = useMemo(
-    () => (activeTags.length === 0 ? posts : posts.filter((post) => post.tags.some((tag) => activeTags.includes(tag)))),
+    () => (activeTags.length === 0 ? posts : posts.filter((post) => activeTags.every((tag) => post.tags.includes(tag)))),
     [activeTags]
   );
 
