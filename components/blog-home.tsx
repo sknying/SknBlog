@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
-import { getPostTimeLabel, getPrimaryTag, getTagLabel, posts, type Post } from "@/lib/blog-data";
+import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
 const snippets = [
@@ -197,7 +197,13 @@ export function BlogHome() {
                   {getPostTimeLabel(post)}
                 </span>
                 <h3>{post.title}</h3>
-                <span className="post-tags">{getTagLabel(post)}</span>
+                <div className="post-tags" aria-label="文章标签">
+                  {post.tags.map((tag) => (
+                    <span className="article-tag-pill" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
                 <p>{post.summary}</p>
                 <Link href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
                   读这篇

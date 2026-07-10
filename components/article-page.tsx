@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useMemo, useState } from "react";
-import { getPostTimeLabel, getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
+import { getPostTimeLabel, getPrimaryTag, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
 type ArticlePageProps = {
@@ -71,7 +71,13 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
             {getPostTimeLabel(article)}
           </span>
           <h1>{article.title}</h1>
-          <span className="article-tags">{getTagLabel(article)}</span>
+          <div className="article-tags" aria-label="文章标签">
+            {article.tags.map((tag) => (
+              <Link className="article-tag-pill" href={`/posts?tag=${encodeURIComponent(tag)}`} key={tag}>
+                {tag}
+              </Link>
+            ))}
+          </div>
           <p>{article.intro}</p>
         </div>
         <aside className="article-cover">

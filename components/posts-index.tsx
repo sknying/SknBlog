@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Icon } from "@iconify/react";
 import type { FormEvent } from "react";
 import { useMemo, useState } from "react";
-import { getPostTimeLabel, getPrimaryTag, getTagLabel, type Post } from "@/lib/blog-data";
+import { getPostTimeLabel, getPrimaryTag, type Post } from "@/lib/blog-data";
 import { DEFAULT_TAG, usePostTagState } from "@/lib/tag-state";
 
 type ViewMode = "grid" | "list";
@@ -13,6 +13,7 @@ type ControlPanel = "search" | "layout" | "sort" | "tags";
 
 type PostsIndexProps = {
   posts: Post[];
+  initialTag?: string;
 };
 
 const ALL_TAG = "全部";
@@ -53,12 +54,12 @@ function parseSearchQuery(query: string) {
   return { title, tags: Array.from(new Set(tags)) };
 }
 
-export function PostsIndex({ posts }: PostsIndexProps) {
+export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [searchQuery, setSearchQuery] = useState("");
-  const [openPanels, setOpenPanels] = useState<ControlPanel[]>([]);
+  const [openPanels, setOpenPanels] = useState<ControlPanel[]>(["search"]);
   const [customTagInput, setCustomTagInput] = useState("");
   const [tagMessage, setTagMessage] = useState("还没创建标签。");
   const { addTag, deleteTags, posts: taggedPosts, tags: editableTags } = usePostTagState(posts);
@@ -114,6 +115,10 @@ export function PostsIndex({ posts }: PostsIndexProps) {
     }
 
     setSelectedTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
+  }
+
+  function removeSelectedTag(tag: string) {
+    setSelectedTags((current) => current.filter((item) => item !== tag));
   }
 
   function createTag(event: FormEvent<HTMLFormElement>) {
@@ -221,6 +226,18 @@ export function PostsIndex({ posts }: PostsIndexProps) {
           {isPanelOpen("search") ? (
             <div className="archive-control-panel" id="archive-search-panel">
               <label htmlFor="archive-search">标题搜索</label>
+              {selectedTags.length > 0 ? (
+                <div className="search-tag-chips" aria-label="已选搜索标签">
+                  {selectedTags.map((tag) => (
+                    <span className="search-tag-chip" key={tag}>
+                      {tag}
+                      <button type="button" onClick={() => removeSelectedTag(tag)} aria-label={`取消标签 ${tag}`}>
+                        <Icon icon="solar:close-circle-linear" aria-hidden="true" />
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              ) : null}
               <div className="archive-search-box">
                 <input
                   id="archive-search"
@@ -239,7 +256,7 @@ export function PostsIndex({ posts }: PostsIndexProps) {
           ) : null}
         </div>
 
-        <div className={isPanelOpen("layout") ? "archive-control-group expanded" : "archive-control-group"}>
+        <div className={isPanelOpen("layout") ? "archive-control-group archive-layout-control expanded" : "archive-control-group archive-layout-control"}>
           <button
             className="archive-control-toggle"
             type="button"
@@ -270,7 +287,7 @@ export function PostsIndex({ posts }: PostsIndexProps) {
           ) : null}
         </div>
 
-        <div className={isPanelOpen("sort") ? "archive-control-group expanded" : "archive-control-group"}>
+        <div className={isPanelOpen("sort") ? "archive-control-group archive-sort-control expanded" : "archive-control-group archive-sort-control"}>
           <button
             className="archive-control-toggle"
             type="button"
@@ -378,7 +395,13 @@ export function PostsIndex({ posts }: PostsIndexProps) {
               <div className="archive-card-main">
                 <span className="archive-card-time">{getPostTimeLabel(post)}</span>
                 <h2>{post.title}</h2>
-                <span className="archive-card-tags">{getTagLabel(post)}</span>
+                <div className="archive-card-tags" aria-label="文章标签">
+                  {post.tags.map((tag) => (
+                    <span className="article-tag-pill" key={tag}>
+                      {tag}
+                    </span>
+                  ))}
+                </div>
                 <p>{post.summary}</p>
               </div>
               <Link href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>

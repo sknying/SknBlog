@@ -7,6 +7,15 @@ export const metadata: Metadata = {
   description: "按布局、标签和时间排序浏览 SknBlog 的技术文章。"
 };
 
-export default function PostsPage() {
-  return <PostsIndex posts={posts} />;
+type PostsPageProps = {
+  searchParams?: Promise<{
+    tag?: string | string[];
+  }>;
+};
+
+export default async function PostsPage({ searchParams }: PostsPageProps) {
+  const params = searchParams ? await searchParams : {};
+  const initialTag = Array.isArray(params.tag) ? params.tag[0] : params.tag;
+
+  return <PostsIndex posts={posts} initialTag={initialTag} />;
 }
