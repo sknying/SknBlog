@@ -73,16 +73,32 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
   }
 
   function togglePanel(panel: ControlPanel) {
-    setOpenPanels((current) => (current.includes(panel) ? current.filter((item) => item !== panel) : [...current, panel]));
+    setOpenPanels((current) => (current.includes(panel) ? [] : [panel]));
+  }
+
+  function closePanels() {
+    setOpenPanels([]);
   }
 
   function toggleTag(tag: string) {
     if (tag === ALL_TAG) {
       setDraftTags([]);
+      closePanels();
       return;
     }
 
     setDraftTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
+    closePanels();
+  }
+
+  function selectViewMode(mode: ViewMode) {
+    setViewMode(mode);
+    closePanels();
+  }
+
+  function selectSortMode(mode: SortMode) {
+    setSortMode(mode);
+    closePanels();
   }
 
   function removeDraftTag(tag: string) {
@@ -129,6 +145,7 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
       setDraftTags((current) => (current.includes(nextTag) ? current : [...current, nextTag]));
       setTagMessage("已有这个标签。");
       setCustomTagInput("");
+      closePanels();
       return;
     }
 
@@ -136,6 +153,7 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
     setDraftTags((current) => [...current, nextTag]);
     setTagMessage(`已创建 ${nextTag}。`);
     setCustomTagInput("");
+    closePanels();
   }
 
   function deleteTag(tag: string) {
@@ -152,6 +170,7 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
     setDraftTags((current) => current.filter((item) => item !== tag));
     setCommittedTags((current) => current.filter((item) => item !== tag));
     setTagMessage(`已删除 ${tag}。`);
+    closePanels();
   }
 
   return (
@@ -259,11 +278,11 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
           {isPanelOpen("layout") ? (
             <div className="archive-control-panel" id="archive-layout-panel">
               <div className="segmented-control">
-                <button className={viewMode === "grid" ? "active" : ""} type="button" onClick={() => setViewMode("grid")}>
+                <button className={viewMode === "grid" ? "active" : ""} type="button" onClick={() => selectViewMode("grid")}>
                   <Icon icon="solar:widget-4-linear" aria-hidden="true" />
                   平铺
                 </button>
-                <button className={viewMode === "list" ? "active" : ""} type="button" onClick={() => setViewMode("list")}>
+                <button className={viewMode === "list" ? "active" : ""} type="button" onClick={() => selectViewMode("list")}>
                   <Icon icon="solar:list-linear" aria-hidden="true" />
                   列表
                 </button>
@@ -290,10 +309,10 @@ export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
           {isPanelOpen("sort") ? (
             <div className="archive-control-panel" id="archive-sort-panel">
               <div className="segmented-control">
-                <button className={sortMode === "newest" ? "active" : ""} type="button" onClick={() => setSortMode("newest")}>
+                <button className={sortMode === "newest" ? "active" : ""} type="button" onClick={() => selectSortMode("newest")}>
                   新到旧
                 </button>
-                <button className={sortMode === "oldest" ? "active" : ""} type="button" onClick={() => setSortMode("oldest")}>
+                <button className={sortMode === "oldest" ? "active" : ""} type="button" onClick={() => selectSortMode("oldest")}>
                   旧到新
                 </button>
               </div>

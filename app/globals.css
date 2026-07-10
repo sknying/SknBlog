@@ -1423,7 +1423,7 @@ a.article-tag-pill:hover {
 }
 
 .archive-tag-control .archive-control-panel {
-  width: min(360px, calc(100vw - 32px));
+  width: min(640px, calc(100vw - 32px));
 }
 
 .archive-control-panel label {
@@ -1532,13 +1532,13 @@ a.article-tag-pill:hover {
 }
 
 .archive-layout-control .segmented-control,
-.archive-tag-control .tag-chips {
+.archive-sort-control .segmented-control {
   flex-direction: column;
   align-items: stretch;
 }
 
 .archive-layout-control .segmented-control button,
-.archive-tag-control .tag-chip {
+.archive-sort-control .segmented-control button {
   width: 100%;
 }
 
