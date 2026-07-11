@@ -65,7 +65,7 @@
   --accent-2: #43d3b0;
   --danger: #eb6a5f;
   --shadow: 0 22px 80px rgba(0, 0, 0, 0.34);
-  --font-code: "Fira Code ASCII", var(--font-body), ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+  --font-code: "Fira Code ASCII", "Cascadia Code", "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, Monaco, "Noto Sans Mono CJK SC", "Microsoft YaHei Mono", "Liberation Mono", ui-monospace, monospace;
 }
 
 * {
