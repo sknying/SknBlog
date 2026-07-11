@@ -10,6 +10,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@iconify-icons/mdi": "^1.2.48",
+    "@iconify-icons/solar": "^1.2.3",
     "@iconify/react": "^6.0.2",
     "next": "16.2.10",
     "react": "19.2.0",

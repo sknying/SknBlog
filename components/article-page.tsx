@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Icon } from "@iconify/react";
+import { Icon } from "@/components/local-icon";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { getCodeLanguage, getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
 import { getPostTimeLabel, getPrimaryTag, type ArticleBlock, type Post } from "@/lib/blog-data";

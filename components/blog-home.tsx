@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Icon } from "@iconify/react";
+import { Icon } from "@/components/local-icon";
 import { useMemo, useState } from "react";
 import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
@@ -93,7 +93,7 @@ export function BlogHome() {
 
       <aside className="sakura-sidebar">
         <Link className="sakura-brand" href="/" aria-label="SknBlog 首页">
-          <Icon icon="solar:flower-linear" aria-hidden="true" />
+          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
           <span>清樱小屋</span>
         </Link>
 
@@ -190,7 +190,7 @@ export function BlogHome() {
             <section className="sakura-recent glass-panel" id="recent" aria-labelledby="recent-title">
               <div className="sakura-section-head">
                 <h2 id="recent-title">
-                  <Icon icon="solar:flower-linear" aria-hidden="true" />
+                  <Icon icon="solar:stars-line-linear" aria-hidden="true" />
                   最近文章
                 </h2>
                 <Link href="/posts">

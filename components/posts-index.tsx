@@ -1,395 +1,305 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { Icon } from "@iconify/react";
-import type { FormEvent, KeyboardEvent } from "react";
-import { useMemo, useState } from "react";
+import { Icon } from "@/components/local-icon";
+import type { FormEvent } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getPostTimeLabel, type Post } from "@/lib/blog-data";
 import { DEFAULT_TAG, usePostTagState } from "@/lib/tag-state";
 
-type ViewMode = "grid" | "list";
-type SortMode = "newest" | "oldest";
-type ControlPanel = "layout" | "sort" | "tags";
+const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
 
-type PostsIndexProps = {
-  posts: Post[];
-};
-
-const ALL_TAG = "全部";
-
-function getDateScore(date: string) {
-  const [month, day] = date.split(".").map(Number);
-  return month * 100 + day;
+function getYearMonth(post: Post) {
+  const [year = "未知", month = "00"] = post.publishedAt.slice(0, 7).split("-");
+  return { year, month };
 }
 
-function getSortLabel(sortMode: SortMode) {
-  if (sortMode === "oldest") {
-    return "旧到新";
-  }
-
-  return "新到旧";
+function countCharacters(post: Post) {
+  return post.blocks.reduce((total, block) => {
+    if (block.type === "paragraph" || block.type === "quote") return total + block.text.length;
+    if (block.type === "code") return total + block.code.length;
+    if (block.type === "list") return total + block.title.length + block.items.join("").length;
+    if (block.type === "table") return total + block.title.length + block.headers.join("").length + block.rows.flat().join("").length;
+    if (block.type === "math") return total + block.formula.length;
+    return total + block.alt.length + (block.caption?.length ?? 0);
+  }, post.title.length + post.summary.length + post.intro.length);
 }
 
-function matchesPost(post: Post, title: string, tags: string[]) {
-  const normalizedTitle = title.toLowerCase();
-  const matchesTags = tags.length === 0 || tags.every((tag) => post.tags.includes(tag));
-  const matchesTitle = !normalizedTitle || post.title.toLowerCase().includes(normalizedTitle);
-
-  return matchesTags && matchesTitle;
+function formatCharacterCount(value: number) {
+  return value >= 1000 ? `${(value / 1000).toFixed(1)}k` : `${value}`;
 }
 
-export function PostsIndex({ posts }: PostsIndexProps) {
+export function PostsIndex({ posts }: { posts: Post[] }) {
   const searchParams = useSearchParams();
-  const initialTag = searchParams.get("tag") ?? undefined;
-  const [viewMode, setViewMode] = useState<ViewMode>("grid");
-  const [sortMode, setSortMode] = useState<SortMode>("newest");
-  const [draftTitle, setDraftTitle] = useState("");
+  const initialTag = searchParams.get("tag") ?? "";
+  const { addTag, deleteTags, posts: taggedPosts, tags } = usePostTagState(posts);
+  const [draftQuery, setDraftQuery] = useState("");
+  const [committedQuery, setCommittedQuery] = useState("");
   const [draftTags, setDraftTags] = useState<string[]>(initialTag ? [initialTag] : []);
-  const [committedTitle, setCommittedTitle] = useState("");
   const [committedTags, setCommittedTags] = useState<string[]>(initialTag ? [initialTag] : []);
-  const [openPanels, setOpenPanels] = useState<ControlPanel[]>([]);
-  const [customTagInput, setCustomTagInput] = useState("");
-  const [tagMessage, setTagMessage] = useState("还没创建标签。");
-  const [searchNotice, setSearchNotice] = useState("");
-  const { addTag, deleteTags, posts: taggedPosts, tags: editableTags } = usePostTagState(posts);
+  const [selectedMonth, setSelectedMonth] = useState("");
+  const [tagPanelOpen, setTagPanelOpen] = useState(false);
+  const [newTag, setNewTag] = useState("");
+  const [tagMessage, setTagMessage] = useState("");
+  const [randomIndex, setRandomIndex] = useState(0);
 
-  const tags = useMemo(() => [ALL_TAG, ...editableTags], [editableTags]);
+  const searchedPosts = useMemo(() => {
+    const query = committedQuery.trim().toLocaleLowerCase("zh-CN");
 
-  const visiblePosts = useMemo(() => {
-    const filtered = taggedPosts.filter((post) => matchesPost(post, committedTitle, committedTags));
+    return taggedPosts
+      .filter((post) => {
+        const matchesText = !query || [post.title, post.summary, ...post.tags].some((value) => value.toLocaleLowerCase("zh-CN").includes(query));
+        const matchesTags = committedTags.every((tag) => post.tags.includes(tag));
+        return matchesText && matchesTags;
+      })
+      .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
+  }, [committedQuery, committedTags, taggedPosts]);
 
-    return [...filtered].sort((left, right) => {
-      if (sortMode === "oldest") {
-        return getDateScore(left.date) - getDateScore(right.date);
-      }
+  const years = useMemo(() => {
+    const sourceYears = Array.from(new Set(taggedPosts.map((post) => getYearMonth(post).year))).sort((a, b) => b.localeCompare(a));
 
-      return getDateScore(right.date) - getDateScore(left.date);
+    return sourceYears.map((year) => {
+      const yearPosts = searchedPosts.filter((post) => getYearMonth(post).year === year);
+      return {
+        year,
+        posts: yearPosts,
+        monthCounts: Object.fromEntries(MONTH_LABELS.map((month) => [month, yearPosts.filter((post) => getYearMonth(post).month === month).length]))
+      };
     });
-  }, [committedTags, committedTitle, sortMode, taggedPosts]);
+  }, [searchedPosts, taggedPosts]);
 
-  const hasCommittedSearch = committedTitle.trim().length > 0 || committedTags.length > 0;
+  const totalCharacters = useMemo(() => taggedPosts.reduce((sum, post) => sum + countCharacters(post), 0), [taggedPosts]);
+  const newestPost = [...taggedPosts].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))[0];
+  const oldestPost = [...taggedPosts].sort((a, b) => Date.parse(a.publishedAt) - Date.parse(b.publishedAt))[0];
+  const runningDays = oldestPost && newestPost
+    ? Math.max(1, Math.ceil((Date.parse(newestPost.publishedAt) - Date.parse(oldestPost.publishedAt)) / 86_400_000) + 1)
+    : 0;
+  const randomPost = taggedPosts[randomIndex % Math.max(taggedPosts.length, 1)];
 
-  function isPanelOpen(panel: ControlPanel) {
-    return openPanels.includes(panel);
-  }
-
-  function togglePanel(panel: ControlPanel) {
-    setOpenPanels((current) => (current.includes(panel) ? [] : [panel]));
-  }
-
-  function closePanels() {
-    setOpenPanels([]);
-  }
-
-  function toggleTag(tag: string) {
-    if (tag === ALL_TAG) {
-      setDraftTags([]);
-      closePanels();
-      return;
-    }
-
-    setDraftTags((current) => (current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]));
-    closePanels();
-  }
-
-  function selectViewMode(mode: ViewMode) {
-    setViewMode(mode);
-    closePanels();
-  }
-
-  function selectSortMode(mode: SortMode) {
-    setSortMode(mode);
-    closePanels();
-  }
-
-  function removeDraftTag(tag: string) {
-    setDraftTags((current) => current.filter((item) => item !== tag));
-  }
+  useEffect(() => {
+    if (!tagPanelOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setTagPanelOpen(false);
+    };
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [tagPanelOpen]);
 
   function submitSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    const nextTitle = draftTitle.trim();
-    const nextTags = [...draftTags];
-    const resultCount = taggedPosts.filter((post) => matchesPost(post, nextTitle, nextTags)).length;
-
-    setCommittedTitle(nextTitle);
-    setCommittedTags(nextTags);
-    setSearchNotice(resultCount === 0 ? "×未查到文章" : "");
+    setCommittedQuery(draftQuery);
+    setCommittedTags(draftTags);
+    setSelectedMonth("");
   }
 
-  function handleSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
-    if (event.key !== "Backspace" || draftTitle.length > 0 || draftTags.length === 0) {
-      return;
-    }
-
-    event.preventDefault();
-    setDraftTags((current) => current.slice(0, -1));
+  function toggleDraftTag(tag: string) {
+    setDraftTags((current) => current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]);
   }
 
   function createTag(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    const nextTag = customTagInput.trim().replace(/\s+/g, " ");
-
-    if (!nextTag) {
-      setTagMessage("先写个名字。");
+    const value = newTag.trim();
+    if (!value) {
+      setTagMessage("请输入标签名。");
       return;
     }
-
-    if (nextTag.length > 16) {
-      setTagMessage("名字太长了。");
+    if (tags.includes(value)) {
+      setTagMessage("标签已存在。");
       return;
     }
-
-    if (tags.includes(nextTag)) {
-      setDraftTags((current) => (current.includes(nextTag) ? current : [...current, nextTag]));
-      setTagMessage("已有这个标签。");
-      setCustomTagInput("");
-      closePanels();
-      return;
-    }
-
-    addTag(nextTag);
-    setDraftTags((current) => [...current, nextTag]);
-    setTagMessage(`已创建 ${nextTag}。`);
-    setCustomTagInput("");
-    closePanels();
+    addTag(value);
+    setNewTag("");
+    setTagMessage(`已创建 ${value}。`);
   }
 
   function deleteTag(tag: string) {
-    if (tag === DEFAULT_TAG) {
-      setTagMessage("其他标签别删。它兜底用。");
-      return;
-    }
-
-    if (!window.confirm(`删除标签 ${tag}？会从文章里移除。`)) {
-      return;
-    }
-
+    if (tag === DEFAULT_TAG) return;
     deleteTags([tag]);
     setDraftTags((current) => current.filter((item) => item !== tag));
     setCommittedTags((current) => current.filter((item) => item !== tag));
     setTagMessage(`已删除 ${tag}。`);
-    closePanels();
   }
 
   return (
-    <main className="archive-shell">
-      <div className="noise" aria-hidden="true" />
-      <div className="meteor-field" aria-hidden="true">
-        <i />
-        <i />
-        <i />
-      </div>
+    <main className="archive-page">
+      <div className="archive-grain" aria-hidden="true" />
 
-      <header className="article-topbar">
-        <Link className="brand" href="/" aria-label="回到首页">
-          <span className="brand-mark">S</span>
-          <span>SknBlog</span>
+      <aside className="archive-side">
+        <Link className="archive-logo" href="/">
+          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
+          <span>清樱小屋</span>
         </Link>
-        <Link className="article-back" href="/">
-          <Icon icon="solar:arrow-left-linear" aria-hidden="true" />
-          回首页
-        </Link>
-      </header>
-
-      <section className="archive-hero">
-        <div>
-          <span className="article-kicker">文章仓库 / {posts.length} 篇</span>
-          <h1>别乱翻。先筛一下。</h1>
+        <div className="archive-author">
+          <div><Image src="/images/sakura-coast-hero.png" alt="Sknying 头像" fill sizes="78px" priority /></div>
+          <strong>Sknying</strong>
+          <p>记录美好，分享热爱。</p>
         </div>
-        <p>标签能自定义。排序也能换。要找坑，别靠玄学。</p>
-      </section>
-
-      <section className="archive-controls" aria-label="文章筛选与排序">
-        <div className={isPanelOpen("tags") ? "archive-control-group archive-tag-control expanded" : "archive-control-group archive-tag-control"}>
-          <button
-            className="archive-control-toggle"
-            type="button"
-            onClick={() => togglePanel("tags")}
-            aria-expanded={isPanelOpen("tags")}
-            aria-controls="archive-tags-panel"
-          >
-            <span>
-              <Icon icon="solar:tag-linear" aria-hidden="true" />
-              标签
-            </span>
-            <small>{draftTags.length > 0 ? `已选 ${draftTags.length}` : `${editableTags.length} 个`}</small>
-            <Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" />
-          </button>
-          {isPanelOpen("tags") ? (
-            <div className="archive-control-panel" id="archive-tags-panel">
-              <div className="tag-chips" aria-label="文章标签">
-                {tags.map((item) => {
-                  const isSelected = item === ALL_TAG ? draftTags.length === 0 : draftTags.includes(item);
-                  const canDelete = item !== ALL_TAG && item !== DEFAULT_TAG;
-
-                  return (
-                    <span className={isSelected ? "tag-chip active" : "tag-chip"} key={item}>
-                      <button className="tag-chip-filter" type="button" onClick={() => toggleTag(item)} aria-pressed={isSelected}>
-                        {item}
-                      </button>
-                      {canDelete ? (
-                        <button className="tag-chip-delete" type="button" onClick={() => deleteTag(item)} aria-label={`删除标签 ${item}`}>
-                          <Icon icon="solar:trash-bin-minimalistic-linear" aria-hidden="true" />
-                        </button>
-                      ) : null}
-                    </span>
-                  );
-                })}
-              </div>
-              <form className="tag-create" onSubmit={createTag}>
-                <label htmlFor="tag-name">创建标签</label>
-                <div>
-                  <input
-                    id="tag-name"
-                    type="text"
-                    maxLength={16}
-                    value={customTagInput}
-                    onChange={(event) => setCustomTagInput(event.target.value)}
-                    placeholder="比如：Rust"
-                  />
-                  <button type="submit">
-                    <Icon icon="solar:add-circle-linear" aria-hidden="true" />
-                    创建
-                  </button>
-                </div>
-                <p role="status">{tagMessage}</p>
-              </form>
-            </div>
-          ) : null}
+        <nav className="archive-navigation" aria-label="归档导航">
+          <Link href="/"><Icon icon="solar:home-2-linear" aria-hidden="true" />首页</Link>
+          <Link className="active" href="/posts"><Icon icon="solar:archive-linear" aria-hidden="true" />归档</Link>
+          <a href="#years"><Icon icon="solar:widget-4-linear" aria-hidden="true" />分类</a>
+          <button type="button" onClick={() => setTagPanelOpen(true)}><Icon icon="solar:tag-linear" aria-hidden="true" />标签</button>
+          <a href="#archive-stats"><Icon icon="solar:chart-2-linear" aria-hidden="true" />统计</a>
+          <Link href="/#about"><Icon icon="solar:user-circle-linear" aria-hidden="true" />关于</Link>
+        </nav>
+        <div className="archive-side-links">
+          <a href="https://github.com/sknying" aria-label="GitHub"><Icon icon="mdi:github" aria-hidden="true" /></a>
+          <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
+          <button type="button" onClick={() => setTagPanelOpen(true)} aria-label="管理标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></button>
         </div>
+        <footer>2026 · SknBlog</footer>
+      </aside>
 
-        <div className={isPanelOpen("layout") ? "archive-control-group archive-layout-control expanded" : "archive-control-group archive-layout-control"}>
-          <button
-            className="archive-control-toggle"
-            type="button"
-            onClick={() => togglePanel("layout")}
-            aria-expanded={isPanelOpen("layout")}
-            aria-controls="archive-layout-panel"
-          >
-            <span>
-              <Icon icon="solar:widget-4-linear" aria-hidden="true" />
-              布局
-            </span>
-            <small>{viewMode === "grid" ? "平铺" : "列表"}</small>
-            <Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" />
-          </button>
-          {isPanelOpen("layout") ? (
-            <div className="archive-control-panel" id="archive-layout-panel">
-              <div className="segmented-control">
-                <button className={viewMode === "grid" ? "active" : ""} type="button" onClick={() => selectViewMode("grid")}>
-                  <Icon icon="solar:widget-4-linear" aria-hidden="true" />
-                  平铺
-                </button>
-                <button className={viewMode === "list" ? "active" : ""} type="button" onClick={() => selectViewMode("list")}>
-                  <Icon icon="solar:list-linear" aria-hidden="true" />
-                  列表
-                </button>
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        <div className={isPanelOpen("sort") ? "archive-control-group archive-sort-control expanded" : "archive-control-group archive-sort-control"}>
-          <button
-            className="archive-control-toggle"
-            type="button"
-            onClick={() => togglePanel("sort")}
-            aria-expanded={isPanelOpen("sort")}
-            aria-controls="archive-sort-panel"
-          >
-            <span>
-              <Icon icon="solar:sort-linear" aria-hidden="true" />
-              排序
-            </span>
-            <small>{getSortLabel(sortMode)}</small>
-            <Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" />
-          </button>
-          {isPanelOpen("sort") ? (
-            <div className="archive-control-panel" id="archive-sort-panel">
-              <div className="segmented-control">
-                <button className={sortMode === "newest" ? "active" : ""} type="button" onClick={() => selectSortMode("newest")}>
-                  新到旧
-                </button>
-                <button className={sortMode === "oldest" ? "active" : ""} type="button" onClick={() => selectSortMode("oldest")}>
-                  旧到新
-                </button>
-              </div>
-            </div>
-          ) : null}
-        </div>
-
-        <div className="archive-control-group archive-search-control">
-          <form className="archive-search-form" onSubmit={submitSearch} aria-label="搜索文章">
-            <div className="archive-search-box">
+      <div className="archive-workspace">
+        <header className="archive-toolbar">
+          <form className="archive-global-search" onSubmit={submitSearch}>
+            <Icon icon="solar:magnifer-linear" aria-hidden="true" />
+            <div className="archive-search-content">
               {draftTags.map((tag) => (
-                <span className="search-tag-chip" key={tag}>
-                  {tag}
-                  <button type="button" onClick={() => removeDraftTag(tag)} aria-label={`取消标签 ${tag}`}>
-                    <Icon icon="solar:close-circle-linear" aria-hidden="true" />
-                  </button>
-                </span>
+                <span key={tag}>{tag}<button type="button" onClick={() => toggleDraftTag(tag)} aria-label={`取消标签 ${tag}`}><Icon icon="solar:close-circle-linear" aria-hidden="true" /></button></span>
               ))}
               <input
-                id="archive-search"
+                value={draftQuery}
+                onChange={(event) => setDraftQuery(event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Backspace" && !draftQuery && draftTags.length > 0) {
+                    setDraftTags((current) => current.slice(0, -1));
+                  }
+                }}
                 type="search"
-                value={draftTitle}
-                onChange={(event) => setDraftTitle(event.target.value)}
-                onKeyDown={handleSearchKeyDown}
-                placeholder={draftTags.length > 0 ? "继续输入标题" : "输入标题，或点标签"}
-                aria-label="按标题搜索文章"
+                placeholder="搜索文章、标签..."
+                aria-label="搜索文章或标签"
               />
             </div>
-            <button className="archive-search-submit" type="submit">
-              <Icon icon="solar:check-circle-linear" aria-hidden="true" />
-              确认
-            </button>
+            <button type="submit" aria-label="确认搜索"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></button>
           </form>
-        </div>
-      </section>
+          <div className="archive-toolbar-icons">
+            <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
+            <button type="button" onClick={() => setTagPanelOpen(true)} aria-label="打开标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></button>
+          </div>
+        </header>
 
-      {searchNotice ? (
-        <div className="archive-message" role="status" aria-live="polite">
-          <span aria-hidden="true">×</span>
-          未查到文章
+        <section className="archive-banner" aria-labelledby="archive-title">
+          <Image src="/images/sakura-coast-hero.png" alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
+          <div aria-hidden="true" />
+          <div className="archive-banner-copy">
+            <span>从第一篇开始</span>
+            <h1 id="archive-title">文章归档</h1>
+            <p><Icon icon="solar:stars-line-linear" aria-hidden="true" />记录每一刻的思考</p>
+          </div>
+        </section>
+
+        <div className="archive-content-grid">
+          <section className="archive-years archive-panel" id="years" aria-label="按年份浏览文章">
+            {years.map((group) => {
+              const displayedPosts = selectedMonth.startsWith(`${group.year}-`)
+                ? group.posts.filter((post) => getYearMonth(post).month === selectedMonth.slice(-2))
+                : selectedMonth ? [] : group.posts;
+
+              return (
+                <section className="archive-year" key={group.year}>
+                  <div className="archive-year-heading">
+                    <span aria-hidden="true" />
+                    <div><h2>{group.year} 年</h2><p>共 {group.posts.length} 篇文章</p></div>
+                  </div>
+                  <div className="archive-months">
+                    {MONTH_LABELS.map((month) => {
+                      const key = `${group.year}-${month}`;
+                      const count = group.monthCounts[month] ?? 0;
+                      return (
+                        <button className={selectedMonth === key ? "active" : ""} type="button" key={key} disabled={count === 0} onClick={() => setSelectedMonth((current) => current === key ? "" : key)} aria-pressed={selectedMonth === key}>
+                          <strong>{month} 月</strong><span>{count} 篇文章</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  {displayedPosts.length > 0 ? (
+                    <div className="archive-year-posts">
+                      {displayedPosts.map((post) => (
+                        <Link href={`/posts/${post.slug}`} key={post.slug}>
+                          <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
+                          <strong>{post.title}</strong>
+                          <span>{post.tags.slice(0, 3).join(" · ")}</span>
+                          <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
+                        </Link>
+                      ))}
+                    </div>
+                  ) : null}
+                </section>
+              );
+            })}
+            {searchedPosts.length === 0 ? <div className="archive-no-results" role="status"><Icon icon="solar:close-circle-linear" aria-hidden="true" />未查到文章</div> : null}
+            <p className="archive-year-quote"><Icon icon="solar:stars-line-linear" aria-hidden="true" />时光会走，文字留下。</p>
+          </section>
+
+          <aside className="archive-insights" id="archive-stats">
+            <section className="archive-stats archive-panel">
+              <h2><Icon icon="solar:archive-linear" aria-hidden="true" />归档统计</h2>
+              <dl>
+                <div><dt><Icon icon="solar:document-text-linear" aria-hidden="true" />文章总数</dt><dd>{taggedPosts.length} 篇</dd></div>
+                <div><dt><Icon icon="solar:text-linear" aria-hidden="true" />字符统计</dt><dd>{formatCharacterCount(totalCharacters)} 字</dd></div>
+                <div><dt><Icon icon="solar:clock-circle-linear" aria-hidden="true" />运行天数</dt><dd>{runningDays} 天</dd></div>
+                <div><dt><Icon icon="solar:calendar-linear" aria-hidden="true" />最后更新</dt><dd>{newestPost ? getPostTimeLabel(newestPost).slice(0, 10) : "暂无"}</dd></div>
+              </dl>
+              <div className="archive-stat-art"><Image src="/images/sakura-coast-hero.png" alt="樱花海岸插画局部" fill sizes="220px" /></div>
+            </section>
+
+            <section className="archive-trend archive-panel">
+              <h2><Icon icon="solar:stars-line-linear" aria-hidden="true" />年度趋势</h2>
+              <div className="archive-bars" aria-label="各年份文章数量">
+                {[...years].reverse().map((group) => {
+                  const maxCount = Math.max(...years.map((item) => item.posts.length), 1);
+                  return <span key={group.year}><i style={{ height: `${Math.max(18, (group.posts.length / maxCount) * 100)}%` }} /><b>{group.posts.length}</b><small>{group.year}</small></span>;
+                })}
+              </div>
+            </section>
+
+            <section className="archive-random archive-panel">
+              <h2><Icon icon="solar:camera-linear" aria-hidden="true" />探索时光</h2>
+              <p>{randomPost ? randomPost.title : "翻开过去的文章。"}</p>
+              {randomPost ? <Link href={`/posts/${randomPost.slug}`}>读一篇<Icon icon="solar:arrow-right-linear" aria-hidden="true" /></Link> : null}
+              <button type="button" onClick={() => setRandomIndex((current) => current + 1)}>换一篇</button>
+            </section>
+
+            <blockquote className="archive-quote archive-panel">
+              <Icon icon="solar:chat-round-line-linear" aria-hidden="true" />
+              <p>把平凡写成诗。</p>
+              <cite>Sknying</cite>
+            </blockquote>
+          </aside>
+        </div>
+
+        <footer className="archive-footer">
+          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
+          <strong>清樱小屋</strong>
+          <span>记录美好 · 分享热爱</span>
+        </footer>
+      </div>
+
+      {tagPanelOpen ? (
+        <div className="archive-tag-layer" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setTagPanelOpen(false); }}>
+          <section className="archive-tag-dialog" role="dialog" aria-modal="true" aria-labelledby="tag-dialog-title">
+            <header><div><span>文章筛选</span><h2 id="tag-dialog-title">标签管理</h2></div><button type="button" onClick={() => setTagPanelOpen(false)} aria-label="关闭标签管理" autoFocus><Icon icon="solar:close-circle-linear" aria-hidden="true" /></button></header>
+            <div className="archive-tag-list">
+              {tags.map((tag) => (
+                <span className={draftTags.includes(tag) ? "active" : ""} key={tag}>
+                  <button type="button" onClick={() => toggleDraftTag(tag)} aria-pressed={draftTags.includes(tag)}>{tag}</button>
+                  {tag !== DEFAULT_TAG ? <button type="button" onClick={() => deleteTag(tag)} aria-label={`删除标签 ${tag}`}><Icon icon="solar:trash-bin-minimalistic-linear" aria-hidden="true" /></button> : null}
+                </span>
+              ))}
+            </div>
+            <form className="archive-tag-create" onSubmit={createTag}><label htmlFor="archive-new-tag">创建标签</label><div><input id="archive-new-tag" value={newTag} onChange={(event) => setNewTag(event.target.value)} maxLength={16} placeholder="比如：Rust" /><button type="submit"><Icon icon="solar:add-circle-linear" aria-hidden="true" />创建</button></div><p role="status">{tagMessage}</p></form>
+            <footer><button type="button" onClick={() => { setCommittedTags(draftTags); setCommittedQuery(draftQuery); setSelectedMonth(""); setTagPanelOpen(false); }}>应用筛选</button></footer>
+          </section>
         </div>
       ) : null}
-
-      <section className={`archive-posts ${viewMode}`} aria-live="polite">
-        {visiblePosts.length > 0 ? (
-          visiblePosts.map((post) => (
-            <article className="archive-card" key={post.slug}>
-              <div className="archive-card-mark" aria-hidden="true">
-                <Icon icon="solar:document-text-linear" />
-              </div>
-              <div className="archive-card-main">
-                <span className="archive-card-time">{getPostTimeLabel(post)}</span>
-                <h2>{post.title}</h2>
-                <div className="archive-card-tags" aria-label="文章标签">
-                  {post.tags.map((tag) => (
-                    <span className="article-tag-pill" key={tag}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-                <p>{post.summary}</p>
-              </div>
-              <Link href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
-                <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-              </Link>
-            </article>
-          ))
-        ) : (
-          <div className="archive-empty">
-            <Icon icon="solar:folder-open-linear" aria-hidden="true" />
-            <h2>{hasCommittedSearch ? "没搜到。" : "这个标签还空着。"}</h2>
-            <p>{hasCommittedSearch ? "换个词再试。" : "先记着。以后再塞文章。"}</p>
-          </div>
-        )}
-      </section>
     </main>
   );
 }
