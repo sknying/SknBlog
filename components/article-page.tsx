@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { Fragment, useEffect, useMemo, useState } from "react";
+import { getCodeLanguage, getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
 import { getPostTimeLabel, getPrimaryTag, type ArticleBlock, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
@@ -19,149 +20,12 @@ type OutlineItem = {
   level: 1 | 2;
 };
 
-const CODE_KEYWORDS = new Set([
-  "async",
-  "await",
-  "break",
-  "case",
-  "catch",
-  "class",
-  "const",
-  "default",
-  "else",
-  "export",
-  "extends",
-  "false",
-  "finally",
-  "for",
-  "from",
-  "function",
-  "if",
-  "import",
-  "in",
-  "interface",
-  "let",
-  "new",
-  "null",
-  "return",
-  "switch",
-  "true",
-  "try",
-  "type",
-  "undefined"
-]);
-
 function getBlockHeading(block: ArticleBlock) {
   if (block.type === "list" || block.type === "table") {
     return block.title;
   }
 
   return null;
-}
-
-function getCodeLanguage(title: string) {
-  const normalized = title.toLowerCase();
-
-  if (normalized.includes("frontmatter") || normalized.endsWith(".yml") || normalized.endsWith(".yaml")) {
-    return "yaml";
-  }
-
-  if (normalized.endsWith(".tsx")) {
-    return "tsx";
-  }
-
-  if (normalized.endsWith(".ts")) {
-    return "ts";
-  }
-
-  if (normalized.endsWith(".css")) {
-    return "css";
-  }
-
-  return "text";
-}
-
-function getLanguageLabel(language: string) {
-  if (language === "tsx") {
-    return "TSX";
-  }
-
-  if (language === "ts") {
-    return "TypeScript";
-  }
-
-  if (language === "css") {
-    return "CSS";
-  }
-
-  if (language === "yaml") {
-    return "YAML";
-  }
-
-  return "Text";
-}
-
-function getTokenClass(token: string, language: string) {
-  if (/^\/\/|^\/\*/.test(token)) {
-    return "comment";
-  }
-
-  if (/^["'`]/.test(token)) {
-    return "string";
-  }
-
-  if (/^\d/.test(token)) {
-    return "number";
-  }
-
-  if (language === "css" && /^[-a-zA-Z]+$/.test(token)) {
-    return "property";
-  }
-
-  if (CODE_KEYWORDS.has(token)) {
-    return "keyword";
-  }
-
-  if (/^[{}()[\].,;:=>-]+$/.test(token)) {
-    return "punctuation";
-  }
-
-  return null;
-}
-
-function highlightCodeLine(line: string, language: string, lineIndex: number) {
-  const matcher =
-    language === "css"
-      ? /(\/\*.*?\*\/|#[0-9a-fA-F]{3,8}\b|[-a-zA-Z]+(?=\s*:)|["'][^"']*["']|\b\d+(?:\.\d+)?(?:px|rem|em|%|vw|vh)?\b|[{}()[\].,;:=>-])/g
-      : /(\/\/.*|["'`][^"'`]*["'`]|\b\d+(?:\.\d+)?\b|\b[A-Za-z_$][\w$]*\b|[{}()[\].,;:=>-])/g;
-  const nodes = [];
-  let lastIndex = 0;
-  let match: RegExpExecArray | null;
-
-  while ((match = matcher.exec(line)) !== null) {
-    if (match.index > lastIndex) {
-      nodes.push(line.slice(lastIndex, match.index));
-    }
-
-    const token = match[0];
-    const tokenClass = getTokenClass(token, language);
-    nodes.push(
-      tokenClass ? (
-        <span className={`code-token ${tokenClass}`} key={`${lineIndex}-${match.index}`}>
-          {token}
-        </span>
-      ) : (
-        token
-      )
-    );
-    lastIndex = matcher.lastIndex;
-  }
-
-  if (lastIndex < line.length) {
-    nodes.push(line.slice(lastIndex));
-  }
-
-  return nodes.length > 0 ? nodes : "\u00A0";
 }
 
 function renderInlineText(text: string) {

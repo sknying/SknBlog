@@ -4,8 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@iconify/react";
 import { useEffect, useMemo, useState } from "react";
+import { getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
 import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
+
+const HOME_DEMO_LANGUAGE = "tsx";
+const HOME_DEMO_CODE = `const note = {
+  mood: "midnight",
+  stack: "Next.js",
+  coffee: 2,
+};`;
+const HOME_DEMO_LINES = HOME_DEMO_CODE.split("\n");
 
 function MeteorCursor() {
   const [points, setPoints] = useState<Array<{ id: number; x: number; y: number }>>([]);
@@ -80,7 +89,8 @@ export function BlogHome() {
   const stats = useMemo(
     () => [
       { label: "文章", value: `${visiblePosts.length} 篇` },
-      { label: "标签", value: `${tags.length} 个` }
+      { label: "标签", value: `${tags.length} 个` },
+      { label: "专栏", value: "预留" }
     ],
     [tags.length, visiblePosts.length]
   );
@@ -139,21 +149,20 @@ export function BlogHome() {
                 <span />
                 <span />
                 <b>notes/sknblog.tsx</b>
+                <em>{getLanguageLabel(HOME_DEMO_LANGUAGE)}</em>
               </div>
               <div className="editor-body">
-                <div className="line-numbers">
-                  <span>01</span>
-                  <span>02</span>
-                  <span>03</span>
-                  <span>04</span>
-                  <span>05</span>
-                </div>
                 <pre>
-                  <code>{`const note = {
-  mood: "midnight",
-  stack: "Next.js",
-  coffee: 2,
-};`}</code>
+                  <code>
+                    {HOME_DEMO_LINES.map((line, lineIndex) => (
+                      <span className="code-line" key={`home-demo-${lineIndex}`}>
+                        <span className="code-line-number" aria-hidden="true">
+                          {lineIndex + 1}
+                        </span>
+                        <span className="code-line-content">{highlightCodeLine(line, HOME_DEMO_LANGUAGE, lineIndex)}</span>
+                      </span>
+                    ))}
+                  </code>
                 </pre>
               </div>
             </div>

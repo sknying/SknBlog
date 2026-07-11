@@ -386,37 +386,58 @@ h1 {
 }
 
 .editor-top b {
+  min-width: 0;
   margin-left: 8px;
+  overflow: hidden;
   font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.editor-top em {
+  margin-left: auto;
+  border: 1px solid rgba(122, 162, 247, 0.22);
+  border-radius: 999px;
+  padding: 3px 9px;
+  color: #c0caf5;
+  font-family: var(--font-code);
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1;
+  background: rgba(122, 162, 247, 0.08);
 }
 
 .editor-body {
-  display: grid;
-  grid-template-columns: 42px 1fr;
-  gap: 14px;
-  padding: 20px 18px;
-}
-
-.line-numbers {
-  display: grid;
-  color: #565f89;
-  font-family: var(--font-code);
-  font-size: 13px;
-  line-height: 1.85;
-  text-align: right;
+  min-width: 0;
+  overflow: hidden;
+  padding: 16px 0;
 }
 
 .editor-body pre {
   margin: 0;
+  overflow: auto;
   color: #c0caf5;
-  white-space: pre-wrap;
-  font-family: var(--font-code);
-  font-size: clamp(15px, 1.6vw, 18px);
-  line-height: 1.85;
+  background:
+    linear-gradient(90deg, rgba(122, 162, 247, 0.05), transparent 18rem),
+    #24283b;
+  font-size: clamp(13px, 1.35vw, 16px);
+  line-height: 1.75;
 }
 
 .editor-body code {
-  color: inherit;
+  display: block;
+  min-width: max-content;
+  font-family: var(--font-code);
+  font-variant-ligatures: contextual;
+  font-variant-numeric: tabular-nums;
+}
+
+.editor-body .code-line {
+  padding: 0 16px;
+}
+
+.editor-body .code-line-number {
+  background: #24283b;
 }
 
 .editor-orbit {
@@ -445,9 +466,9 @@ h1 {
   bottom: 18px;
   z-index: 2;
   display: grid;
-  grid-template-columns: repeat(2, minmax(92px, 1fr));
+  grid-template-columns: repeat(3, minmax(82px, 1fr));
   gap: 8px;
-  width: min(310px, calc(100% - 36px));
+  width: min(460px, calc(100% - 36px));
   padding: 8px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -458,7 +479,7 @@ h1 {
 .status-strip span {
   display: grid;
   gap: 2px;
-  min-height: 78px;
+  min-height: 74px;
   align-content: center;
   padding: 12px;
   border-radius: 8px;
@@ -468,7 +489,7 @@ h1 {
 
 .status-strip b {
   color: var(--text);
-  font-size: clamp(22px, 2.2vw, 30px);
+  font-size: clamp(20px, 2vw, 28px);
   line-height: 1;
 }
 

@@ -1,0 +1,52 @@
+.code-line {
+  display: grid;
+  grid-template-columns: 4.5ch minmax(0, 1fr);
+  min-height: 1.75em;
+  padding: 0 clamp(16px, 3vw, 24px);
+}
+
+.code-line:hover {
+  background: rgba(122, 162, 247, 0.055);
+}
+
+.code-line-number {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  padding-right: 14px;
+  color: #565f89;
+  text-align: right;
+  user-select: none;
+  background: #24283b;
+}
+
+.code-line-content {
+  border-left: 1px solid rgba(122, 162, 247, 0.13);
+  padding-left: 14px;
+  white-space: pre;
+}
+
+.code-token.keyword {
+  color: #bb9af7;
+}
+
+.code-token.string {
+  color: #9ece6a;
+}
+
+.code-token.number {
+  color: #ff9e64;
+}
+
+.code-token.comment {
+  color: #565f89;
+  font-style: italic;
+}
+
+.code-token.property {
+  color: #7dcfff;
+}
+
+.code-token.punctuation {
+  color: #89ddff;
+}
