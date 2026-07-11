@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Icon } from "@iconify/react";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useMemo, useState } from "react";
@@ -13,7 +14,6 @@ type ControlPanel = "layout" | "sort" | "tags";
 
 type PostsIndexProps = {
   posts: Post[];
-  initialTag?: string;
 };
 
 const ALL_TAG = "全部";
@@ -39,7 +39,9 @@ function matchesPost(post: Post, title: string, tags: string[]) {
   return matchesTags && matchesTitle;
 }
 
-export function PostsIndex({ posts, initialTag }: PostsIndexProps) {
+export function PostsIndex({ posts }: PostsIndexProps) {
+  const searchParams = useSearchParams();
+  const initialTag = searchParams.get("tag") ?? undefined;
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [draftTitle, setDraftTitle] = useState("");
