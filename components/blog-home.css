@@ -415,6 +415,7 @@ h1 {
 
 .editor-body pre {
   margin: 0;
+  min-height: calc(5 * 1.75em);
   overflow: auto;
   color: #c0caf5;
   background:

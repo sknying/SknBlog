@@ -8,13 +8,13 @@ import { getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
 import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
 
-const HOME_DEMO_LANGUAGE = "tsx";
-const HOME_DEMO_CODE = `const note = {
-  mood: "midnight",
-  stack: "Next.js",
-  coffee: 2,
-};`;
-const HOME_DEMO_LINES = HOME_DEMO_CODE.split("\n");
+const HOME_DEMO_LANGUAGE = "rust";
+const HOME_DEMO_CODE = `fn main() {
+    let mood = "midnight";
+    let coffee = 2;
+    println!("SknBlog: {mood} x{coffee}");
+}`;
+const HOME_DEMO_PAUSE_TICKS = 34;
 
 function MeteorCursor() {
   const [points, setPoints] = useState<Array<{ id: number; x: number; y: number }>>([]);
@@ -85,7 +85,11 @@ function PostImage({ post, index }: { post: Post; index: number }) {
 
 export function BlogHome() {
   const [subscribed, setSubscribed] = useState(false);
+  const [typedTick, setTypedTick] = useState(0);
   const { posts: visiblePosts, tags } = usePostTagState(posts);
+  const typedCode = HOME_DEMO_CODE.slice(0, Math.min(typedTick, HOME_DEMO_CODE.length));
+  const typedLines = typedCode.split("\n");
+  const isTyping = typedTick < HOME_DEMO_CODE.length;
   const stats = useMemo(
     () => [
       { label: "文章", value: `${visiblePosts.length} 篇` },
@@ -94,6 +98,21 @@ export function BlogHome() {
     ],
     [tags.length, visiblePosts.length]
   );
+
+  useEffect(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (prefersReducedMotion) {
+      setTypedTick(HOME_DEMO_CODE.length);
+      return;
+    }
+
+    const intervalId = window.setInterval(() => {
+      setTypedTick((current) => (current >= HOME_DEMO_CODE.length + HOME_DEMO_PAUSE_TICKS ? 0 : current + 1));
+    }, 42);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   return (
     <main className="site-shell">
@@ -148,18 +167,21 @@ export function BlogHome() {
                 <span />
                 <span />
                 <span />
-                <b>notes/sknblog.tsx</b>
+                <b>notes/sknblog.rs</b>
                 <em>{getLanguageLabel(HOME_DEMO_LANGUAGE)}</em>
               </div>
               <div className="editor-body">
                 <pre>
                   <code>
-                    {HOME_DEMO_LINES.map((line, lineIndex) => (
+                    {typedLines.map((line, lineIndex) => (
                       <span className="code-line" key={`home-demo-${lineIndex}`}>
                         <span className="code-line-number" aria-hidden="true">
                           {lineIndex + 1}
                         </span>
-                        <span className="code-line-content">{highlightCodeLine(line, HOME_DEMO_LANGUAGE, lineIndex)}</span>
+                        <span className="code-line-content">
+                          {highlightCodeLine(line, HOME_DEMO_LANGUAGE, lineIndex)}
+                          {isTyping && lineIndex === typedLines.length - 1 ? <span className="typing-caret" aria-hidden="true" /> : null}
+                        </span>
                       </span>
                     ))}
                   </code>

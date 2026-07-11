@@ -12,6 +12,7 @@ const CODE_KEYWORDS = new Set([
   "extends",
   "false",
   "finally",
+  "fn",
   "for",
   "from",
   "function",
@@ -20,9 +21,12 @@ const CODE_KEYWORDS = new Set([
   "in",
   "interface",
   "let",
+  "match",
+  "mut",
   "new",
   "null",
   "return",
+  "self",
   "switch",
   "true",
   "try",
@@ -49,6 +53,10 @@ export function getCodeLanguage(title: string) {
     return "css";
   }
 
+  if (normalized.endsWith(".rs")) {
+    return "rust";
+  }
+
   return "text";
 }
 
@@ -67,6 +75,10 @@ export function getLanguageLabel(language: string) {
 
   if (language === "yaml") {
     return "YAML";
+  }
+
+  if (language === "rust") {
+    return "Rust";
   }
 
   return "Text";
