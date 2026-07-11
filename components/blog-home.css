@@ -416,7 +416,7 @@ h1 {
 .editor-body pre {
   margin: 0;
   min-height: calc(5 * 1.75em);
-  overflow: auto;
+  overflow: hidden;
   color: #c0caf5;
   background:
     linear-gradient(90deg, rgba(122, 162, 247, 0.05), transparent 18rem),
@@ -427,7 +427,8 @@ h1 {
 
 .editor-body code {
   display: block;
-  min-width: max-content;
+  width: 100%;
+  min-width: 0;
   font-family: var(--font-code);
   font-variant-ligatures: contextual;
   font-variant-numeric: tabular-nums;

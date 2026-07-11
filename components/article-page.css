@@ -443,7 +443,7 @@ a.article-tag-pill:hover {
 
 .article-code pre {
   margin: 0;
-  overflow-x: auto;
+  overflow-x: hidden;
   padding: clamp(14px, 3vw, 22px) 0;
   color: #c0caf5;
   background:
@@ -455,7 +455,8 @@ a.article-tag-pill:hover {
 
 .article-code code {
   display: block;
-  min-width: max-content;
+  width: 100%;
+  min-width: 0;
   font-family: var(--font-code);
   font-variant-ligatures: contextual;
   font-variant-numeric: tabular-nums;

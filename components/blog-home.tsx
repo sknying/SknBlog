@@ -14,6 +14,7 @@ const HOME_DEMO_CODE = `fn main() {
     let coffee = 2;
     println!("SknBlog: {mood} x{coffee}");
 }`;
+const HOME_DEMO_LINE_COUNT = HOME_DEMO_CODE.split("\n").length;
 const HOME_DEMO_PAUSE_TICKS = 34;
 
 function MeteorCursor() {
@@ -89,6 +90,7 @@ export function BlogHome() {
   const { posts: visiblePosts, tags } = usePostTagState(posts);
   const typedCode = HOME_DEMO_CODE.slice(0, Math.min(typedTick, HOME_DEMO_CODE.length));
   const typedLines = typedCode.split("\n");
+  const typedRows = Array.from({ length: HOME_DEMO_LINE_COUNT }, (_, index) => typedLines[index] ?? "");
   const isTyping = typedTick < HOME_DEMO_CODE.length;
   const stats = useMemo(
     () => [
@@ -173,7 +175,7 @@ export function BlogHome() {
               <div className="editor-body">
                 <pre>
                   <code>
-                    {typedLines.map((line, lineIndex) => (
+                    {typedRows.map((line, lineIndex) => (
                       <span className="code-line" key={`home-demo-${lineIndex}`}>
                         <span className="code-line-number" aria-hidden="true">
                           {lineIndex + 1}
