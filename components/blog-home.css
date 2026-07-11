@@ -22,7 +22,7 @@
     linear-gradient(145deg, #fbfdff 0%, var(--sakura-bg) 56%, #fdf5f8 100%);
 }
 
-.sakura-site[data-theme="night"] {
+:root[data-theme="dark"] .sakura-site {
   --sakura-bg: #18223a;
   --sakura-paper: rgba(24, 34, 58, 0.86);
   --sakura-paper-strong: rgba(31, 43, 70, 0.96);
@@ -85,7 +85,7 @@
   backdrop-filter: blur(22px);
 }
 
-[data-theme="night"] .sakura-sidebar {
+:root[data-theme="dark"] .sakura-sidebar {
   background: rgba(17, 24, 42, 0.78);
 }
 
@@ -319,7 +319,7 @@
     linear-gradient(0deg, rgba(42, 67, 108, 0.08), transparent 42%);
 }
 
-[data-theme="night"] .sakura-hero-wash {
+:root[data-theme="dark"] .sakura-hero-wash {
   background: linear-gradient(90deg, rgba(18, 27, 48, 0.93), rgba(18, 27, 48, 0.55) 38%, rgba(18, 27, 48, 0.08) 68%);
 }
 
@@ -344,7 +344,7 @@
   line-height: 1.28;
 }
 
-[data-theme="night"] .sakura-hero-copy h1 {
+:root[data-theme="dark"] .sakura-hero-copy h1 {
   color: var(--sakura-text);
 }
 
@@ -962,5 +962,36 @@
   .sakura-site * {
     scroll-behavior: auto;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .sakura-site {
+    --sakura-bg: #18223a;
+    --sakura-paper: rgba(24, 34, 58, 0.86);
+    --sakura-paper-strong: rgba(31, 43, 70, 0.96);
+    --sakura-text: #f5f7ff;
+    --sakura-muted: #b7c2dc;
+    --sakura-blue: #91b4ff;
+    --sakura-blue-deep: #79a2f2;
+    --sakura-pink: #ff9db7;
+    --sakura-line: rgba(190, 207, 244, 0.2);
+    --sakura-shadow: 0 16px 44px rgba(5, 10, 25, 0.36);
+    background:
+      radial-gradient(circle at 72% 8%, rgba(89, 119, 179, 0.3), transparent 34rem),
+      radial-gradient(circle at 90% 54%, rgba(129, 67, 100, 0.22), transparent 30rem),
+      linear-gradient(145deg, #11182a 0%, var(--sakura-bg) 58%, #241a2b 100%);
+  }
+
+  :root:not([data-theme]) .sakura-sidebar {
+    background: rgba(17, 24, 42, 0.78);
+  }
+
+  :root:not([data-theme]) .sakura-hero-wash {
+    background: linear-gradient(90deg, rgba(18, 27, 48, 0.93), rgba(18, 27, 48, 0.55) 38%, rgba(18, 27, 48, 0.08) 68%);
+  }
+
+  :root:not([data-theme]) .sakura-hero-copy h1 {
+    color: var(--sakura-text);
   }
 }

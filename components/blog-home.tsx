@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
@@ -74,7 +75,6 @@ function HomeArticle({ post }: { post: Post }) {
 
 export function BlogHome() {
   const [query, setQuery] = useState("");
-  const [nightMode, setNightMode] = useState(false);
   const { posts: visiblePosts, tags } = usePostTagState(posts);
   const recentPosts = useMemo(() => {
     const keyword = query.trim().toLocaleLowerCase("zh-CN");
@@ -88,7 +88,7 @@ export function BlogHome() {
   }, [query, visiblePosts]);
 
   return (
-    <main className="sakura-site" data-theme={nightMode ? "night" : "day"} id="top">
+    <main className="sakura-site" id="top">
       <div className="sakura-grain" aria-hidden="true" />
 
       <aside className="sakura-sidebar">
@@ -148,9 +148,7 @@ export function BlogHome() {
             ) : null}
           </label>
           <div className="sakura-toolbar-actions">
-            <button type="button" onClick={() => setNightMode((current) => !current)} aria-label="切换明暗主题">
-              <Icon icon={nightMode ? "solar:sun-2-linear" : "solar:moon-linear"} aria-hidden="true" />
-            </button>
+            <ThemeToggle />
             <Link href="/posts" aria-label="查看文章">
               <Icon icon="solar:bell-linear" aria-hidden="true" />
             </Link>

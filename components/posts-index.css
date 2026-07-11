@@ -21,6 +21,43 @@
     linear-gradient(145deg, #fbfdff, #eef5fc 58%, #fff7fa);
 }
 
+:root[data-theme="dark"] .archive-page {
+  --archive-paper: rgba(24, 34, 58, 0.86);
+  --archive-paper-strong: rgba(31, 43, 70, 0.96);
+  --archive-text: #f3f6ff;
+  --archive-muted: #b4bfd8;
+  --archive-blue: #91b4ff;
+  --archive-blue-deep: #79a2f2;
+  --archive-pink: #ff9db7;
+  --archive-line: rgba(190, 207, 244, 0.2);
+  --archive-shadow: 0 16px 44px rgba(4, 9, 22, 0.4);
+  background:
+    radial-gradient(circle at 78% 2%, rgba(76, 105, 165, 0.3), transparent 32rem),
+    radial-gradient(circle at 92% 48%, rgba(133, 68, 102, 0.22), transparent 30rem),
+    linear-gradient(145deg, #0f1728, #18223a 58%, #241a2b);
+}
+
+:root[data-theme="dark"] .archive-side,
+:root[data-theme="dark"] .archive-footer {
+  background-color: rgba(17, 24, 42, 0.82);
+}
+
+:root[data-theme="dark"] .archive-banner > div:first-of-type {
+  background: linear-gradient(90deg, rgba(18, 27, 48, 0.94), rgba(18, 27, 48, 0.62) 44%, rgba(18, 27, 48, 0.08) 72%);
+}
+
+:root[data-theme="dark"] .archive-months button,
+:root[data-theme="dark"] .archive-tag-dialog,
+:root[data-theme="dark"] .archive-tag-list > span,
+:root[data-theme="dark"] .archive-tag-create > div {
+  color: var(--archive-text);
+  background: var(--archive-paper-strong);
+}
+
+:root[data-theme="dark"] .archive-year-heading > span {
+  border-color: #18223a;
+}
+
 .archive-grain {
   position: fixed;
   inset: 0;
@@ -956,4 +993,43 @@
   .archive-years,
   .archive-insights > * { animation: none; }
   .archive-page * { transition-duration: 0.01ms !important; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .archive-page {
+    --archive-paper: rgba(24, 34, 58, 0.86);
+    --archive-paper-strong: rgba(31, 43, 70, 0.96);
+    --archive-text: #f3f6ff;
+    --archive-muted: #b4bfd8;
+    --archive-blue: #91b4ff;
+    --archive-blue-deep: #79a2f2;
+    --archive-pink: #ff9db7;
+    --archive-line: rgba(190, 207, 244, 0.2);
+    --archive-shadow: 0 16px 44px rgba(4, 9, 22, 0.4);
+    background:
+      radial-gradient(circle at 78% 2%, rgba(76, 105, 165, 0.3), transparent 32rem),
+      radial-gradient(circle at 92% 48%, rgba(133, 68, 102, 0.22), transparent 30rem),
+      linear-gradient(145deg, #0f1728, #18223a 58%, #241a2b);
+  }
+
+  :root:not([data-theme]) .archive-side,
+  :root:not([data-theme]) .archive-footer {
+    background-color: rgba(17, 24, 42, 0.82);
+  }
+
+  :root:not([data-theme]) .archive-banner > div:first-of-type {
+    background: linear-gradient(90deg, rgba(18, 27, 48, 0.94), rgba(18, 27, 48, 0.62) 44%, rgba(18, 27, 48, 0.08) 72%);
+  }
+
+  :root:not([data-theme]) .archive-months button,
+  :root:not([data-theme]) .archive-tag-dialog,
+  :root:not([data-theme]) .archive-tag-list > span,
+  :root:not([data-theme]) .archive-tag-create > div {
+    color: var(--archive-text);
+    background: var(--archive-paper-strong);
+  }
+
+  :root:not([data-theme]) .archive-year-heading > span {
+    border-color: #18223a;
+  }
 }

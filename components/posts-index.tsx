@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/local-icon";
+import { ThemeToggle } from "@/components/theme-toggle";
 import type { FormEvent } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { getPostTimeLabel, type Post } from "@/lib/blog-data";
@@ -34,9 +35,10 @@ function formatCharacterCount(value: number) {
 export function PostsIndex({ posts }: { posts: Post[] }) {
   const searchParams = useSearchParams();
   const initialTag = searchParams.get("tag") ?? "";
+  const initialQuery = searchParams.get("q") ?? "";
   const { addTag, deleteTags, posts: taggedPosts, tags } = usePostTagState(posts);
-  const [draftQuery, setDraftQuery] = useState("");
-  const [committedQuery, setCommittedQuery] = useState("");
+  const [draftQuery, setDraftQuery] = useState(initialQuery);
+  const [committedQuery, setCommittedQuery] = useState(initialQuery);
   const [draftTags, setDraftTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [committedTags, setCommittedTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [selectedMonth, setSelectedMonth] = useState("");
@@ -181,6 +183,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
             <button type="submit" aria-label="确认搜索"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></button>
           </form>
           <div className="archive-toolbar-icons">
+            <ThemeToggle />
             <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
             <button type="button" onClick={() => setTagPanelOpen(true)} aria-label="打开标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></button>
           </div>
