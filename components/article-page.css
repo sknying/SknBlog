@@ -661,3 +661,108 @@ a.article-tag-pill:hover {
   color: var(--accent-2);
   font-size: 13px;
 }
+
+/* Sakura light theme */
+.article-shell {
+  color: var(--text);
+  background:
+    radial-gradient(circle at 86% 4%, rgba(255, 202, 218, 0.48), transparent 28rem),
+    radial-gradient(circle at 12% 16%, rgba(181, 216, 255, 0.56), transparent 30rem),
+    linear-gradient(145deg, #fbfdff, #edf5fc 58%, #fff7fa);
+}
+
+.article-shell .noise { opacity: 0.12; }
+.article-shell .meteor-field { display: none; }
+
+.article-shell .article-topbar,
+.article-sidebar,
+.article-content,
+.article-rail,
+.article-pager a {
+  border-color: var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.article-shell .brand-mark {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+
+.article-shell .article-back,
+.article-outline-toggle,
+.article-outline a,
+.article-sidebar-note {
+  border-color: var(--line);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.article-hero {
+  border-color: var(--line);
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.article-title-block .article-kicker,
+.article-tag-pill,
+.article-outline a.active {
+  border-color: rgba(100, 142, 228, 0.36);
+  color: #4774d2;
+  background: rgba(100, 142, 228, 0.11);
+}
+
+.article-title-block p,
+.article-sidebar-note p,
+.article-content > p,
+.article-image-block figcaption,
+.article-math-block figcaption { color: var(--muted); }
+
+.article-cover {
+  border-color: rgba(255, 255, 255, 0.58);
+  box-shadow: 0 18px 46px rgba(74, 105, 161, 0.18);
+}
+
+.article-content {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 22px 58px rgba(74, 105, 161, 0.2);
+}
+
+.article-content blockquote {
+  border-left-color: var(--accent);
+  color: var(--text);
+  background: rgba(242, 143, 168, 0.08);
+}
+
+.article-content :not(pre) > code,
+.article-inline-code {
+  border-color: rgba(100, 142, 228, 0.28);
+  color: #385ea9;
+  background: rgba(100, 142, 228, 0.1);
+}
+
+.article-content a {
+  color: #4774d2;
+  text-decoration-color: rgba(71, 116, 210, 0.42);
+}
+
+.article-list,
+.article-table-block,
+.article-math-block,
+.article-image-block {
+  border-color: var(--line);
+  background: rgba(244, 248, 255, 0.8);
+}
+
+.article-table-block th {
+  color: #385ea9;
+  background: rgba(100, 142, 228, 0.12);
+}
+
+.article-table-block td,
+.article-table-block th { border-color: var(--line); }
+
+.article-pager a:hover {
+  border-color: rgba(100, 142, 228, 0.42);
+  background: rgba(100, 142, 228, 0.12);
+}

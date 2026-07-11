@@ -600,3 +600,78 @@
 .archive-empty p {
   margin: 0;
 }
+
+/* Sakura light theme */
+.archive-shell {
+  color: var(--text);
+  background:
+    radial-gradient(circle at 84% 2%, rgba(255, 203, 218, 0.48), transparent 26rem),
+    radial-gradient(circle at 14% 18%, rgba(181, 216, 255, 0.56), transparent 30rem),
+    linear-gradient(145deg, #fbfdff, #edf5fc 58%, #fff7fa);
+}
+
+.archive-shell .noise { opacity: 0.12; }
+.archive-shell .meteor-field { display: none; }
+
+.archive-shell .article-topbar,
+.archive-controls,
+.archive-control-group,
+.archive-control-panel,
+.archive-card,
+.archive-empty {
+  border-color: var(--line);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.archive-shell .article-topbar { border-radius: 8px; }
+
+.archive-shell .brand-mark {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+}
+
+.archive-shell .article-back,
+.archive-control-toggle,
+.archive-search-box,
+.archive-search-form,
+.tag-create > div,
+.segmented-control,
+.archive-card-mark {
+  border-color: var(--line);
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.archive-control-toggle small,
+.archive-search-box input,
+.tag-create input,
+.archive-card p,
+.archive-card-time { color: var(--muted); }
+
+.archive-control-toggle:hover,
+.archive-control-toggle[aria-expanded="true"],
+.segmented-control button.active,
+.tag-chip.active,
+.search-tag-chip {
+  border-color: rgba(100, 142, 228, 0.42);
+  color: var(--text);
+  background: rgba(100, 142, 228, 0.12);
+}
+
+.archive-search-submit {
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent-2), #4774d2);
+}
+
+.archive-card:hover {
+  border-color: rgba(100, 142, 228, 0.42);
+  background: rgba(255, 255, 255, 0.96);
+  transform: translateY(-2px);
+}
+
+.archive-card .article-tag-pill {
+  color: #4774d2;
+  background: rgba(100, 142, 228, 0.1);
+}
