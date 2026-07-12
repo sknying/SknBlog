@@ -103,7 +103,7 @@
   background: color-mix(in srgb, var(--accent-2) 10%, transparent);
 }
 
-.site-search-menu > a > span:first-child {
+.site-search-menu > a:not(.site-search-more) > span:first-child {
   display: grid;
   width: 32px;
   height: 32px;
@@ -132,7 +132,16 @@
   font-weight: 700;
 }
 
+.site-search-more > span { min-width: 0; }
+.site-search-more > svg { width: 18px; height: 18px; }
 .site-search-more b { color: var(--muted); font-size: 10px; font-weight: 500; }
+
+.site-search-more:hover,
+.site-search-more:focus-visible {
+  border-radius: 6px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
+}
 .site-search-shell :where(a, button, input):focus-visible { outline: 3px solid color-mix(in srgb, var(--accent-2) 52%, transparent); outline-offset: 2px; }
 
 @media (max-width: 700px) {
