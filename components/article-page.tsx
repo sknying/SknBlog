@@ -92,14 +92,6 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
   const [isOutlineOpen, setIsOutlineOpen] = useState(true);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
-  const relatedPosts = useMemo(
-    () => allPosts.filter((item) => item.slug !== article.slug).sort((left, right) => {
-      const leftScore = left.tags.filter((tag) => article.tags.includes(tag)).length;
-      const rightScore = right.tags.filter((tag) => article.tags.includes(tag)).length;
-      return rightScore - leftScore || Date.parse(right.publishedAt) - Date.parse(left.publishedAt);
-    }).slice(0, 3),
-    [article, allPosts]
-  );
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
       { id: "article-title", label: article.title, level: 1 },
@@ -149,7 +141,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
           </div>
         </header>
 
-        <div className="article-grid">
+        <div className={`article-grid ${isOutlineOpen ? "" : "outline-collapsed"}`}>
           <article className="article-card">
             <header className="article-heading">
               <Link className="article-primary-tag" href={`/posts?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>
@@ -241,36 +233,13 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
             </nav>
           </article>
 
-          <aside className="article-right-rail">
+          <aside className={`article-right-rail ${isOutlineOpen ? "" : "is-collapsed"}`}>
             <section className="article-outline-panel article-rail-panel">
-              <button className="article-outline-toggle" type="button" onClick={() => setIsOutlineOpen((current) => !current)} aria-expanded={isOutlineOpen} aria-controls="article-outline-list">
-                <span><Icon icon="solar:list-check-linear" aria-hidden="true" />文章目录</span>
-                <Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" />
+              <button className="article-outline-toggle" type="button" onClick={() => setIsOutlineOpen((current) => !current)} aria-expanded={isOutlineOpen} aria-controls="article-outline-list" aria-label={isOutlineOpen ? "收起文章目录" : "展开文章目录"} title={isOutlineOpen ? "收起文章目录" : "展开文章目录"}>
+                {isOutlineOpen ? <><span><Icon icon="solar:list-check-linear" aria-hidden="true" />文章目录</span><Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" /></> : <Icon icon="solar:list-check-linear" aria-hidden="true" />}
               </button>
               {isOutlineOpen ? <nav className="article-outline" id="article-outline-list">{outlineItems.map((item, index) => <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} aria-current={activeOutlineId === item.id ? "location" : undefined}><span>{index + 1}.</span>{item.label}</a>)}</nav> : null}
             </section>
-
-            <section className="article-info article-rail-panel">
-              <h2><Icon icon="solar:document-text-linear" aria-hidden="true" />文章信息</h2>
-              <dl>
-                {article.column ? <div><dt><Icon icon="solar:bookmark-linear" aria-hidden="true" />所属专栏</dt><dd>{article.column}</dd></div> : null}
-                <div><dt><Icon icon="solar:tag-linear" aria-hidden="true" />文章标签</dt><dd>{article.tags.join(" · ")}</dd></div>
-                <div><dt><Icon icon="solar:calendar-linear" aria-hidden="true" />发布时间</dt><dd>{getPostTimeLabel(article)}</dd></div>
-                <div><dt><Icon icon="solar:text-linear" aria-hidden="true" />字符统计</dt><dd>{characterCount} 字</dd></div>
-                <div><dt><Icon icon="solar:clock-circle-linear" aria-hidden="true" />阅读时长</dt><dd>{article.read}</dd></div>
-              </dl>
-            </section>
-
-            <section className="article-related article-rail-panel">
-              <h2><Icon icon="solar:gallery-wide-linear" aria-hidden="true" />相关文章</h2>
-              <div>{relatedPosts.map((item) => <Link href={`/posts/${item.slug}`} key={item.slug}><span><SafePostImage post={item} /></span><div><strong>{item.title}</strong><small>{getPostTimeLabel(item).slice(0, 10)}</small></div></Link>)}</div>
-            </section>
-
-            <blockquote className="article-rail-quote article-rail-panel">
-              <Icon icon="solar:chat-round-line-linear" aria-hidden="true" />
-              <p>代码如诗。异步如梦。</p>
-              <cite>Sknying</cite>
-            </blockquote>
           </aside>
         </div>
 
