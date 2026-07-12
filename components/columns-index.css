@@ -76,6 +76,7 @@
 .columns-sort svg { position: absolute; right: 11px; pointer-events: none; }
 
 .columns-layout { display: grid; grid-template-columns: minmax(0, 1fr) 280px; align-items: start; gap: 18px; max-width: 1260px; margin: 0 auto; }
+.columns-cover-layout { margin-top: 18px; }
 .columns-main, .columns-rail { display: grid; min-width: 0; gap: 18px; }
 .columns-panel { border: 1px solid var(--columns-line); border-radius: 8px; background: var(--columns-paper); box-shadow: var(--columns-shadow); backdrop-filter: blur(18px); }
 .columns-featured { padding: 20px; }
@@ -84,7 +85,9 @@
 .columns-featured h2 svg, .columns-rail h2 svg { color: var(--columns-pink); }
 .columns-featured > header > span { color: var(--columns-muted); font-size: 12px; }
 .columns-card-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+.columns-cover-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .columns-card { display: grid; grid-template-rows: 124px auto auto auto; min-width: 0; overflow: hidden; border: 1px solid var(--columns-line); border-radius: 8px; background: var(--columns-paper-strong); transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease; }
+.columns-cover-card { grid-template-rows: 170px auto auto auto; }
 .columns-card:hover { border-color: color-mix(in srgb, var(--columns-blue) 58%, var(--columns-line)); box-shadow: 0 12px 25px rgba(74, 105, 161, 0.15); transform: translateY(-2px); }
 .columns-card-cover, .columns-article-cover { position: relative; display: block; overflow: hidden; background: color-mix(in srgb, var(--columns-blue) 10%, var(--columns-paper-strong)); }
 .columns-card-cover img, .columns-article-cover img, .columns-recent a > span img { object-fit: cover; transition: transform 240ms ease; }
