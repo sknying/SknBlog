@@ -730,6 +730,26 @@
   line-height: 1.45;
 }
 
+.sakura-footer {
+  display: grid;
+  min-height: 140px;
+  justify-items: center;
+  align-content: center;
+  gap: 5px;
+  width: calc(100% + 56px);
+  margin: 34px -28px -64px;
+  border-top: 1px solid var(--sakura-line);
+  color: var(--sakura-muted);
+  background:
+    radial-gradient(circle at 18% 110%, color-mix(in srgb, var(--sakura-blue) 24%, transparent), transparent 18rem),
+    radial-gradient(circle at 82% 110%, color-mix(in srgb, var(--sakura-pink) 22%, transparent), transparent 18rem),
+    color-mix(in srgb, var(--sakura-paper) 70%, transparent);
+}
+
+.sakura-footer svg { color: var(--sakura-pink); }
+.sakura-footer strong { color: var(--sakura-text); font-family: var(--font-display), var(--font-body), sans-serif; font-size: 19px; }
+.sakura-footer span { font-size: 11px; }
+
 .sakura-site :where(a, button, input):focus-visible {
   outline: 3px solid rgba(71, 116, 210, 0.48);
   outline-offset: 3px;
@@ -924,6 +944,11 @@
 
   .sakura-right-rail {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sakura-footer {
+    width: calc(100% + 24px);
+    margin: 28px -12px -40px;
   }
 
   .sakura-profile {

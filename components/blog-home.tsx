@@ -210,6 +210,12 @@ export function BlogHome({ posts }: { posts: Post[] }) {
             </section>
           </aside>
         </div>
+
+        <footer className="sakura-footer">
+          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
+          <strong>清樱小屋</strong>
+          <span>记录美好 · 分享热爱</span>
+        </footer>
       </div>
     </main>
   );
