@@ -41,6 +41,9 @@ import "prismjs/components/prism-typescript";
 import "prismjs/components/prism-tsx";
 import "prismjs/components/prism-yaml";
 
+// Article code is rendered by React, so Prism must not mutate it after hydration.
+Prism.manual = true;
+
 const LANGUAGE_ALIASES: Record<string, string> = {
   "c#": "csharp",
   "c++": "cpp",

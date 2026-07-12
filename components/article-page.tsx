@@ -184,7 +184,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                   const language = getCodeLanguage(block.language, block.title);
                   const codeLines = highlightCodeLines(block.code, language);
                   return (
-                    <figure className={`article-code language-${language}`} id={id} key={id}>
+                    <figure className="article-code" data-language={language} id={id} key={id}>
                       <figcaption>
                         <span className="article-code-dots" aria-hidden="true"><i /><i /><i /></span>
                         <span>{block.title}</span>
