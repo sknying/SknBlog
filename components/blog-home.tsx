@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
+import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 function PostCover({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
@@ -98,7 +99,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
               <Icon icon="solar:bell-linear" aria-hidden="true" />
             </Link>
             <span className="sakura-mini-avatar" aria-hidden="true">
-              <Image src="/images/sakura-coast-hero.png" alt="" fill sizes="44px" priority />
+              <Image src={GITHUB_AVATAR} alt="" fill sizes="44px" priority unoptimized />
             </span>
           </div>
         </header>
@@ -167,7 +168,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
           <aside className="sakura-right-rail" aria-label="博客侧栏">
             <section className="sakura-profile glass-panel" id="about">
               <div className="sakura-profile-avatar">
-                <Image src="/images/sakura-coast-hero.png" alt="SknBlog 头像" fill sizes="88px" priority />
+                <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="88px" priority unoptimized />
               </div>
               <h2>Sknying</h2>
               <p>写技术，也画界面。</p>
@@ -213,8 +214,8 @@ export function BlogHome({ posts }: { posts: Post[] }) {
 
         <footer className="sakura-footer">
           <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-          <strong>清樱小屋</strong>
-          <span>记录美好 · 分享热爱</span>
+          <strong>{SITE_NAME}</strong>
+          <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>
     </main>

@@ -10,6 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
+import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
 
@@ -220,8 +221,8 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
 
         <footer className="archive-footer">
           <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-          <strong>清樱小屋</strong>
-          <span>记录美好 · 分享热爱</span>
+          <strong>{SITE_NAME}</strong>
+          <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>
 

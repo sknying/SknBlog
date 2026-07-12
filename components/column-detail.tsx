@@ -10,6 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, sortPostsByDate, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
+import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 type ColumnDetailProps = {
   column: ColumnGroup;
@@ -228,8 +229,8 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
 
         <footer className="column-detail-footer">
           <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-          <strong>清樱小屋</strong>
-          <span>记录美好 · 分享热爱</span>
+          <strong>{SITE_NAME}</strong>
+          <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>
     </main>

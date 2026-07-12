@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
+import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 type SiteSidebarProps = {
   active?: "home" | "archive" | "columns";
@@ -20,9 +21,9 @@ const navigation = [
 export function SiteSidebar({ active, onTagsClick }: SiteSidebarProps) {
   return (
     <aside className="sakura-sidebar">
-      <Link className="sakura-brand" href="/" aria-label="清樱小屋首页">
+      <Link className="sakura-brand" href="/" aria-label={`${SITE_NAME} 首页`}>
         <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-        <span>清樱小屋</span>
+        <span>{SITE_NAME}</span>
       </Link>
 
       <nav className="sakura-nav" aria-label="主导航">
@@ -49,7 +50,7 @@ export function SiteSidebar({ active, onTagsClick }: SiteSidebarProps) {
 
       <div className="sakura-now-card" aria-label="当前状态">
         <div className="sakura-disc">
-          <Image src="/images/sakura-coast-hero.png" alt="樱花海岸插画局部" fill sizes="112px" priority />
+          <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="112px" priority unoptimized />
         </div>
         <span>春风与代码</span>
         <small>今天也在写</small>
@@ -61,7 +62,7 @@ export function SiteSidebar({ active, onTagsClick }: SiteSidebarProps) {
           <Link href="/posts" aria-label="文章归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>
           <Link href="/#tags" aria-label="热门标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
         </div>
-        <p>2026 · SknBlog</p>
+        <p>{SITE_COPYRIGHT}</p>
       </footer>
     </aside>
   );

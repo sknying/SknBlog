@@ -10,6 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, getColumnGroups, type ColumnDefinition, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
+import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 function ColumnCover({ group }: { group: ColumnGroup }) {
   const [failed, setFailed] = useState(false);
@@ -76,7 +77,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
               <Icon icon="solar:archive-linear" aria-hidden="true" />
             </Link>
             <span className="columns-mini-avatar">
-              <Image src="/images/sakura-coast-hero.png" alt="" fill sizes="44px" priority />
+              <Image src={GITHUB_AVATAR} alt="" fill sizes="44px" priority unoptimized />
             </span>
           </div>
         </header>
@@ -151,8 +152,8 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
 
         <footer className="columns-footer">
           <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-          <strong>清樱小屋</strong>
-          <span>记录美好 · 分享热爱</span>
+          <strong>{SITE_NAME}</strong>
+          <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>
     </main>
