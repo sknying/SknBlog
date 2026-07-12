@@ -141,7 +141,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
           </div>
         </header>
 
-        <div className={`article-grid ${isOutlineOpen ? "" : "outline-collapsed"}`}>
+        <div className="article-grid">
           <article className="article-card">
             <header className="article-heading">
               <Link className="article-primary-tag" href={`/posts?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>

@@ -208,8 +208,6 @@
   margin: 0 auto;
 }
 
-.article-grid.outline-collapsed { grid-template-columns: minmax(0, 1fr) 52px; }
-
 .article-card,
 .article-rail-panel {
   border: 1px solid var(--article-line);
@@ -383,7 +381,6 @@
   .article-toolbar { grid-template-columns: minmax(0, 1fr) auto; }
   .article-breadcrumb { display: none; }
   .article-grid { grid-template-columns: minmax(0, 1fr); }
-  .article-grid.outline-collapsed { grid-template-columns: minmax(0, 1fr); }
   .article-right-rail { position: static; max-height: none; overflow: visible; }
   .article-outline-panel { grid-column: 1 / -1; }
 }
