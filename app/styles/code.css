@@ -32,29 +32,48 @@
   word-break: break-word;
 }
 
+.code-line-content .token.keyword,
 .code-token.keyword {
   color: var(--code-keyword);
 }
 
+.code-line-content .token.string,
 .code-token.string {
   color: var(--code-string);
 }
 
+.code-line-content .token.number,
 .code-token.number {
   color: var(--code-number);
 }
 
+.code-line-content .token.comment,
 .code-token.comment {
   color: var(--code-comment);
   font-style: italic;
 }
 
+.code-line-content .token.property,
+.code-line-content .token.attr-name,
+.code-line-content .token.tag,
+.code-line-content .token.key,
 .code-token.property {
   color: var(--code-property);
 }
 
+.code-line-content .token.punctuation,
+.code-line-content .token.operator,
 .code-token.punctuation {
   color: var(--code-punctuation);
+}
+
+.code-line-content .token.function,
+.code-line-content .token.class-name,
+.code-line-content .token.builtin,
+.code-line-content .token.boolean,
+.code-line-content .token.constant,
+.code-line-content .token.symbol {
+  color: var(--code-property);
 }
 
 .typing-caret {

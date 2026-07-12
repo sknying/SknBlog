@@ -24,4 +24,15 @@ intro: "文章开头的引言。"
 - `publishedAt` 决定排序和展示时间。
 - `wordCount` 与阅读时长在构建时从正文自动计算。
 - 标签列表直接从全部文章的 `tags` 字段聚合，不在网页中创建或删除。
+
+代码块在围栏后写语言和可选文件名：
+
+````md
+```ts parser.ts
+// 这行会显示为灰色斜体注释。
+export function parse() {}
+```
+````
+
+支持 TypeScript、JavaScript、JSX/TSX、Rust、Python、Java、C/C++/C#、Go、PHP、Ruby、Kotlin、Swift、Shell、PowerShell、SQL、HTML/XML、CSS/Sass/Less，以及 JSON/JSON5、YAML、TOML、INI、Properties、Dockerfile、Nginx、HCL、GraphQL 和 Markdown。语言别名如 `ts`、`rs`、`py`、`yml`、`sh`、`ps1`、`dockerfile` 也可直接使用。
 - 支持标题、链接、图片、引用、代码块、列表、表格和数学公式。

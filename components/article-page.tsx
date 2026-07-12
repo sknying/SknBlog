@@ -7,7 +7,7 @@ import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { getCodeLanguage, getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
+import { getCodeLanguage, getLanguageLabel, highlightCodeLines } from "@/lib/code-highlight";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 
@@ -189,8 +189,8 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                 }
 
                 if (block.type === "code") {
-                  const language = getCodeLanguage(block.language ?? block.title);
-                  const codeLines = block.code.split("\n");
+                  const language = getCodeLanguage(block.language, block.title);
+                  const codeLines = highlightCodeLines(block.code, language);
                   return (
                     <figure className={`article-code language-${language}`} id={id} key={id}>
                       <figcaption>
@@ -201,7 +201,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                       <pre><code>{codeLines.map((line, lineIndex) => (
                         <span className="code-line" key={`${id}-${lineIndex}`}>
                           <span className="code-line-number" aria-hidden="true">{lineIndex + 1}</span>
-                          <span className="code-line-content">{highlightCodeLine(line, language, lineIndex)}</span>
+                          <span className="code-line-content" dangerouslySetInnerHTML={{ __html: line }} />
                         </span>
                       ))}</code></pre>
                     </figure>
