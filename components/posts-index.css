@@ -81,6 +81,12 @@
   background: var(--archive-paper-strong);
 }
 
+:root[data-theme="dark"] .archive-random {
+  background:
+    radial-gradient(circle at 100% 100%, rgba(89, 129, 202, 0.2), transparent 10rem),
+    var(--archive-paper);
+}
+
 .archive-grain {
   position: fixed;
   inset: 0;
@@ -992,5 +998,11 @@
   :root:not([data-theme]) .archive-tag-list > span,
   :root:not([data-theme]) .archive-tag-dialog {
     background: var(--archive-paper-strong);
+  }
+
+  :root:not([data-theme]) .archive-random {
+    background:
+      radial-gradient(circle at 100% 100%, rgba(89, 129, 202, 0.2), transparent 10rem),
+      var(--archive-paper);
   }
 }
