@@ -1,6 +1,15 @@
 # Markdown 文章目录
 
-把每篇文章放进 `content/posts`，文件名就是文章链接的 slug。
+按年份放进 `content/posts/YYYY`，文件名就是文章链接的 slug。目录年份必须与 `publishedAt` 一致。
+
+```text
+content/posts/
+  2026/
+    next-cache-notes.md
+    markdown-rendering-notes.md
+  2025/
+    older-note.md
+```
 
 ```md
 ---
@@ -22,6 +31,7 @@ intro: "文章开头的引言。"
 - `column` 是可选的单选专栏，用于归类系列文章。
 - `tags` 是多选标签，用于交叉筛选文章。
 - `publishedAt` 决定排序和展示时间。
+- 不同年份目录中不能有同名文件，避免 slug 冲突。
 - `wordCount` 与阅读时长在构建时从正文自动计算。
 - 标签列表直接从全部文章的 `tags` 字段聚合，不在网页中创建或删除。
 

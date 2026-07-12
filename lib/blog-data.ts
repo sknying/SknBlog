@@ -106,6 +106,15 @@ function dateLabel(publishedAt: string) {
   return parts ? `${parts[1]}.${parts[2]}` : "未定";
 }
 
+function getMarkdownFiles(directory = contentDirectory, relativeDirectory = ""): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const relativePath = join(relativeDirectory, entry.name);
+
+    if (entry.isDirectory()) return getMarkdownFiles(join(directory, entry.name), relativePath);
+    return entry.isFile() && entry.name.endsWith(".md") ? [relativePath] : [];
+  });
+}
+
 function readPost(fileName: string): Post | null {
   const slug = parse(fileName).name;
   const parsed = matter(readFileSync(join(contentDirectory, fileName), "utf8"));
@@ -115,6 +124,11 @@ function readPost(fileName: string): Post | null {
   const publishedAt = frontmatter.publishedAt instanceof Date
     ? frontmatter.publishedAt.toISOString()
     : String(frontmatter.publishedAt);
+  const folderYear = fileName.split(/[\\/]/)[0];
+
+  if (/^\d{4}$/.test(folderYear) && !publishedAt.startsWith(`${folderYear}-`)) {
+    throw new Error(`文章 ${fileName} 的目录年份与 publishedAt 不一致。`);
+  }
 
   const wordCount = countWords(parsed.content);
   const blocks = parseBlocks(parsed.content);
@@ -138,11 +152,16 @@ function readPost(fileName: string): Post | null {
 }
 
 function loadPosts() {
-  return readdirSync(contentDirectory)
-    .filter((fileName) => fileName.endsWith(".md"))
+  const loadedPosts = getMarkdownFiles()
     .map(readPost)
-    .filter((post): post is Post => Boolean(post))
-    .sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt));
+    .filter((post): post is Post => Boolean(post));
+  const duplicateSlug = loadedPosts.find((post, index) => loadedPosts.findIndex((item) => item.slug === post.slug) !== index);
+
+  if (duplicateSlug) {
+    throw new Error(`文章 slug 重复：${duplicateSlug.slug}`);
+  }
+
+  return loadedPosts.sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt));
 }
 
 export const posts = loadPosts();
