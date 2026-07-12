@@ -1,7 +1,4 @@
 .article-page {
-  --font-display: "Noto Serif SC", serif;
-  --font-body: "Noto Serif SC", serif;
-  --font-code: "Fira Code ASCII", "Noto Serif SC", serif;
   --article-bg: #eef5fc;
   --article-paper: rgba(255, 255, 255, 0.88);
   --article-paper-strong: rgba(255, 255, 255, 0.97);
@@ -257,6 +254,8 @@
 .article-image-fallback svg { width: 38px; height: 38px; }
 
 .article-lead-quote {
+  --font-display: "Noto Serif SC", serif;
+  --font-body: "Noto Serif SC", serif;
   position: relative;
   display: grid;
   justify-items: center;
@@ -277,7 +276,7 @@
 .article-lead-quote p { margin: 0; font-size: clamp(15px, 1.6vw, 18px); font-weight: 700; line-height: 1.7; }
 .article-lead-quote cite { color: var(--article-muted); font-size: 12px; font-style: normal; }
 
-.article-content { display: grid; gap: 18px; margin-top: 24px; }
+.article-content { --font-display: "Noto Serif SC", serif; --font-body: "Noto Serif SC", serif; --font-code: "Fira Code ASCII", "Noto Serif SC", serif; display: grid; gap: 18px; margin-top: 24px; }
 .article-content > :where(p, section, figure, blockquote, h2, h3, h4) { scroll-margin-top: 24px; }
 .article-content > p { margin: 0; color: var(--article-muted); font-size: 16px; line-height: 1.9; }
 .article-list, .article-table-block { display: grid; gap: 12px; }
