@@ -67,6 +67,20 @@
   border-color: #18223a;
 }
 
+:root[data-theme="dark"] .archive-footer {
+  background:
+    radial-gradient(circle at 18% 110%, rgba(84, 123, 192, 0.22), transparent 18rem),
+    radial-gradient(circle at 82% 110%, rgba(166, 76, 116, 0.18), transparent 18rem),
+    color-mix(in srgb, var(--archive-paper) 84%, #10182a);
+}
+
+:root[data-theme="dark"] .archive-months button,
+:root[data-theme="dark"] .archive-months button:disabled:hover,
+:root[data-theme="dark"] .archive-tag-list > span,
+:root[data-theme="dark"] .archive-tag-dialog {
+  background: var(--archive-paper-strong);
+}
+
 .archive-grain {
   position: fixed;
   inset: 0;
@@ -964,5 +978,19 @@
 
   :root:not([data-theme]) .archive-year-heading > span {
     border-color: #18223a;
+  }
+
+  :root:not([data-theme]) .archive-footer {
+    background:
+      radial-gradient(circle at 18% 110%, rgba(84, 123, 192, 0.22), transparent 18rem),
+      radial-gradient(circle at 82% 110%, rgba(166, 76, 116, 0.18), transparent 18rem),
+      color-mix(in srgb, var(--archive-paper) 84%, #10182a);
+  }
+
+  :root:not([data-theme]) .archive-months button,
+  :root:not([data-theme]) .archive-months button:disabled:hover,
+  :root:not([data-theme]) .archive-tag-list > span,
+  :root:not([data-theme]) .archive-tag-dialog {
+    background: var(--archive-paper-strong);
   }
 }
