@@ -10,7 +10,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { getCodeLanguage, getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
-import { usePostTagState } from "@/lib/tag-state";
 
 type ArticlePageProps = {
   post: Post;
@@ -89,9 +88,7 @@ function SafePostImage({ post, priority = false }: { post: Post; priority?: bool
 }
 
 export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: ArticlePageProps) {
-  const articleSource = useMemo(() => [post], [post]);
-  const { posts: taggedArticle } = usePostTagState(articleSource);
-  const article = taggedArticle[0] ?? post;
+  const article = post;
   const [isOutlineOpen, setIsOutlineOpen] = useState(true);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
@@ -256,7 +253,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
             <section className="article-info article-rail-panel">
               <h2><Icon icon="solar:document-text-linear" aria-hidden="true" />文章信息</h2>
               <dl>
-                <div><dt><Icon icon="solar:bookmark-linear" aria-hidden="true" />所属专栏</dt><dd>{article.column}</dd></div>
+                {article.column ? <div><dt><Icon icon="solar:bookmark-linear" aria-hidden="true" />所属专栏</dt><dd>{article.column}</dd></div> : null}
                 <div><dt><Icon icon="solar:tag-linear" aria-hidden="true" />文章标签</dt><dd>{article.tags.join(" · ")}</dd></div>
                 <div><dt><Icon icon="solar:calendar-linear" aria-hidden="true" />发布时间</dt><dd>{getPostTimeLabel(article)}</dd></div>
                 <div><dt><Icon icon="solar:text-linear" aria-hidden="true" />字符统计</dt><dd>{characterCount} 字</dd></div>

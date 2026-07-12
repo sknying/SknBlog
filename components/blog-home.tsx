@@ -9,7 +9,6 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
-import { usePostTagState } from "@/lib/tag-state";
 
 function PostCover({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
@@ -70,12 +69,14 @@ function HomeArticle({ post }: { post: Post }) {
 
 export function BlogHome({ posts }: { posts: Post[] }) {
   const [query, setQuery] = useState("");
-  const { posts: visiblePosts, tags } = usePostTagState(posts);
+  const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
+  const columns = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
+  const visiblePosts = posts;
   const recentPosts = useMemo(() => {
     const keyword = query.trim().toLocaleLowerCase("zh-CN");
     const matched = keyword
       ? visiblePosts.filter((post) =>
-          [post.title, post.summary, ...post.tags].some((value) => value.toLocaleLowerCase("zh-CN").includes(keyword))
+          [post.title, post.summary, post.column ?? "", ...post.tags].some((value) => value.toLocaleLowerCase("zh-CN").includes(keyword))
         )
       : visiblePosts;
 
@@ -158,7 +159,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
               <div className="sakura-note-stats">
                 <span><b>{visiblePosts.length}</b>文章</span>
                 <span><b>{tags.length}</b>标签</span>
-                <span><b>1</b>专栏</span>
+                <span><b>{columns.length}</b>专栏</span>
               </div>
             </section>
           </div>
@@ -173,7 +174,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
               <p>偶尔记录生活。</p>
               <div className="sakura-profile-stats">
                 <span><b>{visiblePosts.length}</b>文章</span>
-                <span><b>1</b>专栏</span>
+                <span><b>{columns.length}</b>专栏</span>
                 <span><b>{tags.length}</b>标签</span>
               </div>
             </section>

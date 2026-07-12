@@ -7,11 +7,9 @@ import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
-import type { FormEvent } from "react";
 import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
-import { DEFAULT_TAG, usePostTagState } from "@/lib/tag-state";
 
 const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
 
@@ -32,15 +30,14 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
   const searchParams = useSearchParams();
   const initialTag = searchParams.get("tag") ?? "";
   const initialQuery = searchParams.get("q") ?? "";
-  const { addTag, deleteTags, posts: taggedPosts, tags } = usePostTagState(posts);
+  const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
+  const taggedPosts = posts;
   const [draftQuery, setDraftQuery] = useState(initialQuery);
   const [committedQuery, setCommittedQuery] = useState(initialQuery);
   const [draftTags, setDraftTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [committedTags, setCommittedTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [tagPanelOpen, setTagPanelOpen] = useState(false);
-  const [newTag, setNewTag] = useState("");
-  const [tagMessage, setTagMessage] = useState("");
   const [randomIndex, setRandomIndex] = useState(0);
 
   useEffect(() => {
@@ -57,7 +54,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
 
     return taggedPosts
       .filter((post) => {
-        const matchesText = !query || [post.title, post.summary, ...post.tags].some((value) => value.toLocaleLowerCase("zh-CN").includes(query));
+        const matchesText = !query || [post.title, post.summary, post.column ?? "", ...post.tags].some((value) => value.toLocaleLowerCase("zh-CN").includes(query));
         const matchesTags = committedTags.every((tag) => post.tags.includes(tag));
         return matchesText && matchesTags;
       })
@@ -103,30 +100,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
     setDraftTags((current) => current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]);
   }
 
-  function createTag(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const value = newTag.trim();
-    if (!value) {
-      setTagMessage("请输入标签名。");
-      return;
-    }
-    if (tags.includes(value)) {
-      setTagMessage("标签已存在。");
-      return;
-    }
-    addTag(value);
-    setNewTag("");
-    setTagMessage(`已创建 ${value}。`);
-  }
-
-  function deleteTag(tag: string) {
-    if (tag === DEFAULT_TAG) return;
-    deleteTags([tag]);
-    setDraftTags((current) => current.filter((item) => item !== tag));
-    setCommittedTags((current) => current.filter((item) => item !== tag));
-    setTagMessage(`已删除 ${tag}。`);
-  }
-
   return (
     <main className="archive-page">
       <div className="archive-grain" aria-hidden="true" />
@@ -151,7 +124,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
           <div className="archive-toolbar-icons">
             <ThemeToggle />
             <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
-            <button type="button" onClick={() => setTagPanelOpen(true)} aria-label="打开标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></button>
+            <button type="button" onClick={() => setTagPanelOpen(true)} aria-label="筛选标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></button>
           </div>
         </header>
 
@@ -255,16 +228,14 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
       {tagPanelOpen ? (
         <div className="archive-tag-layer" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setTagPanelOpen(false); }}>
           <section className="archive-tag-dialog" role="dialog" aria-modal="true" aria-labelledby="tag-dialog-title">
-            <header><div><span>文章筛选</span><h2 id="tag-dialog-title">标签管理</h2></div><button type="button" onClick={() => setTagPanelOpen(false)} aria-label="关闭标签管理" autoFocus><Icon icon="solar:close-circle-linear" aria-hidden="true" /></button></header>
+            <header><div><span>来自 Markdown</span><h2 id="tag-dialog-title">标签筛选</h2></div><button type="button" onClick={() => setTagPanelOpen(false)} aria-label="关闭标签筛选" autoFocus><Icon icon="solar:close-circle-linear" aria-hidden="true" /></button></header>
             <div className="archive-tag-list">
               {tags.map((tag) => (
                 <span className={draftTags.includes(tag) ? "active" : ""} key={tag}>
                   <button type="button" onClick={() => toggleDraftTag(tag)} aria-pressed={draftTags.includes(tag)}>{tag}</button>
-                  {tag !== DEFAULT_TAG ? <button type="button" onClick={() => deleteTag(tag)} aria-label={`删除标签 ${tag}`}><Icon icon="solar:trash-bin-minimalistic-linear" aria-hidden="true" /></button> : null}
                 </span>
               ))}
             </div>
-            <form className="archive-tag-create" onSubmit={createTag}><label htmlFor="archive-new-tag">创建标签</label><div><input id="archive-new-tag" value={newTag} onChange={(event) => setNewTag(event.target.value)} maxLength={16} placeholder="比如：Rust" /><button type="submit"><Icon icon="solar:add-circle-linear" aria-hidden="true" />创建</button></div><p role="status">{tagMessage}</p></form>
             <footer><button type="button" onClick={() => { setCommittedTags(draftTags); setCommittedQuery(draftQuery); setSelectedMonth(""); setTagPanelOpen(false); }}>应用筛选</button></footer>
           </section>
         </div>

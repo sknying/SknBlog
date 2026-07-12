@@ -12,7 +12,7 @@ export type Post = {
   slug: string;
   title: string;
   tags: string[];
-  column: string;
+  column?: string;
   publishedAt: string;
   date: string;
   read: string;

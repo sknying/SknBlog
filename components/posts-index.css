@@ -58,8 +58,7 @@
 
 :root[data-theme="dark"] .archive-months button,
 :root[data-theme="dark"] .archive-tag-dialog,
-:root[data-theme="dark"] .archive-tag-list > span,
-:root[data-theme="dark"] .archive-tag-create > div {
+:root[data-theme="dark"] .archive-tag-list > span {
   color: var(--archive-text);
   background: var(--archive-paper-strong);
 }
@@ -830,45 +829,6 @@
   cursor: pointer;
 }
 
-.archive-tag-list button + button {
-  width: 42px;
-  padding: 0;
-  border-left: 1px solid var(--archive-line);
-  color: #c9435c;
-}
-
-.archive-tag-create {
-  display: grid;
-  gap: 8px;
-  margin-top: 24px;
-}
-
-.archive-tag-create label {
-  color: var(--archive-blue-deep);
-  font-size: 13px;
-}
-
-.archive-tag-create > div {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 8px;
-  padding: 7px;
-  border: 1px solid var(--archive-line);
-  border-radius: 8px;
-  background: #f8fbff;
-}
-
-.archive-tag-create input {
-  min-width: 0;
-  min-height: 44px;
-  border: 0;
-  padding: 0 8px;
-  outline: 0;
-  color: var(--archive-text);
-  background: transparent;
-}
-
-.archive-tag-create button,
 .archive-tag-dialog > footer button {
   display: inline-flex;
   min-height: 44px;
@@ -881,12 +841,6 @@
   color: #fff;
   background: linear-gradient(135deg, var(--archive-blue), var(--archive-blue-deep));
   cursor: pointer;
-}
-
-.archive-tag-create p {
-  min-height: 22px;
-  color: var(--archive-muted);
-  font-size: 12px;
 }
 
 .archive-tag-dialog > footer {
@@ -965,7 +919,6 @@
   .archive-banner-copy { width: 92%; }
   .archive-banner-copy h1 { font-size: 34px; }
   .archive-tag-dialog { padding: 17px; }
-  .archive-tag-create > div { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1004,8 +957,7 @@
 
   :root:not([data-theme]) .archive-months button,
   :root:not([data-theme]) .archive-tag-dialog,
-  :root:not([data-theme]) .archive-tag-list > span,
-  :root:not([data-theme]) .archive-tag-create > div {
+  :root:not([data-theme]) .archive-tag-list > span {
     color: var(--archive-text);
     background: var(--archive-paper-strong);
   }

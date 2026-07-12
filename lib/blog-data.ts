@@ -123,8 +123,8 @@ function readPost(fileName: string): Post | null {
   return {
     slug,
     title: frontmatter.title,
-    tags: Array.isArray(frontmatter.tags) && frontmatter.tags.length > 0 ? frontmatter.tags.map(String) : ["其他"],
-    column: frontmatter.column?.trim() || "随笔",
+    tags: Array.isArray(frontmatter.tags) ? frontmatter.tags.map(String).map((tag) => tag.trim()).filter(Boolean) : [],
+    column: frontmatter.column?.trim() || undefined,
     publishedAt,
     date: dateLabel(publishedAt),
     read: frontmatter.read?.trim() || `${Math.max(1, Math.ceil(wordCount / 350))} 分钟`,
@@ -146,7 +146,7 @@ function loadPosts() {
 }
 
 export const posts = loadPosts();
-export const columns = Array.from(new Set(posts.map((post) => post.column))).sort((left, right) => left.localeCompare(right, "zh-CN"));
+export const columns = Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN"));
 
 export function getPostBySlug(slug: string) { return posts.find((post) => post.slug === slug); }
 
