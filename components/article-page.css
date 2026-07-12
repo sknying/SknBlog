@@ -343,7 +343,7 @@
 .article-outline-toggle > svg { transition: transform 180ms ease; }
 .article-outline-toggle[aria-expanded="true"] > svg { transform: rotate(180deg); }
 .article-right-rail.is-collapsed { overflow: visible; }
-.article-right-rail.is-collapsed .article-outline-panel { padding: 4px; }
+.article-right-rail.is-collapsed .article-outline-panel { border: 0; padding: 4px; background: transparent; box-shadow: none; backdrop-filter: none; }
 .article-right-rail.is-collapsed .article-outline-toggle { width: 44px; min-height: 44px; justify-content: center; border: 1px solid var(--article-line); border-radius: 8px; color: var(--article-blue-deep); background: var(--article-paper-strong); box-shadow: var(--article-shadow); }
 .article-right-rail.is-collapsed .article-outline-toggle > svg { width: 20px; height: 20px; transform: none; }
 .article-right-rail.is-collapsed .article-outline-toggle:hover { color: var(--article-pink); }
