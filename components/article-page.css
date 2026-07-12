@@ -1,4 +1,7 @@
 .article-page {
+  --font-display: "Noto Serif SC", serif;
+  --font-body: "Noto Serif SC", serif;
+  --font-code: "Fira Code ASCII", "Noto Serif SC", serif;
   --article-bg: #eef5fc;
   --article-paper: rgba(255, 255, 255, 0.88);
   --article-paper-strong: rgba(255, 255, 255, 0.97);

@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap");
 
 @font-face {
   font-family: "Fira Code ASCII";
@@ -55,8 +55,8 @@
 }
 
 :root {
-  --font-display: "Noto Serif SC", serif;
-  --font-body: "Noto Serif SC", serif;
+  --font-display: "Noto Sans SC", sans-serif;
+  --font-body: "Noto Sans SC", sans-serif;
   color-scheme: light;
   --bg: #eef5fc;
   --bg-deep: #e4edf8;
@@ -82,7 +82,7 @@
   --code-comment: #8692a7;
   --code-property: #2c7594;
   --code-punctuation: #4b6f9d;
-  --font-code: "Fira Code ASCII", "Noto Serif SC", serif;
+  --font-code: "Fira Code ASCII", "Noto Sans SC", sans-serif;
 }
 
 :root[data-theme="dark"] {
