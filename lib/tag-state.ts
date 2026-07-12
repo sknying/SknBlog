@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import type { Post } from "@/lib/blog-data";
+import type { Post } from "@/lib/blog-types";
 
 export const DEFAULT_TAG = "其他";
 

@@ -7,7 +7,8 @@ import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
-import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
+import type { Post } from "@/lib/blog-types";
+import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { usePostTagState } from "@/lib/tag-state";
 
 function PostCover({ post }: { post: Post }) {
@@ -67,7 +68,7 @@ function HomeArticle({ post }: { post: Post }) {
   );
 }
 
-export function BlogHome() {
+export function BlogHome({ posts }: { posts: Post[] }) {
   const [query, setQuery] = useState("");
   const { posts: visiblePosts, tags } = usePostTagState(posts);
   const recentPosts = useMemo(() => {
@@ -89,7 +90,7 @@ export function BlogHome() {
 
       <div className="sakura-workspace">
         <header className="sakura-toolbar">
-          <SiteSearch value={query} onValueChange={setQuery} onSearch={setQuery} />
+          <SiteSearch posts={visiblePosts} value={query} onValueChange={setQuery} onSearch={setQuery} />
           <div className="sakura-toolbar-actions">
             <ThemeToggle />
             <Link href="/posts" aria-label="查看文章">

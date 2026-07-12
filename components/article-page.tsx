@@ -8,11 +8,13 @@ import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getCodeLanguage, getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
-import { getPostTimeLabel, getPrimaryTag, posts as allPosts, type ArticleBlock, type Post } from "@/lib/blog-data";
+import type { ArticleBlock, Post } from "@/lib/blog-types";
+import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { usePostTagState } from "@/lib/tag-state";
 
 type ArticlePageProps = {
   post: Post;
+  posts: Post[];
   previousPost?: Post;
   nextPost?: Post;
 };
@@ -20,22 +22,16 @@ type ArticlePageProps = {
 type OutlineItem = {
   id: string;
   label: string;
-  level: 1 | 2;
+  level: 1 | 2 | 3 | 4;
 };
 
 function getBlockHeading(block: ArticleBlock) {
-  return block.type === "list" || block.type === "table" ? block.title : null;
+  if (block.type === "heading") return block.text;
+  return block.type === "list" || block.type === "table" ? block.title ?? null : null;
 }
 
 function countPostCharacters(post: Post) {
-  return post.blocks.reduce((total, block) => {
-    if (block.type === "paragraph" || block.type === "quote") return total + block.text.length;
-    if (block.type === "code") return total + block.code.length;
-    if (block.type === "list") return total + block.title.length + block.items.join("").length;
-    if (block.type === "table") return total + block.title.length + block.headers.join("").length + block.rows.flat().join("").length;
-    if (block.type === "math") return total + block.formula.length;
-    return total + block.alt.length + (block.caption?.length ?? 0);
-  }, post.title.length + post.summary.length + post.intro.length);
+  return post.wordCount;
 }
 
 function renderInlineText(text: string) {
@@ -92,10 +88,10 @@ function SafePostImage({ post, priority = false }: { post: Post; priority?: bool
   );
 }
 
-export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) {
+export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: ArticlePageProps) {
   const articleSource = useMemo(() => [post], [post]);
-  const { posts } = usePostTagState(articleSource);
-  const article = posts[0] ?? post;
+  const { posts: taggedArticle } = usePostTagState(articleSource);
+  const article = taggedArticle[0] ?? post;
   const [isOutlineOpen, setIsOutlineOpen] = useState(true);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
@@ -105,14 +101,15 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
       const rightScore = right.tags.filter((tag) => article.tags.includes(tag)).length;
       return rightScore - leftScore || Date.parse(right.publishedAt) - Date.parse(left.publishedAt);
     }).slice(0, 3),
-    [article]
+    [article, allPosts]
   );
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
       { id: "article-title", label: article.title, level: 1 },
       ...article.blocks.flatMap((block, index) => {
         const heading = getBlockHeading(block);
-        return heading ? [{ id: `block-${index + 1}`, label: heading, level: 2 as const }] : [];
+        const level = block.type === "heading" ? block.level : 2;
+        return heading ? [{ id: `block-${index + 1}`, label: heading, level }] : [];
       })
     ],
     [article]
@@ -148,7 +145,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
             <span>/</span>
             <b>正文</b>
           </nav>
-          <SiteSearch />
+          <SiteSearch posts={allPosts} />
           <div className="article-toolbar-actions">
             <ThemeToggle />
             <Link href="/posts" aria-label="返回归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>
@@ -183,6 +180,11 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
               {article.blocks.map((block, index) => {
                 const id = `block-${index + 1}`;
 
+                if (block.type === "heading") {
+                  const Heading = `h${block.level}` as "h2" | "h3" | "h4";
+                  return <Heading className="article-markdown-heading" id={id} key={id}>{block.text}</Heading>;
+                }
+
                 if (block.type === "paragraph") return <p id={id} key={id}>{renderInlineText(block.text)}</p>;
 
                 if (block.type === "quote") {
@@ -190,7 +192,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
                 }
 
                 if (block.type === "code") {
-                  const language = getCodeLanguage(block.title);
+                  const language = getCodeLanguage(block.language ?? block.title);
                   const codeLines = block.code.split("\n");
                   return (
                     <figure className={`article-code language-${language}`} id={id} key={id}>
@@ -221,7 +223,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
                 if (block.type === "table") {
                   return (
                     <section className="article-table-block" id={id} key={id}>
-                      <h2>{block.title}</h2>
+                      {block.title ? <h2>{block.title}</h2> : null}
                       <div className="article-table-scroll"><table><thead><tr>{block.headers.map((header) => <th key={header}>{header}</th>)}</tr></thead><tbody>{block.rows.map((row, rowIndex) => <tr key={`row-${rowIndex}`}>{row.map((cell, cellIndex) => <td key={`${rowIndex}-${cellIndex}`}>{cell}</td>)}</tr>)}</tbody></table></div>
                     </section>
                   );
@@ -231,7 +233,8 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
                   return <figure className="article-math-block" id={id} key={id}><div>{block.formula}</div>{block.caption ? <figcaption>{block.caption}</figcaption> : null}</figure>;
                 }
 
-                return <section className="article-list" id={id} key={id}><h2>{block.title}</h2><ul>{block.items.map((item) => <li key={item}>{item}</li>)}</ul></section>;
+                const List = block.ordered ? "ol" : "ul";
+                return <section className="article-list" id={id} key={id}>{block.title ? <h2>{block.title}</h2> : null}<List>{block.items.map((item) => <li key={item}>{item}</li>)}</List></section>;
               })}
             </div>
 
@@ -253,6 +256,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
             <section className="article-info article-rail-panel">
               <h2><Icon icon="solar:document-text-linear" aria-hidden="true" />文章信息</h2>
               <dl>
+                <div><dt><Icon icon="solar:bookmark-linear" aria-hidden="true" />所属专栏</dt><dd>{article.column}</dd></div>
                 <div><dt><Icon icon="solar:tag-linear" aria-hidden="true" />文章标签</dt><dd>{article.tags.join(" · ")}</dd></div>
                 <div><dt><Icon icon="solar:calendar-linear" aria-hidden="true" />发布时间</dt><dd>{getPostTimeLabel(article)}</dd></div>
                 <div><dt><Icon icon="solar:text-linear" aria-hidden="true" />字符统计</dt><dd>{characterCount} 字</dd></div>

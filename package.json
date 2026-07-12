@@ -13,9 +13,13 @@
     "@iconify-icons/mdi": "^1.2.48",
     "@iconify-icons/solar": "^1.2.3",
     "@iconify/react": "^6.0.2",
+    "gray-matter": "^4.0.3",
     "next": "16.2.10",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "remark": "^15.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.13.14",

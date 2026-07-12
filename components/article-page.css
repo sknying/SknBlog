@@ -275,11 +275,13 @@
 .article-lead-quote cite { color: var(--article-muted); font-size: 12px; font-style: normal; }
 
 .article-content { display: grid; gap: 18px; margin-top: 24px; }
-.article-content > :where(p, section, figure, blockquote) { scroll-margin-top: 24px; }
+.article-content > :where(p, section, figure, blockquote, h2, h3, h4) { scroll-margin-top: 24px; }
 .article-content > p { margin: 0; color: var(--article-muted); font-size: 16px; line-height: 1.9; }
 .article-list, .article-table-block { display: grid; gap: 12px; }
-.article-list h2, .article-table-block h2 { position: relative; margin: 0; padding-left: 17px; color: var(--article-text); font-size: clamp(21px, 2.4vw, 28px); }
-.article-list h2::before, .article-table-block h2::before { position: absolute; top: 0.22em; bottom: 0.18em; left: 0; width: 5px; border-radius: 3px; background: linear-gradient(var(--article-blue), var(--article-pink)); content: ""; }
+.article-list h2, .article-table-block h2, .article-markdown-heading { position: relative; margin: 0; padding-left: 17px; color: var(--article-text); font-size: clamp(21px, 2.4vw, 28px); }
+.article-list h2::before, .article-table-block h2::before, .article-markdown-heading::before { position: absolute; top: 0.22em; bottom: 0.18em; left: 0; width: 5px; border-radius: 3px; background: linear-gradient(var(--article-blue), var(--article-pink)); content: ""; }
+.article-markdown-heading:is(h3, h4) { padding-left: 13px; font-size: clamp(17px, 2vw, 22px); }
+.article-markdown-heading:is(h3, h4)::before { width: 3px; }
 .article-list ul { display: grid; gap: 9px; margin: 0; padding: 0; list-style: none; }
 .article-list li { position: relative; padding-left: 22px; color: var(--article-muted); line-height: 1.75; }
 .article-list li::before { position: absolute; top: 0.66em; left: 2px; width: 9px; height: 9px; border: 2px solid var(--article-blue); border-radius: 50%; content: ""; }
@@ -343,6 +345,8 @@
 .article-outline { display: grid; gap: 4px; margin-top: 10px; }
 .article-outline a { display: grid; grid-template-columns: 22px minmax(0, 1fr); min-height: 36px; align-items: center; border-left: 3px solid transparent; border-radius: 5px; padding: 5px 8px; color: var(--article-muted); font-size: 12px; line-height: 1.45; }
 .article-outline a.level-2 { padding-left: 14px; }
+.article-outline a.level-3 { padding-left: 20px; }
+.article-outline a.level-4 { padding-left: 26px; }
 .article-outline a:hover, .article-outline a.active { border-color: var(--article-blue); color: var(--article-blue-deep); background: var(--article-soft-blue); }
 .article-outline a span { color: var(--article-muted); font-family: var(--font-code); }
 

@@ -41,5 +41,5 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const index = posts.findIndex((item) => item.slug === post.slug);
 
-  return <ArticlePage post={post} previousPost={posts[index - 1]} nextPost={posts[index + 1]} />;
+  return <ArticlePage post={post} posts={posts} previousPost={posts[index - 1]} nextPost={posts[index + 1]} />;
 }

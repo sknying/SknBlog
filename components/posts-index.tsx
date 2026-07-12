@@ -9,7 +9,8 @@ import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { FormEvent } from "react";
 import { useEffect, useMemo, useState } from "react";
-import { getPostTimeLabel, type Post } from "@/lib/blog-data";
+import type { Post } from "@/lib/blog-types";
+import { getPostTimeLabel } from "@/lib/blog-utils";
 import { DEFAULT_TAG, usePostTagState } from "@/lib/tag-state";
 
 const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
@@ -20,14 +21,7 @@ function getYearMonth(post: Post) {
 }
 
 function countCharacters(post: Post) {
-  return post.blocks.reduce((total, block) => {
-    if (block.type === "paragraph" || block.type === "quote") return total + block.text.length;
-    if (block.type === "code") return total + block.code.length;
-    if (block.type === "list") return total + block.title.length + block.items.join("").length;
-    if (block.type === "table") return total + block.title.length + block.headers.join("").length + block.rows.flat().join("").length;
-    if (block.type === "math") return total + block.formula.length;
-    return total + block.alt.length + (block.caption?.length ?? 0);
-  }, post.title.length + post.summary.length + post.intro.length);
+  return post.wordCount;
 }
 
 function formatCharacterCount(value: number) {
@@ -142,6 +136,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
       <div className="archive-workspace">
         <header className="archive-toolbar">
           <SiteSearch
+            posts={taggedPosts}
             value={draftQuery}
             selectedTags={draftTags}
             onValueChange={setDraftQuery}

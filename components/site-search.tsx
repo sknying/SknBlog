@@ -4,9 +4,11 @@ import Link from "next/link";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useMemo, useRef, useState } from "react";
 import { Icon } from "@/components/local-icon";
-import { getPostTimeLabel, posts } from "@/lib/blog-data";
+import type { Post } from "@/lib/blog-types";
+import { getPostTimeLabel } from "@/lib/blog-utils";
 
 type SiteSearchProps = {
+  posts: Post[];
   value?: string;
   defaultValue?: string;
   selectedTags?: string[];
@@ -17,6 +19,7 @@ type SiteSearchProps = {
 };
 
 export function SiteSearch({
+  posts,
   value,
   defaultValue = "",
   selectedTags = [],
