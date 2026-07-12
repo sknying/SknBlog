@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
+import { SiteSearch } from "@/components/site-search";
+import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getCodeLanguage, getLanguageLabel, highlightCodeLine } from "@/lib/code-highlight";
 import { getPostTimeLabel, getPrimaryTag, posts as allPosts, type ArticleBlock, type Post } from "@/lib/blog-data";
@@ -20,14 +22,6 @@ type OutlineItem = {
   label: string;
   level: 1 | 2;
 };
-
-const articleNavigation = [
-  { label: "首页", href: "/", icon: "solar:home-2-linear" },
-  { label: "归档", href: "/posts", icon: "solar:archive-linear" },
-  { label: "分类", href: "/posts#years", icon: "solar:widget-4-linear" },
-  { label: "标签", href: "/posts", icon: "solar:tag-linear" },
-  { label: "关于", href: "/#about", icon: "solar:user-circle-linear" }
-];
 
 function getBlockHeading(block: ArticleBlock) {
   return block.type === "list" || block.type === "table" ? block.title : null;
@@ -141,31 +135,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
     <main className="article-page">
       <div className="article-grain" aria-hidden="true" />
 
-      <aside className="article-site-side">
-        <Link className="article-site-brand" href="/" aria-label="清樱小屋首页">
-          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-          <span>清樱小屋</span>
-        </Link>
-        <div className="article-author">
-          <div><Image src="/images/sakura-coast-hero.png" alt="Sknying 头像" fill sizes="80px" priority /></div>
-          <strong>Sknying</strong>
-          <p>记录美好，分享热爱。</p>
-        </div>
-        <nav className="article-site-nav" aria-label="站点导航">
-          {articleNavigation.map((item) => (
-            <Link href={item.href} key={item.label}>
-              <Icon icon={item.icon} aria-hidden="true" />
-              <span>{item.label}</span>
-            </Link>
-          ))}
-        </nav>
-        <div className="article-side-links">
-          <a href="https://github.com/sknying" aria-label="GitHub"><Icon icon="mdi:github" aria-hidden="true" /></a>
-          <Link href="/posts" aria-label="文章归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>
-          <Link href="/#about" aria-label="关于作者"><Icon icon="solar:user-circle-linear" aria-hidden="true" /></Link>
-        </div>
-        <footer>2026 · 清樱小屋</footer>
-      </aside>
+      <SiteSidebar active="archive" />
 
       <div className="article-workspace">
         <header className="article-toolbar">
@@ -178,12 +148,7 @@ export function ArticlePage({ post, previousPost, nextPost }: ArticlePageProps) 
             <span>/</span>
             <b>正文</b>
           </nav>
-          <form className="article-search" action="/posts">
-            <Icon icon="solar:magnifer-linear" aria-hidden="true" />
-            <label className="sr-only" htmlFor="article-search-input">搜索文章</label>
-            <input id="article-search-input" name="q" type="search" placeholder="搜索文章、标签..." />
-            <button type="submit" aria-label="搜索"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></button>
-          </form>
+          <SiteSearch />
           <div className="article-toolbar-actions">
             <ThemeToggle />
             <Link href="/posts" aria-label="返回归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>

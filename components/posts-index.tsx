@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/local-icon";
+import { SiteSearch } from "@/components/site-search";
+import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { FormEvent } from "react";
 import { useEffect, useMemo, useState } from "react";
@@ -46,6 +48,15 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
   const [newTag, setNewTag] = useState("");
   const [tagMessage, setTagMessage] = useState("");
   const [randomIndex, setRandomIndex] = useState(0);
+
+  useEffect(() => {
+    const urlTags = initialTag ? [initialTag] : [];
+    setDraftQuery(initialQuery);
+    setCommittedQuery(initialQuery);
+    setDraftTags(urlTags);
+    setCommittedTags(urlTags);
+    setSelectedMonth("");
+  }, [initialQuery, initialTag]);
 
   const searchedPosts = useMemo(() => {
     const query = committedQuery.trim().toLocaleLowerCase("zh-CN");
@@ -94,13 +105,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
     };
   }, [tagPanelOpen]);
 
-  function submitSearch(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setCommittedQuery(draftQuery);
-    setCommittedTags(draftTags);
-    setSelectedMonth("");
-  }
-
   function toggleDraftTag(tag: string) {
     setDraftTags((current) => current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]);
   }
@@ -133,55 +137,22 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
     <main className="archive-page">
       <div className="archive-grain" aria-hidden="true" />
 
-      <aside className="archive-side">
-        <Link className="archive-logo" href="/">
-          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-          <span>清樱小屋</span>
-        </Link>
-        <div className="archive-author">
-          <div><Image src="/images/sakura-coast-hero.png" alt="Sknying 头像" fill sizes="78px" priority /></div>
-          <strong>Sknying</strong>
-          <p>记录美好，分享热爱。</p>
-        </div>
-        <nav className="archive-navigation" aria-label="归档导航">
-          <Link href="/"><Icon icon="solar:home-2-linear" aria-hidden="true" />首页</Link>
-          <Link className="active" href="/posts"><Icon icon="solar:archive-linear" aria-hidden="true" />归档</Link>
-          <a href="#years"><Icon icon="solar:widget-4-linear" aria-hidden="true" />分类</a>
-          <button type="button" onClick={() => setTagPanelOpen(true)}><Icon icon="solar:tag-linear" aria-hidden="true" />标签</button>
-          <a href="#archive-stats"><Icon icon="solar:chart-2-linear" aria-hidden="true" />统计</a>
-          <Link href="/#about"><Icon icon="solar:user-circle-linear" aria-hidden="true" />关于</Link>
-        </nav>
-        <div className="archive-side-links">
-          <a href="https://github.com/sknying" aria-label="GitHub"><Icon icon="mdi:github" aria-hidden="true" /></a>
-          <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
-          <button type="button" onClick={() => setTagPanelOpen(true)} aria-label="管理标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></button>
-        </div>
-        <footer>2026 · SknBlog</footer>
-      </aside>
+      <SiteSidebar active="archive" onTagsClick={() => setTagPanelOpen(true)} />
 
       <div className="archive-workspace">
         <header className="archive-toolbar">
-          <form className="archive-global-search" onSubmit={submitSearch}>
-            <Icon icon="solar:magnifer-linear" aria-hidden="true" />
-            <div className="archive-search-content">
-              {draftTags.map((tag) => (
-                <span key={tag}>{tag}<button type="button" onClick={() => toggleDraftTag(tag)} aria-label={`取消标签 ${tag}`}><Icon icon="solar:close-circle-linear" aria-hidden="true" /></button></span>
-              ))}
-              <input
-                value={draftQuery}
-                onChange={(event) => setDraftQuery(event.target.value)}
-                onKeyDown={(event) => {
-                  if (event.key === "Backspace" && !draftQuery && draftTags.length > 0) {
-                    setDraftTags((current) => current.slice(0, -1));
-                  }
-                }}
-                type="search"
-                placeholder="搜索文章、标签..."
-                aria-label="搜索文章或标签"
-              />
-            </div>
-            <button type="submit" aria-label="确认搜索"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></button>
-          </form>
+          <SiteSearch
+            value={draftQuery}
+            selectedTags={draftTags}
+            onValueChange={setDraftQuery}
+            onRemoveTag={toggleDraftTag}
+            onEmptyBackspace={() => setDraftTags((current) => current.slice(0, -1))}
+            onSearch={(value) => {
+              setCommittedQuery(value);
+              setCommittedTags(draftTags);
+              setSelectedMonth("");
+            }}
+          />
           <div className="archive-toolbar-icons">
             <ThemeToggle />
             <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>

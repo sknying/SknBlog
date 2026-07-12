@@ -21,6 +21,16 @@
     linear-gradient(145deg, #fbfdff, #eef5fc 58%, #fff7fa);
 }
 
+.archive-page > .sakura-sidebar {
+  --sakura-paper-strong: var(--archive-paper-strong);
+  --sakura-text: var(--archive-text);
+  --sakura-muted: var(--archive-muted);
+  --sakura-blue: var(--archive-blue);
+  --sakura-blue-deep: var(--archive-blue-deep);
+  --sakura-pink: var(--archive-pink);
+  --sakura-line: var(--archive-line);
+}
+
 :root[data-theme="dark"] .archive-page {
   --archive-paper: rgba(24, 34, 58, 0.86);
   --archive-paper-strong: rgba(31, 43, 70, 0.96);
@@ -218,6 +228,8 @@
 }
 
 .archive-toolbar {
+  position: relative;
+  z-index: 60;
   display: flex;
   min-height: 54px;
   align-items: center;
@@ -226,6 +238,8 @@
   max-width: 1260px;
   margin: 0 auto 18px;
 }
+
+.archive-toolbar .site-search-shell { width: min(500px, 56vw); }
 
 .archive-global-search {
   display: grid;
@@ -914,36 +928,8 @@
   .archive-year-posts a > span { display: none; }
 }
 
-@media (max-width: 920px) {
+@media (max-width: 980px) {
   .archive-page { display: block; }
-  .archive-side {
-    position: sticky;
-    top: 0;
-    flex-direction: row;
-    width: 100%;
-    height: auto;
-    align-items: center;
-    gap: 16px;
-    padding: 10px 16px;
-    border-right: 0;
-    border-bottom: 1px solid var(--archive-line);
-  }
-  .archive-logo span,
-  .archive-author,
-  .archive-side-links,
-  .archive-side footer { display: none; }
-  .archive-navigation {
-    display: flex;
-    min-width: 0;
-    gap: 4px;
-    margin: 0;
-    overflow-x: auto;
-  }
-  .archive-navigation :where(a, button) {
-    min-width: 88px;
-    justify-content: center;
-    padding: 0 10px;
-  }
   .archive-content-grid { grid-template-columns: minmax(0, 1fr); }
   .archive-insights {
     position: static;
@@ -952,14 +938,9 @@
 }
 
 @media (max-width: 680px) {
-  .archive-side { overflow-x: auto; }
-  .archive-logo { flex: 0 0 46px; justify-content: center; }
-  .archive-navigation :where(a, button) { min-width: 50px; padding: 0 13px; }
-  .archive-navigation :where(a, button) { font-size: 0; }
-  .archive-navigation svg { width: 20px; height: 20px; }
   .archive-workspace { padding: 12px 12px 0; }
   .archive-toolbar { gap: 8px; margin-bottom: 12px; }
-  .archive-global-search { width: 100%; }
+  .archive-toolbar .site-search-shell { width: 100%; }
   .archive-toolbar-icons a { display: none; }
   .archive-banner { min-height: 280px; }
   .archive-banner > img { object-position: 62% center; }

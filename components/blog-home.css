@@ -112,20 +112,25 @@
   margin-top: 42px;
 }
 
-.sakura-nav a {
+.sakura-nav :where(a, button) {
   display: flex;
+  width: 100%;
   min-height: 48px;
   align-items: center;
   gap: 14px;
+  border: 0;
   padding: 0 16px;
   border-radius: 8px;
   color: var(--sakura-muted);
+  background: transparent;
+  cursor: pointer;
   font-weight: 600;
+  text-align: left;
   transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
 
-.sakura-nav a:hover,
-.sakura-nav a.active {
+.sakura-nav :where(a, button):hover,
+.sakura-nav :where(a, button).active {
   color: #fff;
   background: linear-gradient(135deg, var(--sakura-blue), var(--sakura-blue-deep));
   box-shadow: 0 8px 18px rgba(71, 116, 210, 0.28);
@@ -209,6 +214,8 @@
 }
 
 .sakura-toolbar {
+  position: relative;
+  z-index: 60;
   display: flex;
   min-height: 56px;
   align-items: center;
@@ -810,7 +817,7 @@
     overflow-x: auto;
   }
 
-  .sakura-nav a {
+  .sakura-nav :where(a, button) {
     min-width: 92px;
     justify-content: center;
     padding: 0 12px;
@@ -841,12 +848,12 @@
     justify-content: center;
   }
 
-  .sakura-nav a {
+  .sakura-nav :where(a, button) {
     min-width: 52px;
     padding: 0 14px;
   }
 
-  .sakura-nav a span {
+  .sakura-nav :where(a, button) span {
     display: none;
   }
 

@@ -1,0 +1,147 @@
+.site-search-shell {
+  position: relative;
+  z-index: 50;
+  width: min(500px, 56vw);
+}
+
+.site-search {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  min-height: 48px;
+  align-items: center;
+  gap: 9px;
+  padding: 0 8px 0 15px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  color: var(--muted);
+  background: var(--surface-strong);
+  box-shadow: 0 8px 24px rgba(75, 105, 160, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.site-search > svg { width: 18px; height: 18px; flex: 0 0 auto; }
+.site-search-content { display: flex; min-width: 0; align-items: center; gap: 6px; overflow: hidden; }
+
+.site-search-content > span {
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-height: 30px;
+  align-items: center;
+  gap: 3px;
+  border-radius: 6px;
+  padding-left: 8px;
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 11%, transparent);
+  font-size: 12px;
+}
+
+.site-search-content > span button {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  place-items: center;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+
+.site-search-content input {
+  min-width: 100px;
+  flex: 1;
+  height: 44px;
+  border: 0;
+  outline: 0;
+  color: var(--text);
+  background: transparent;
+}
+
+.site-search-content input::placeholder { color: var(--muted); }
+
+.site-search > button {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--accent-2);
+  cursor: pointer;
+}
+
+.site-search-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  left: 0;
+  z-index: 80;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px;
+  color: var(--text);
+  background: var(--surface-strong);
+  box-shadow: 0 20px 48px rgba(50, 75, 125, 0.2);
+  backdrop-filter: blur(22px);
+}
+
+.site-search-menu > a:not(.site-search-more) {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  min-height: 54px;
+  align-items: center;
+  gap: 10px;
+  border-radius: 6px;
+  padding: 7px 9px;
+  transition: color 160ms ease, background 160ms ease;
+}
+
+.site-search-menu > a:not(.site-search-more):hover,
+.site-search-menu > a:not(.site-search-more):focus-visible {
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
+}
+
+.site-search-menu > a > span:first-child {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--accent-2);
+  background: color-mix(in srgb, var(--accent-2) 10%, transparent);
+}
+
+.site-search-menu strong { display: block; overflow: hidden; color: var(--text); font-size: 13px; text-overflow: ellipsis; white-space: nowrap; }
+.site-search-menu small { display: block; margin-top: 3px; overflow: hidden; color: var(--muted); font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+.site-search-menu time { color: var(--muted); font-size: 10px; }
+.site-search-menu > p { display: flex; min-height: 58px; align-items: center; justify-content: center; gap: 7px; margin: 0; color: var(--muted); font-size: 13px; }
+
+.site-search-more {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto 20px;
+  min-height: 44px;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  border-top: 1px solid var(--line);
+  padding: 7px 10px 3px;
+  color: var(--accent-2);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.site-search-more b { color: var(--muted); font-size: 10px; font-weight: 500; }
+.site-search-shell :where(a, button, input):focus-visible { outline: 3px solid color-mix(in srgb, var(--accent-2) 52%, transparent); outline-offset: 2px; }
+
+@media (max-width: 700px) {
+  .site-search-shell { width: 100%; }
+  .site-search-menu { position: fixed; top: 124px; right: 12px; left: 12px; }
+}
+
+@media (max-width: 420px) {
+  .site-search-content > span { max-width: 88px; overflow: hidden; }
+  .site-search-content > span:first-of-type ~ span { display: none; }
+  .site-search-menu time { display: none; }
+}

@@ -3,18 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
+import { SiteSearch } from "@/components/site-search";
+import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import { getPostTimeLabel, getPrimaryTag, posts, type Post } from "@/lib/blog-data";
 import { usePostTagState } from "@/lib/tag-state";
-
-const navigation = [
-  { label: "首页", href: "#top", icon: "solar:home-2-linear" },
-  { label: "归档", href: "/posts", icon: "solar:archive-linear" },
-  { label: "专栏", href: "#columns", icon: "solar:widget-4-linear" },
-  { label: "标签", href: "#tags", icon: "solar:tag-linear" },
-  { label: "关于", href: "#about", icon: "solar:user-circle-linear" }
-];
 
 function PostCover({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
@@ -91,62 +85,11 @@ export function BlogHome() {
     <main className="sakura-site" id="top">
       <div className="sakura-grain" aria-hidden="true" />
 
-      <aside className="sakura-sidebar">
-        <Link className="sakura-brand" href="/" aria-label="SknBlog 首页">
-          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-          <span>清樱小屋</span>
-        </Link>
-
-        <nav className="sakura-nav" aria-label="主导航">
-          {navigation.map((item, index) => (
-            <Link className={index === 0 ? "active" : ""} href={item.href} key={item.label}>
-              <Icon icon={item.icon} aria-hidden="true" />
-              <span>{item.label}</span>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="sakura-now-card" aria-label="当前状态">
-          <div className="sakura-disc">
-            <Image src="/images/sakura-coast-hero.png" alt="樱花海岸插画局部" fill sizes="112px" priority />
-          </div>
-          <span>春风与代码</span>
-          <small>今天也在写</small>
-        </div>
-
-        <footer className="sakura-side-footer">
-          <div>
-            <a href="https://github.com/sknying" aria-label="GitHub">
-              <Icon icon="mdi:github" aria-hidden="true" />
-            </a>
-            <Link href="/posts" aria-label="文章归档">
-              <Icon icon="solar:archive-linear" aria-hidden="true" />
-            </Link>
-            <a href="#tags" aria-label="热门标签">
-              <Icon icon="solar:tag-linear" aria-hidden="true" />
-            </a>
-          </div>
-          <p>2026 · SknBlog</p>
-        </footer>
-      </aside>
+      <SiteSidebar active="home" />
 
       <div className="sakura-workspace">
         <header className="sakura-toolbar">
-          <label className="sakura-search">
-            <span className="sr-only">搜索文章或标签</span>
-            <Icon icon="solar:magnifer-linear" aria-hidden="true" />
-            <input
-              type="search"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="搜索文章、标签..."
-            />
-            {query ? (
-              <button type="button" onClick={() => setQuery("")} aria-label="清空搜索">
-                <Icon icon="solar:close-circle-linear" aria-hidden="true" />
-              </button>
-            ) : null}
-          </label>
+          <SiteSearch value={query} onValueChange={setQuery} onSearch={setQuery} />
           <div className="sakura-toolbar-actions">
             <ThemeToggle />
             <Link href="/posts" aria-label="查看文章">
