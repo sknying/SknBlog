@@ -35,6 +35,27 @@ intro: "文章开头的引言。"
 - `wordCount` 与阅读时长在构建时从正文自动计算。
 - 标签列表直接从全部文章的 `tags` 字段聚合，不在网页中创建或删除。
 
+## 专栏配置
+
+在 `content/columns` 中为专栏建立一个 Markdown 配置文件。文章中的 `column` 要与配置的 `name` 一致。
+
+```md
+---
+name: "前端工程"
+slug: "frontend"
+coverImage: "/images/columns/frontend.png"
+summary: "Next.js、性能和架构。"
+intro: "从页面到构建流程。"
+mood: "持续整理中。"
+order: 10
+---
+```
+
+- `slug` 决定专栏详情页链接，例如 `/columns/frontend`。
+- `coverImage` 是专栏封面，优先级高于文章封面。
+- `summary`、`intro` 与 `mood` 分别用于专栏卡片、横幅和签名区。
+- `order` 越小越靠前；省略时按最近更新时间排序。
+
 代码块在围栏后写语言和可选文件名：
 
 ````md

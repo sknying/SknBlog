@@ -8,7 +8,7 @@ import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
-import { formatCompactNumber, getColumnGroups, type ColumnGroup } from "@/lib/column-data";
+import { formatCompactNumber, getColumnGroups, type ColumnDefinition, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 
 function ColumnCover({ group }: { group: ColumnGroup }) {
@@ -57,8 +57,8 @@ function ColumnCard({ group }: { group: ColumnGroup }) {
   );
 }
 
-export function ColumnsIndex({ posts }: { posts: Post[] }) {
-  const groups = useMemo(() => getColumnGroups(posts), [posts]);
+export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; columnDefinitions: ColumnDefinition[] }) {
+  const groups = useMemo(() => getColumnGroups(posts, columnDefinitions), [columnDefinitions, posts]);
   const totalWords = groups.reduce((total, group) => total + group.totalWords, 0);
   const latestGroups = groups.slice(0, 3);
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ColumnDetail } from "@/components/column-detail";
-import { posts } from "@/lib/blog-data";
+import { columnDefinitions, posts } from "@/lib/blog-data";
 import { getColumnBySlug, getColumnGroups } from "@/lib/column-data";
 
 type ColumnPageProps = {
@@ -9,12 +9,12 @@ type ColumnPageProps = {
 };
 
 export async function generateStaticParams() {
-  return getColumnGroups(posts).map((column) => ({ slug: column.slug }));
+  return getColumnGroups(posts, columnDefinitions).map((column) => ({ slug: column.slug }));
 }
 
 export async function generateMetadata({ params }: ColumnPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const column = getColumnBySlug(posts, slug);
+  const column = getColumnBySlug(posts, slug, columnDefinitions);
 
   if (!column) return {};
 
@@ -31,9 +31,9 @@ export async function generateMetadata({ params }: ColumnPageProps): Promise<Met
 
 export default async function ColumnPage({ params }: ColumnPageProps) {
   const { slug } = await params;
-  const column = getColumnBySlug(posts, slug);
+  const column = getColumnBySlug(posts, slug, columnDefinitions);
 
   if (!column) notFound();
 
-  return <ColumnDetail column={column} columns={getColumnGroups(posts)} posts={posts} />;
+  return <ColumnDetail column={column} columns={getColumnGroups(posts, columnDefinitions)} posts={posts} />;
 }

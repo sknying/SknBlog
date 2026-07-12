@@ -5,6 +5,7 @@ import { remark } from "remark";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
+import type { ColumnDefinition } from "@/lib/column-data";
 
 type MdNode = {
   type: string;
@@ -32,6 +33,7 @@ type Frontmatter = {
 };
 
 const contentDirectory = join(process.cwd(), "content", "posts");
+const columnsDirectory = join(process.cwd(), "content", "columns");
 const processor = remark().use(remarkGfm).use(remarkMath);
 
 function inlineMarkdown(nodes: MdNode[] = []): string {
@@ -164,7 +166,24 @@ function loadPosts() {
   return loadedPosts.sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt));
 }
 
+function loadColumnDefinitions(): ColumnDefinition[] {
+  return readdirSync(columnsDirectory)
+    .filter((fileName) => fileName.endsWith(".md"))
+    .map((fileName) => matter(readFileSync(join(columnsDirectory, fileName), "utf8")).data as Partial<ColumnDefinition>)
+    .filter((definition): definition is ColumnDefinition => Boolean(definition.name))
+    .map((definition) => ({
+      name: definition.name.trim(),
+      slug: definition.slug?.trim() || undefined,
+      coverImage: definition.coverImage?.trim() || undefined,
+      summary: definition.summary?.trim() || undefined,
+      intro: definition.intro?.trim() || undefined,
+      mood: definition.mood?.trim() || undefined,
+      order: typeof definition.order === "number" ? definition.order : undefined
+    }));
+}
+
 export const posts = loadPosts();
+export const columnDefinitions = loadColumnDefinitions();
 export const columns = Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN"));
 
 export function getPostBySlug(slug: string) { return posts.find((post) => post.slug === slug); }

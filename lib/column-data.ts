@@ -1,5 +1,15 @@
 import type { Post } from "@/lib/blog-types";
 
+export type ColumnDefinition = {
+  name: string;
+  slug?: string;
+  coverImage?: string;
+  summary?: string;
+  intro?: string;
+  mood?: string;
+  order?: number;
+};
+
 export type ColumnGroup = {
   slug: string;
   name: string;
@@ -12,6 +22,7 @@ export type ColumnGroup = {
   topTags: string[];
   totalWords: number;
   updatedAt: string;
+  order: number;
 };
 
 export function sortPostsByDate(items: Post[]) {
@@ -45,8 +56,9 @@ function getTopTags(items: Post[]) {
     .map((item) => item.tag);
 }
 
-export function getColumnGroups(posts: Post[]): ColumnGroup[] {
+export function getColumnGroups(posts: Post[], definitions: ColumnDefinition[] = []): ColumnGroup[] {
   const grouped = new Map<string, Post[]>();
+  const definitionsByName = new Map(definitions.map((definition) => [definition.name, definition]));
 
   posts.forEach((post) => {
     if (!post.column) return;
@@ -56,26 +68,28 @@ export function getColumnGroups(posts: Post[]): ColumnGroup[] {
   return Array.from(grouped, ([name, items]) => {
     const orderedPosts = sortPostsByDate(items);
     const latestPost = orderedPosts[0];
+    const definition = definitionsByName.get(name);
 
     return {
-      slug: columnNameToSlug(name),
+      slug: definition?.slug || columnNameToSlug(name),
       name,
       posts: orderedPosts,
       latestPost,
-      coverImage: latestPost.image,
-      summary: latestPost.summary,
-      intro: latestPost.intro,
-      mood: latestPost.mood,
+      coverImage: definition?.coverImage || latestPost.image,
+      summary: definition?.summary || latestPost.summary,
+      intro: definition?.intro || latestPost.intro,
+      mood: definition?.mood || latestPost.mood,
       topTags: getTopTags(orderedPosts),
       totalWords: orderedPosts.reduce((total, post) => total + post.wordCount, 0),
-      updatedAt: latestPost.publishedAt
+      updatedAt: latestPost.publishedAt,
+      order: definition?.order ?? Number.MAX_SAFE_INTEGER
     };
-  }).sort((left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt));
+  }).sort((left, right) => left.order - right.order || Date.parse(right.updatedAt) - Date.parse(left.updatedAt));
 }
 
-export function getColumnBySlug(posts: Post[], slug: string) {
+export function getColumnBySlug(posts: Post[], slug: string, definitions: ColumnDefinition[] = []) {
   const decodedSlug = decodeURIComponent(slug);
-  return getColumnGroups(posts).find((group) => group.slug === decodedSlug);
+  return getColumnGroups(posts, definitions).find((group) => group.slug === decodedSlug);
 }
 
 export function formatCompactNumber(value: number) {

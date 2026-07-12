@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ColumnsIndex } from "@/components/columns-index";
-import { posts } from "@/lib/blog-data";
+import { columnDefinitions, posts } from "@/lib/blog-data";
 
 export const metadata: Metadata = {
   title: "专栏小屋 | SknBlog",
@@ -9,5 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function ColumnsPage() {
-  return <Suspense fallback={null}><ColumnsIndex posts={posts} /></Suspense>;
+  return <Suspense fallback={null}><ColumnsIndex posts={posts} columnDefinitions={columnDefinitions} /></Suspense>;
 }
