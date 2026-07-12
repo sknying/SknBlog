@@ -5,14 +5,14 @@ import Link from "next/link";
 import { Icon } from "@/components/local-icon";
 
 type SiteSidebarProps = {
-  active?: "home" | "archive";
+  active?: "home" | "archive" | "columns";
   onTagsClick?: () => void;
 };
 
 const navigation = [
   { id: "home", label: "首页", href: "/", icon: "solar:home-2-linear" },
   { id: "archive", label: "归档", href: "/posts", icon: "solar:archive-linear" },
-  { id: "columns", label: "专栏", href: "/#columns", icon: "solar:widget-4-linear" },
+  { id: "columns", label: "专栏", href: "/columns", icon: "solar:widget-4-linear" },
   { id: "tags", label: "标签", href: "/#tags", icon: "solar:tag-linear" },
   { id: "about", label: "关于", href: "/#about", icon: "solar:user-circle-linear" }
 ] as const;

@@ -4,4 +4,5 @@
 @import "../components/site-search.css";
 @import "../components/article-page.css";
 @import "../components/posts-index.css";
+@import "../components/columns-index.css";
 @import "./styles/responsive.css";
