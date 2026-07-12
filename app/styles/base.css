@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&display=swap");
+
 @font-face {
   font-family: "Fira Code ASCII";
   src: url("/fonts/fira-code/FiraCode-Light.ttf") format("truetype");
@@ -53,6 +55,8 @@
 }
 
 :root {
+  --font-display: "Noto Serif SC", serif;
+  --font-body: "Noto Serif SC", serif;
   color-scheme: light;
   --bg: #eef5fc;
   --bg-deep: #e4edf8;
@@ -78,7 +82,7 @@
   --code-comment: #8692a7;
   --code-property: #2c7594;
   --code-punctuation: #4b6f9d;
-  --font-code: "Fira Code ASCII", "Cascadia Code", "Cascadia Mono", Consolas, "SFMono-Regular", Menlo, Monaco, "Noto Sans Mono CJK SC", "Microsoft YaHei Mono", "Liberation Mono", ui-monospace, monospace;
+  --font-code: "Fira Code ASCII", "Noto Serif SC", serif;
 }
 
 :root[data-theme="dark"] {
