@@ -138,7 +138,8 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
           <SiteSearch posts={allPosts} />
           <div className="article-toolbar-actions">
             <ThemeToggle />
-            <Link href="/posts" aria-label="返回归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>
+            <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
+            <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
           </div>
         </header>
 

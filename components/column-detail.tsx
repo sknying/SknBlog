@@ -103,9 +103,8 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
           <SiteSearch posts={posts} />
           <div className="column-detail-actions">
             <ThemeToggle />
-            <Link href="/columns" aria-label="返回专栏">
-              <Icon icon="solar:widget-4-linear" aria-hidden="true" />
-            </Link>
+            <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
+            <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
           </div>
         </header>
 

@@ -10,7 +10,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, getColumnGroups, type ColumnDefinition, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
-import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 function ColumnCover({ group }: { group: ColumnGroup }) {
   const [failed, setFailed] = useState(false);
@@ -73,12 +73,8 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
           <SiteSearch posts={posts} />
           <div className="columns-toolbar-actions">
             <ThemeToggle />
-            <Link href="/posts" aria-label="查看文章归档">
-              <Icon icon="solar:archive-linear" aria-hidden="true" />
-            </Link>
-            <span className="columns-mini-avatar">
-              <Image src={GITHUB_AVATAR} alt="" fill sizes="44px" priority unoptimized />
-            </span>
+            <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
+            <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
           </div>
         </header>
 

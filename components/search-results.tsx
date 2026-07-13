@@ -55,7 +55,8 @@ export function SearchResults({ posts }: { posts: Post[] }) {
           <SiteSearch posts={posts} value={query} onValueChange={setQuery} onSearch={setQuery} />
           <div className="search-toolbar-actions">
             <ThemeToggle />
-            <Link href="/posts" aria-label="查看文章归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>
+            <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
+            <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
           </div>
         </header>
 

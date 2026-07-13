@@ -7,7 +7,6 @@ import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 type SiteSidebarProps = {
   active?: "home" | "archive" | "columns" | "tags";
-  onTagsClick?: () => void;
 };
 
 const navigation = [
@@ -18,7 +17,7 @@ const navigation = [
   { id: "about", label: "关于", href: "/#about", icon: "solar:user-circle-linear" }
 ] as const;
 
-export function SiteSidebar({ active, onTagsClick }: SiteSidebarProps) {
+export function SiteSidebar({ active }: SiteSidebarProps) {
   return (
     <aside className="sakura-sidebar">
       <Link className="sakura-brand" href="/" aria-label={`${SITE_NAME} 首页`}>
@@ -29,15 +28,6 @@ export function SiteSidebar({ active, onTagsClick }: SiteSidebarProps) {
       <nav className="sakura-nav" aria-label="主导航">
         {navigation.map((item) => {
           const className = active === item.id ? "active" : "";
-
-          if (item.id === "tags" && onTagsClick) {
-            return (
-              <button className={className} type="button" onClick={onTagsClick} key={item.id}>
-                <Icon icon={item.icon} aria-hidden="true" />
-                <span>{item.label}</span>
-              </button>
-            );
-          }
 
           return (
             <Link className={className} href={item.href} key={item.id}>

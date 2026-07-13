@@ -31,14 +31,12 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
   const searchParams = useSearchParams();
   const initialTag = searchParams.get("tag") ?? "";
   const initialQuery = searchParams.get("q") ?? "";
-  const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const taggedPosts = posts;
   const [draftQuery, setDraftQuery] = useState(initialQuery);
   const [committedQuery, setCommittedQuery] = useState(initialQuery);
   const [draftTags, setDraftTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [committedTags, setCommittedTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [selectedMonth, setSelectedMonth] = useState("");
-  const [tagPanelOpen, setTagPanelOpen] = useState(false);
   const [randomIndex, setRandomIndex] = useState(0);
 
   useEffect(() => {
@@ -83,20 +81,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
     : 0;
   const randomPost = taggedPosts[randomIndex % Math.max(taggedPosts.length, 1)];
 
-  useEffect(() => {
-    if (!tagPanelOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    const closeOnEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setTagPanelOpen(false);
-    };
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", closeOnEscape);
-    };
-  }, [tagPanelOpen]);
-
   function toggleDraftTag(tag: string) {
     setDraftTags((current) => current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]);
   }
@@ -105,7 +89,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
     <main className="archive-page">
       <div className="archive-grain" aria-hidden="true" />
 
-      <SiteSidebar active="archive" onTagsClick={() => setTagPanelOpen(true)} />
+      <SiteSidebar active="archive" />
 
       <div className="archive-workspace">
         <header className="archive-toolbar">
@@ -125,7 +109,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
           <div className="archive-toolbar-icons">
             <ThemeToggle />
             <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
-            <button type="button" onClick={() => setTagPanelOpen(true)} aria-label="筛选标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></button>
+            <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
           </div>
         </header>
 
@@ -226,21 +210,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
         </footer>
       </div>
 
-      {tagPanelOpen ? (
-        <div className="archive-tag-layer" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setTagPanelOpen(false); }}>
-          <section className="archive-tag-dialog" role="dialog" aria-modal="true" aria-labelledby="tag-dialog-title">
-            <header><div><span>来自 Markdown</span><h2 id="tag-dialog-title">标签筛选</h2></div><button type="button" onClick={() => setTagPanelOpen(false)} aria-label="关闭标签筛选" autoFocus><Icon icon="solar:close-circle-linear" aria-hidden="true" /></button></header>
-            <div className="archive-tag-list">
-              {tags.map((tag) => (
-                <span className={draftTags.includes(tag) ? "active" : ""} key={tag}>
-                  <button type="button" onClick={() => toggleDraftTag(tag)} aria-pressed={draftTags.includes(tag)}>{tag}</button>
-                </span>
-              ))}
-            </div>
-            <footer><button type="button" onClick={() => { setCommittedTags(draftTags); setCommittedQuery(draftQuery); setSelectedMonth(""); setTagPanelOpen(false); }}>应用筛选</button></footer>
-          </section>
-        </div>
-      ) : null}
     </main>
   );
 }
