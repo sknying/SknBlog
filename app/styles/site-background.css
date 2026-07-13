@@ -31,6 +31,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   content: "";
+  filter: none;
   pointer-events: none;
   transform: translateZ(0);
 }
@@ -60,9 +61,8 @@
 }
 
 :root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
-  background-image:
-    linear-gradient(rgba(7, 13, 27, 0.7), rgba(12, 20, 38, 0.78)),
-    url("/images/background.png");
+  background-image: url("/images/background.png");
+  filter: brightness(0.58) contrast(1.4) saturate(1.3);
 }
 
 :root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
@@ -90,9 +90,8 @@
   }
 
   :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
-    background-image:
-      linear-gradient(rgba(7, 13, 27, 0.7), rgba(12, 20, 38, 0.78)),
-      url("/images/background.png");
+    background-image: url("/images/background.png");
+    filter: brightness(0.58) contrast(1.4) saturate(1.3);
   }
 
   :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
