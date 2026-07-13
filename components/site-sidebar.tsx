@@ -23,6 +23,7 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
     <aside className="sakura-sidebar">
       <Link className="sakura-brand" href="/" aria-label={`${SITE_NAME} 首页`}>
         <SiteLogo className="sakura-brand-logo" priority sizes="72px" />
+        <span className="sakura-brand-name">{SITE_NAME}</span>
       </Link>
 
       <nav className="sakura-nav" aria-label="主导航">
