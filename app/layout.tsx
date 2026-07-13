@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { AboutDialog } from "@/components/about-dialog";
+import { ScrollProgress } from "@/components/scroll-progress";
 import { getAboutContent } from "@/lib/about-data";
 import "katex/dist/katex.min.css";
 import "./globals.css";
@@ -43,6 +44,7 @@ export default function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning>
       <body>
         <Script id="theme-preference" strategy="beforeInteractive">{themeScript}</Script>
+        <ScrollProgress />
         {children}
         <AboutDialog content={aboutContent} />
       </body>
