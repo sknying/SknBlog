@@ -61,7 +61,7 @@
 
 :root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
   background-image:
-    linear-gradient(rgba(12, 20, 38, 0.42), rgba(20, 30, 52, 0.52)),
+    linear-gradient(rgba(7, 13, 27, 0.7), rgba(12, 20, 38, 0.78)),
     url("/images/background.png");
 }
 
@@ -91,7 +91,7 @@
 
   :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
     background-image:
-      linear-gradient(rgba(12, 20, 38, 0.42), rgba(20, 30, 52, 0.52)),
+      linear-gradient(rgba(7, 13, 27, 0.7), rgba(12, 20, 38, 0.78)),
       url("/images/background.png");
   }
 
