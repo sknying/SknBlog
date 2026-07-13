@@ -16,7 +16,7 @@
   --tags-paper: rgba(255, 255, 255, 0.68);
   --tags-paper-strong: rgba(255, 255, 255, 0.82);
   background-image:
-    linear-gradient(rgba(247, 251, 255, 0.14), rgba(238, 245, 252, 0.3)),
+    linear-gradient(rgba(247, 251, 255, 0.08), rgba(238, 245, 252, 0.2)),
     url("/images/background.png");
   background-position: center;
   background-size: cover;
