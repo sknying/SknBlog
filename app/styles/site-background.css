@@ -82,3 +82,9 @@
     background: rgba(17, 24, 42, 0.62);
   }
 }
+
+/* Avoid Chromium black compositor tiles without changing page backgrounds. */
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
