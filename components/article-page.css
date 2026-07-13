@@ -309,7 +309,8 @@
 .article-code code { display: block; min-width: 0; font-family: var(--font-code); font-variant-ligatures: contextual; font-variant-numeric: tabular-nums; }
 
 .article-inline-code { border: 1px solid var(--code-divider); border-radius: 5px; padding: 0.13em 0.38em; color: var(--code-text); background: var(--code-bg); font-family: var(--font-code); font-size: 0.9em; }
-.article-inline-math { display: inline-flex; border: 1px solid color-mix(in srgb, var(--article-pink) 34%, transparent); border-radius: 5px; padding: 0.06em 0.38em; color: var(--article-blue-deep); background: color-mix(in srgb, var(--article-pink) 10%, transparent); font-family: var(--font-code); }
+.article-inline-math { display: inline-flex; align-items: center; border: 1px solid color-mix(in srgb, var(--article-pink) 34%, transparent); border-radius: 5px; padding: 0.06em 0.38em; color: var(--article-blue-deep); background: color-mix(in srgb, var(--article-pink) 10%, transparent); vertical-align: -0.08em; }
+.article-inline-math .katex { font-size: 1.02em; }
 .article-content a { color: var(--article-blue-deep); text-decoration: underline; text-decoration-color: color-mix(in srgb, var(--article-blue-deep) 42%, transparent); text-underline-offset: 4px; }
 .article-content a:hover { color: var(--article-pink); text-decoration-color: var(--article-pink); }
 
@@ -328,7 +329,9 @@
 .article-table-block td { color: var(--article-muted); }
 .article-table-block tr:last-child td { border-bottom: 0; }
 .article-math-block { display: grid; gap: 8px; margin: 0; border: 1px solid var(--article-line); border-radius: 8px; padding: 18px; background: var(--article-soft-blue); }
-.article-math-block > div { overflow-x: auto; color: var(--article-blue-deep); font-family: var(--font-code); font-size: clamp(17px, 2vw, 22px); white-space: nowrap; }
+.article-math-formula { overflow-x: auto; overflow-y: hidden; color: var(--article-blue-deep); font-size: clamp(17px, 2vw, 22px); }
+.article-math-formula .katex-display { width: max-content; min-width: 100%; margin: 0; padding: 4px 0; }
+.math-formula-error code { color: var(--danger); font-family: var(--font-code); font-size: 0.9em; white-space: pre-wrap; }
 
 .article-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--article-line); }
 .article-pager > :where(a, span) { min-height: 76px; border: 1px solid var(--article-line); border-radius: 8px; padding: 13px; }

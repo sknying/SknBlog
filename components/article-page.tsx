@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
+import { MathFormula } from "@/components/math-formula";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteLogo } from "@/components/site-logo";
@@ -54,7 +55,7 @@ function renderInlineText(text: string) {
         </a>
       );
     } else if (match[5]) {
-      parts.push(<span className="article-inline-math" key={`math-${match.index}`}>{match[5]}</span>);
+      parts.push(<MathFormula className="article-inline-math" formula={match[5]} key={`math-${match.index}`} />);
     }
 
     lastIndex = pattern.lastIndex;
@@ -222,7 +223,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                 }
 
                 if (block.type === "math") {
-                  return <figure className="article-math-block" id={id} key={id}><div>{block.formula}</div>{block.caption ? <figcaption>{block.caption}</figcaption> : null}</figure>;
+                  return <figure className="article-math-block" id={id} key={id}><MathFormula className="article-math-formula" formula={block.formula} displayMode />{block.caption ? <figcaption>{block.caption}</figcaption> : null}</figure>;
                 }
 
                 const List = block.ordered ? "ol" : "ul";
