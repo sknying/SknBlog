@@ -6,7 +6,7 @@ import { Icon } from "@/components/local-icon";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 type SiteSidebarProps = {
-  active?: "home" | "archive" | "columns";
+  active?: "home" | "archive" | "columns" | "tags";
   onTagsClick?: () => void;
 };
 
@@ -14,7 +14,7 @@ const navigation = [
   { id: "home", label: "首页", href: "/", icon: "solar:home-2-linear" },
   { id: "archive", label: "归档", href: "/posts", icon: "solar:archive-linear" },
   { id: "columns", label: "专栏", href: "/columns", icon: "solar:widget-4-linear" },
-  { id: "tags", label: "标签", href: "/#tags", icon: "solar:tag-linear" },
+  { id: "tags", label: "标签", href: "/tags", icon: "solar:tag-linear" },
   { id: "about", label: "关于", href: "/#about", icon: "solar:user-circle-linear" }
 ] as const;
 
@@ -60,7 +60,7 @@ export function SiteSidebar({ active, onTagsClick }: SiteSidebarProps) {
         <div>
           <a href="https://github.com/sknying" aria-label="GitHub"><Icon icon="mdi:github" aria-hidden="true" /></a>
           <Link href="/posts" aria-label="文章归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>
-          <Link href="/#tags" aria-label="热门标签"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
+          <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
         </div>
         <p>{SITE_COPYRIGHT}</p>
       </footer>
