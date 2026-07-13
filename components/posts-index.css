@@ -1,6 +1,6 @@
 .archive-page {
-  --archive-paper: rgba(255, 255, 255, 0.84);
-  --archive-paper-strong: rgba(255, 255, 255, 0.96);
+  --archive-paper: rgba(250, 248, 235, 0.86);
+  --archive-paper-strong: rgba(255, 252, 240, 0.96);
   --archive-text: #30384d;
   --archive-muted: #73809b;
   --archive-blue: #638be5;
@@ -117,7 +117,7 @@
   flex-direction: column;
   padding: 28px 20px 20px;
   border-right: 1px solid var(--archive-line);
-  background: rgba(255, 255, 255, 0.76);
+  background: rgba(250, 248, 235, 0.78);
   box-shadow: 10px 0 34px rgba(72, 102, 158, 0.08);
   backdrop-filter: blur(22px);
 }
@@ -363,7 +363,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.91) 0%, rgba(255, 255, 255, 0.58) 35%, transparent 64%),
+    linear-gradient(90deg, rgba(255, 252, 240, 0.91) 0%, rgba(250, 248, 235, 0.58) 35%, transparent 64%),
     linear-gradient(0deg, rgba(42, 67, 108, 0.08), transparent 42%);
 }
 
@@ -479,7 +479,7 @@
   border: 1px solid var(--archive-line);
   border-radius: 8px;
   color: var(--archive-blue-deep);
-  background: rgba(255, 255, 255, 0.76);
+  background: rgba(250, 248, 235, 0.78);
   box-shadow: 0 6px 16px rgba(72, 102, 158, 0.08);
   cursor: pointer;
   transition: transform 180ms ease, border-color 180ms ease, background 180ms ease, box-shadow 180ms ease;
@@ -506,7 +506,7 @@
 
 .archive-months button:disabled:hover {
   border-color: var(--archive-line);
-  background: rgba(255, 255, 255, 0.76);
+  background: rgba(250, 248, 235, 0.78);
   transform: none;
 }
 
@@ -752,7 +752,7 @@
   background:
     radial-gradient(circle at 18% 110%, rgba(172, 211, 255, 0.6), transparent 18rem),
     radial-gradient(circle at 82% 110%, rgba(255, 198, 216, 0.48), transparent 18rem),
-    rgba(255, 255, 255, 0.66);
+    rgba(250, 248, 235, 0.68);
 }
 
 .archive-footer svg {
@@ -788,7 +788,7 @@
   border-radius: 8px;
   padding: 22px;
   color: var(--archive-text);
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 252, 240, 0.96);
   box-shadow: 0 28px 80px rgba(43, 60, 94, 0.28);
 }
 
@@ -920,7 +920,7 @@
   .archive-toolbar-icons a { display: none; }
   .archive-banner { min-height: 280px; }
   .archive-banner > img { object-position: 62% center; }
-  .archive-banner > div:first-of-type { background: linear-gradient(90deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.68) 68%, rgba(255, 255, 255, 0.18)); }
+  .archive-banner > div:first-of-type { background: linear-gradient(90deg, rgba(255, 252, 240, 0.94), rgba(250, 248, 235, 0.68) 68%, rgba(250, 248, 235, 0.18)); }
   .archive-banner-copy { width: 82%; padding: 58px 22px 32px; }
   .archive-banner-copy h1 { font-size: 38px; }
   .archive-years { padding: 16px 14px 20px 27px; }

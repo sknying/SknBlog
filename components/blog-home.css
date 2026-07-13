@@ -1,7 +1,7 @@
 .sakura-site {
   --sakura-bg: #eef5fc;
-  --sakura-paper: rgba(255, 255, 255, 0.82);
-  --sakura-paper-strong: rgba(255, 255, 255, 0.94);
+  --sakura-paper: rgba(250, 248, 235, 0.84);
+  --sakura-paper-strong: rgba(255, 252, 240, 0.95);
   --sakura-text: #30384d;
   --sakura-muted: #71809d;
   --sakura-blue: #648ee4;
@@ -80,7 +80,7 @@
   flex-direction: column;
   padding: 30px 22px 22px;
   border-right: 1px solid var(--sakura-line);
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(250, 248, 235, 0.74);
   box-shadow: 10px 0 32px rgba(91, 119, 170, 0.08);
   backdrop-filter: blur(22px);
 }
@@ -340,7 +340,7 @@
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.91) 0%, rgba(255, 255, 255, 0.58) 35%, transparent 64%),
+    linear-gradient(90deg, rgba(255, 252, 240, 0.91) 0%, rgba(250, 248, 235, 0.58) 35%, transparent 64%),
     linear-gradient(0deg, rgba(42, 67, 108, 0.08), transparent 42%);
 }
 
@@ -945,7 +945,7 @@
   }
 
   .sakura-hero-wash {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.68) 68%, rgba(255, 255, 255, 0.18));
+    background: linear-gradient(90deg, rgba(255, 252, 240, 0.94), rgba(250, 248, 235, 0.68) 68%, rgba(250, 248, 235, 0.18));
   }
 
   .sakura-hero-copy {

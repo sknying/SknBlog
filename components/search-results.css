@@ -1,7 +1,7 @@
 .search-page {
   --search-bg: #eef5fc;
-  --search-paper: rgba(255, 255, 255, 0.84);
-  --search-paper-strong: rgba(255, 255, 255, 0.96);
+  --search-paper: rgba(250, 248, 235, 0.86);
+  --search-paper-strong: rgba(255, 252, 240, 0.96);
   --search-text: #30384d;
   --search-muted: #71809d;
   --search-blue: #648ee4;

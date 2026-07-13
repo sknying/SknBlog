@@ -58,10 +58,10 @@
   --font-display: "Noto Serif SC", serif;
   --font-body: "Noto Serif SC", serif;
   color-scheme: light;
-  --bg: #eef5fc;
-  --bg-deep: #e4edf8;
-  --surface: rgba(255, 255, 255, 0.8);
-  --surface-strong: rgba(255, 255, 255, 0.94);
+  --bg: #f4f1e3;
+  --bg-deep: #ebe7d6;
+  --surface: rgba(250, 248, 235, 0.82);
+  --surface-strong: rgba(255, 252, 240, 0.95);
   --line: rgba(111, 139, 190, 0.2);
   --text: #30384d;
   --muted: #71809d;

@@ -1,22 +1,22 @@
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
-  --surface: rgba(255, 255, 255, 0.68);
-  --surface-strong: rgba(255, 255, 255, 0.82);
-  --sakura-paper: rgba(255, 255, 255, 0.68);
-  --sakura-paper-strong: rgba(255, 255, 255, 0.82);
-  --archive-paper: rgba(255, 255, 255, 0.68);
-  --archive-paper-strong: rgba(255, 255, 255, 0.82);
-  --article-paper: rgba(255, 255, 255, 0.7);
-  --article-paper-strong: rgba(255, 255, 255, 0.84);
-  --columns-paper: rgba(255, 255, 255, 0.68);
-  --columns-paper-strong: rgba(255, 255, 255, 0.82);
-  --column-paper: rgba(255, 255, 255, 0.68);
-  --column-paper-strong: rgba(255, 255, 255, 0.82);
-  --search-paper: rgba(255, 255, 255, 0.68);
-  --search-paper-strong: rgba(255, 255, 255, 0.82);
-  --tags-paper: rgba(255, 255, 255, 0.68);
-  --tags-paper-strong: rgba(255, 255, 255, 0.82);
+  --surface: rgba(250, 248, 235, 0.7);
+  --surface-strong: rgba(255, 252, 240, 0.84);
+  --sakura-paper: rgba(250, 248, 235, 0.7);
+  --sakura-paper-strong: rgba(255, 252, 240, 0.84);
+  --archive-paper: rgba(250, 248, 235, 0.7);
+  --archive-paper-strong: rgba(255, 252, 240, 0.84);
+  --article-paper: rgba(250, 248, 235, 0.72);
+  --article-paper-strong: rgba(255, 252, 240, 0.86);
+  --columns-paper: rgba(250, 248, 235, 0.7);
+  --columns-paper-strong: rgba(255, 252, 240, 0.84);
+  --column-paper: rgba(250, 248, 235, 0.7);
+  --column-paper-strong: rgba(255, 252, 240, 0.84);
+  --search-paper: rgba(250, 248, 235, 0.7);
+  --search-paper-strong: rgba(255, 252, 240, 0.84);
+  --tags-paper: rgba(250, 248, 235, 0.7);
+  --tags-paper-strong: rgba(255, 252, 240, 0.84);
   background-image:
-    linear-gradient(rgba(247, 251, 255, 0.08), rgba(238, 245, 252, 0.2)),
+    linear-gradient(rgba(250, 248, 235, 0.1), rgba(244, 241, 224, 0.22)),
     url("/images/background.png");
   background-position: center;
   background-size: 100% auto;
@@ -25,7 +25,7 @@
 }
 
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
-  background: rgba(255, 255, 255, 0.56);
+  background: rgba(250, 248, 235, 0.6);
   backdrop-filter: blur(22px);
 }
 
