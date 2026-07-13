@@ -87,8 +87,8 @@ export function BlogHome({ posts }: { posts: Post[] }) {
           <SiteSearch posts={visiblePosts} />
           <div className="sakura-toolbar-actions">
             <ThemeToggle />
-            <Link href="/" aria-label="返回首页">
-              <Icon icon="solar:home-2-linear" aria-hidden="true" />
+            <Link href="/posts" aria-label="文章归档">
+              <Icon icon="solar:archive-linear" aria-hidden="true" />
             </Link>
             <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
           </div>

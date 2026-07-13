@@ -92,12 +92,16 @@ export function SiteSearch({
         if (!event.currentTarget.contains(event.relatedTarget)) setIsFocused(false);
       }}
     >
-      <form className="site-search" action="/search" onSubmit={submitSearch} role="search">
+      <form className="site-search" action="/search" onSubmit={submitSearch} role="search" autoComplete="off">
         <Icon icon="solar:magnifer-linear" aria-hidden="true" />
         <div className="site-search-content">
           <input
             ref={inputRef}
             name="q"
+            autoComplete="off"
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
             value={query}
             onChange={(event) => updateValue(event.target.value)}
             onKeyDown={handleKeyDown}
