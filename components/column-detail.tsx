@@ -61,7 +61,7 @@ function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean
         <SafeImage src={post.image} alt={`${post.title} 封面`} sizes="(max-width: 760px) 84vw, 210px" />
       </Link>
       <div className="column-detail-article-copy">
-        {featured ? <span className="column-detail-featured-mark">推荐阅读</span> : null}
+        {featured ? <span className="column-detail-featured-mark">最新</span> : null}
         <h3><Link href={`/posts/${post.slug}`}>{post.title}</Link></h3>
         <p>{post.summary}</p>
         <div className="column-detail-article-tags">

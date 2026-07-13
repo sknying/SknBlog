@@ -53,7 +53,7 @@
 }
 
 :root[data-theme="dark"] .archive-banner > div:first-of-type {
-  background: linear-gradient(90deg, rgba(18, 27, 48, 0.94), rgba(18, 27, 48, 0.62) 44%, rgba(18, 27, 48, 0.08) 72%);
+  background: linear-gradient(90deg, rgba(18, 27, 48, 0.93), rgba(18, 27, 48, 0.55) 38%, rgba(18, 27, 48, 0.08) 68%);
 }
 
 :root[data-theme="dark"] .archive-months button,
@@ -362,7 +362,9 @@
 .archive-banner > div:first-of-type {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.45) 42%, rgba(255, 255, 255, 0.02) 70%);
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.91) 0%, rgba(255, 255, 255, 0.58) 35%, transparent 64%),
+    linear-gradient(0deg, rgba(42, 67, 108, 0.08), transparent 42%);
 }
 
 .archive-banner-copy {
@@ -918,7 +920,7 @@
   .archive-toolbar-icons a { display: none; }
   .archive-banner { min-height: 280px; }
   .archive-banner > img { object-position: 62% center; }
-  .archive-banner > div:first-of-type { background: linear-gradient(90deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.66) 64%, rgba(255, 255, 255, 0.18)); }
+  .archive-banner > div:first-of-type { background: linear-gradient(90deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.68) 68%, rgba(255, 255, 255, 0.18)); }
   .archive-banner-copy { width: 82%; padding: 58px 22px 32px; }
   .archive-banner-copy h1 { font-size: 38px; }
   .archive-years { padding: 16px 14px 20px 27px; }
@@ -973,7 +975,7 @@
   }
 
   :root:not([data-theme]) .archive-banner > div:first-of-type {
-    background: linear-gradient(90deg, rgba(18, 27, 48, 0.94), rgba(18, 27, 48, 0.62) 44%, rgba(18, 27, 48, 0.08) 72%);
+    background: linear-gradient(90deg, rgba(18, 27, 48, 0.93), rgba(18, 27, 48, 0.55) 38%, rgba(18, 27, 48, 0.08) 68%);
   }
 
   :root:not([data-theme]) .archive-months button,

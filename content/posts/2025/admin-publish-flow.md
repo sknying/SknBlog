@@ -1,6 +1,6 @@
 ---
 title: 管理员发文流程
-publishedAt: 2026-06-21T10:30:00+08:00
+publishedAt: 2025-06-21T10:30:00+08:00
 column: 写作工具
 tags: [Admin, 发布, Markdown]
 summary: 从本地 Markdown 到线上页面。

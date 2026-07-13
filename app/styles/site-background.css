@@ -1,4 +1,20 @@
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+  --surface: rgba(255, 255, 255, 0.68);
+  --surface-strong: rgba(255, 255, 255, 0.82);
+  --sakura-paper: rgba(255, 255, 255, 0.68);
+  --sakura-paper-strong: rgba(255, 255, 255, 0.82);
+  --archive-paper: rgba(255, 255, 255, 0.68);
+  --archive-paper-strong: rgba(255, 255, 255, 0.82);
+  --article-paper: rgba(255, 255, 255, 0.7);
+  --article-paper-strong: rgba(255, 255, 255, 0.84);
+  --columns-paper: rgba(255, 255, 255, 0.68);
+  --columns-paper-strong: rgba(255, 255, 255, 0.82);
+  --column-paper: rgba(255, 255, 255, 0.68);
+  --column-paper-strong: rgba(255, 255, 255, 0.82);
+  --search-paper: rgba(255, 255, 255, 0.68);
+  --search-paper-strong: rgba(255, 255, 255, 0.82);
+  --tags-paper: rgba(255, 255, 255, 0.68);
+  --tags-paper-strong: rgba(255, 255, 255, 0.82);
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.14), rgba(238, 245, 252, 0.3)),
     url("/images/background.png");
@@ -8,16 +24,61 @@
   background-repeat: no-repeat;
 }
 
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+  background: rgba(255, 255, 255, 0.56);
+  backdrop-filter: blur(22px);
+}
+
 :root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+  --surface: rgba(24, 34, 58, 0.66);
+  --surface-strong: rgba(31, 43, 70, 0.8);
+  --sakura-paper: rgba(24, 34, 58, 0.66);
+  --sakura-paper-strong: rgba(31, 43, 70, 0.8);
+  --archive-paper: rgba(24, 34, 58, 0.66);
+  --archive-paper-strong: rgba(31, 43, 70, 0.8);
+  --article-paper: rgba(24, 34, 58, 0.7);
+  --article-paper-strong: rgba(31, 43, 70, 0.84);
+  --columns-paper: rgba(24, 34, 58, 0.66);
+  --columns-paper-strong: rgba(31, 43, 70, 0.8);
+  --column-paper: rgba(24, 34, 58, 0.66);
+  --column-paper-strong: rgba(31, 43, 70, 0.8);
+  --search-paper: rgba(24, 34, 58, 0.66);
+  --search-paper-strong: rgba(31, 43, 70, 0.8);
+  --tags-paper: rgba(24, 34, 58, 0.66);
+  --tags-paper-strong: rgba(31, 43, 70, 0.8);
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
     url("/images/background.png");
 }
 
+:root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+  background: rgba(17, 24, 42, 0.62);
+}
+
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+    --surface: rgba(24, 34, 58, 0.66);
+    --surface-strong: rgba(31, 43, 70, 0.8);
+    --sakura-paper: rgba(24, 34, 58, 0.66);
+    --sakura-paper-strong: rgba(31, 43, 70, 0.8);
+    --archive-paper: rgba(24, 34, 58, 0.66);
+    --archive-paper-strong: rgba(31, 43, 70, 0.8);
+    --article-paper: rgba(24, 34, 58, 0.7);
+    --article-paper-strong: rgba(31, 43, 70, 0.84);
+    --columns-paper: rgba(24, 34, 58, 0.66);
+    --columns-paper-strong: rgba(31, 43, 70, 0.8);
+    --column-paper: rgba(24, 34, 58, 0.66);
+    --column-paper-strong: rgba(31, 43, 70, 0.8);
+    --search-paper: rgba(24, 34, 58, 0.66);
+    --search-paper-strong: rgba(31, 43, 70, 0.8);
+    --tags-paper: rgba(24, 34, 58, 0.66);
+    --tags-paper-strong: rgba(31, 43, 70, 0.8);
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
       url("/images/background.png");
+  }
+
+  :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+    background: rgba(17, 24, 42, 0.62);
   }
 }
