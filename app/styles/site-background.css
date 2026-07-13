@@ -25,7 +25,7 @@
   inset: 0;
   backface-visibility: hidden;
   background-image:
-    linear-gradient(rgba(247, 251, 255, 0.14), rgba(238, 245, 252, 0.3)),
+    linear-gradient(rgba(247, 251, 255, 0.04), rgba(238, 245, 252, 0.12)),
     url("/images/background.png");
   background-position: center;
   background-size: cover;
@@ -61,7 +61,7 @@
 
 :root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
   background-image:
-    linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
+    linear-gradient(rgba(12, 20, 38, 0.42), rgba(20, 30, 52, 0.52)),
     url("/images/background.png");
 }
 
@@ -91,7 +91,7 @@
 
   :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
     background-image:
-      linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
+      linear-gradient(rgba(12, 20, 38, 0.42), rgba(20, 30, 52, 0.52)),
       url("/images/background.png");
   }
 
