@@ -29,6 +29,15 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
         {navigation.map((item) => {
           const className = active === item.id ? "active" : "";
 
+          if (item.id === "about") {
+            return (
+              <button className={className} type="button" onClick={() => window.dispatchEvent(new Event("sknblog:open-about"))} key={item.id}>
+                <Icon icon={item.icon} aria-hidden="true" />
+                <span>{item.label}</span>
+              </button>
+            );
+          }
+
           return (
             <Link className={className} href={item.href} key={item.id}>
               <Icon icon={item.icon} aria-hidden="true" />

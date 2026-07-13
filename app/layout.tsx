@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
+import { AboutDialog } from "@/components/about-dialog";
+import { getAboutContent } from "@/lib/about-data";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -34,11 +36,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const aboutContent = getAboutContent();
+
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <body>
         <Script id="theme-preference" strategy="beforeInteractive">{themeScript}</Script>
         {children}
+        <AboutDialog content={aboutContent} />
       </body>
     </html>
   );
