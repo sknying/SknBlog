@@ -876,17 +876,17 @@
   outline-offset: 3px;
 }
 
+.archive-page > .sakura-sidebar,
 .archive-toolbar,
 .archive-banner,
 .archive-years,
 .archive-insights > * {
-  animation: archive-enter 460ms ease-out both;
+  animation: archive-enter 500ms ease-out both;
 }
 
-.archive-years { animation-delay: 70ms; }
-.archive-insights > :nth-child(2) { animation-delay: 90ms; }
+.archive-years,
+.archive-insights > :nth-child(2) { animation-delay: 80ms; }
 .archive-insights > :nth-child(3) { animation-delay: 140ms; }
-.archive-insights > :nth-child(4) { animation-delay: 190ms; }
 
 @keyframes archive-enter {
   from { opacity: 0; transform: translateY(12px); }
@@ -942,6 +942,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .archive-page > .sakura-sidebar,
   .archive-toolbar,
   .archive-banner,
   .archive-years,
