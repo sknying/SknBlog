@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 import { AboutDialog } from "@/components/about-dialog";
+import { NavigationProgress } from "@/components/navigation-progress";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SiteLoader } from "@/components/site-loader";
 import { getAboutContent } from "@/lib/about-data";
@@ -47,6 +48,7 @@ export default function RootLayout({
         <Script id="theme-preference" strategy="beforeInteractive">{themeScript}</Script>
         <SiteLoader />
         <ScrollProgress />
+        <NavigationProgress />
         {children}
         <AboutDialog content={aboutContent} />
       </body>
