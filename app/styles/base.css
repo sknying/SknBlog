@@ -70,18 +70,18 @@
   --accent-2: #648ee4;
   --danger: #d94a62;
   --shadow: 0 16px 44px rgba(74, 105, 161, 0.14);
-  --code-bg: #f5f7fc;
-  --code-header: #eaf0f8;
-  --code-text: #33415f;
-  --code-line-number: #8c9ab3;
-  --code-divider: rgba(82, 111, 168, 0.16);
-  --code-hover: rgba(100, 142, 228, 0.08);
-  --code-keyword: #7c55bd;
-  --code-string: #3e855e;
-  --code-number: #b86732;
-  --code-comment: #8692a7;
-  --code-property: #2c7594;
-  --code-punctuation: #4b6f9d;
+  --code-bg: #f8f3df;
+  --code-header: #eee7cf;
+  --code-text: #3d4350;
+  --code-line-number: #958b73;
+  --code-divider: rgba(122, 106, 72, 0.18);
+  --code-hover: rgba(191, 157, 77, 0.11);
+  --code-keyword: #7655a1;
+  --code-string: #477a5c;
+  --code-number: #a95f38;
+  --code-comment: #858174;
+  --code-property: #356f83;
+  --code-punctuation: #52647c;
   --font-code: "Fira Code ASCII", "Noto Serif SC", serif;
 }
 
