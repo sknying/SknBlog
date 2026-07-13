@@ -25,8 +25,7 @@ function SearchCover({ post }: { post: Post }) {
 function matchesQuery(post: Post, query: string) {
   if (!query) return false;
 
-  return [post.title, post.summary, post.column ?? "", ...post.tags]
-    .some((value) => value.toLocaleLowerCase("zh-CN").includes(query));
+  return post.title.toLocaleLowerCase("zh-CN").includes(query);
 }
 
 export function SearchResults({ posts }: { posts: Post[] }) {
@@ -63,7 +62,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
         <section className="search-heading" aria-labelledby="search-title">
           <span><Icon icon="solar:magnifer-linear" aria-hidden="true" />全站检索</span>
           <h1 id="search-title">{normalizedQuery ? `“${query.trim()}”` : "搜索文章"}</h1>
-          <p>{normalizedQuery ? `找到 ${results.length} 篇相关文章。` : "输入标题、标签或专栏。"}</p>
+          <p>{normalizedQuery ? `找到 ${results.length} 篇相关文章。` : "输入文章标题。"}</p>
         </section>
 
         <div className="search-layout">
@@ -84,7 +83,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
                         <h2><Link href={`/posts/${post.slug}`}>{post.title}</Link></h2>
                         <p>{post.summary}</p>
                         <div className="search-result-tags" aria-label="文章标签">
-                          {post.tags.map((tag) => <Link href={`/search?q=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
+                          {post.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
                         </div>
                       </div>
                       <Link className="search-result-open" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></Link>
@@ -111,7 +110,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
             <section className="search-rail-panel">
               <h2><Icon icon="solar:tag-linear" aria-hidden="true" />标签速查</h2>
               <div className="search-tag-cloud">
-                {tags.map((tag) => <Link href={`/search?q=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
+                {tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
               </div>
             </section>
             <section className="search-rail-panel search-tip">

@@ -29,36 +29,28 @@ function formatCharacterCount(value: number) {
 
 export function PostsIndex({ posts }: { posts: Post[] }) {
   const searchParams = useSearchParams();
-  const initialTag = searchParams.get("tag") ?? "";
   const initialQuery = searchParams.get("q") ?? "";
   const taggedPosts = posts;
   const [draftQuery, setDraftQuery] = useState(initialQuery);
   const [committedQuery, setCommittedQuery] = useState(initialQuery);
-  const [draftTags, setDraftTags] = useState<string[]>(initialTag ? [initialTag] : []);
-  const [committedTags, setCommittedTags] = useState<string[]>(initialTag ? [initialTag] : []);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [randomIndex, setRandomIndex] = useState(0);
 
   useEffect(() => {
-    const urlTags = initialTag ? [initialTag] : [];
     setDraftQuery(initialQuery);
     setCommittedQuery(initialQuery);
-    setDraftTags(urlTags);
-    setCommittedTags(urlTags);
     setSelectedMonth("");
-  }, [initialQuery, initialTag]);
+  }, [initialQuery]);
 
   const searchedPosts = useMemo(() => {
     const query = committedQuery.trim().toLocaleLowerCase("zh-CN");
 
     return taggedPosts
       .filter((post) => {
-        const matchesText = !query || [post.title, post.summary, post.column ?? "", ...post.tags].some((value) => value.toLocaleLowerCase("zh-CN").includes(query));
-        const matchesTags = committedTags.every((tag) => post.tags.includes(tag));
-        return matchesText && matchesTags;
+        return !query || post.title.toLocaleLowerCase("zh-CN").includes(query);
       })
       .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
-  }, [committedQuery, committedTags, taggedPosts]);
+  }, [committedQuery, taggedPosts]);
 
   const years = useMemo(() => {
     const sourceYears = Array.from(new Set(taggedPosts.map((post) => getYearMonth(post).year))).sort((a, b) => b.localeCompare(a));
@@ -81,10 +73,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
     : 0;
   const randomPost = taggedPosts[randomIndex % Math.max(taggedPosts.length, 1)];
 
-  function toggleDraftTag(tag: string) {
-    setDraftTags((current) => current.includes(tag) ? current.filter((item) => item !== tag) : [...current, tag]);
-  }
-
   return (
     <main className="archive-page">
       <div className="archive-grain" aria-hidden="true" />
@@ -96,13 +84,9 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
           <SiteSearch
             posts={taggedPosts}
             value={draftQuery}
-            selectedTags={draftTags}
             onValueChange={setDraftQuery}
-            onRemoveTag={toggleDraftTag}
-            onEmptyBackspace={() => setDraftTags((current) => current.slice(0, -1))}
             onSearch={(value) => {
               setCommittedQuery(value);
-              setCommittedTags(draftTags);
               setSelectedMonth("");
             }}
           />

@@ -50,7 +50,7 @@ function HomeArticle({ post }: { post: Post }) {
         </h3>
         <div className="sakura-inline-tags" aria-label="文章标签">
           {post.tags.slice(0, 3).map((tag) => (
-            <Link href={`/posts?tag=${encodeURIComponent(tag)}`} key={tag}>
+            <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>
               {tag}
             </Link>
           ))}
@@ -181,7 +181,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
               </div>
               <div>
                 {tags.slice(0, 9).map((tag) => (
-                  <Link href={`/posts?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>
+                  <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>
                 ))}
               </div>
             </section>

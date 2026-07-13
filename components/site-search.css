@@ -22,30 +22,6 @@
 .site-search > svg { width: 18px; height: 18px; flex: 0 0 auto; }
 .site-search-content { display: flex; min-width: 0; align-items: center; gap: 6px; overflow: hidden; }
 
-.site-search-content > span {
-  display: inline-flex;
-  flex: 0 0 auto;
-  min-height: 30px;
-  align-items: center;
-  gap: 3px;
-  border-radius: 6px;
-  padding-left: 8px;
-  color: var(--accent-2);
-  background: color-mix(in srgb, var(--accent-2) 11%, transparent);
-  font-size: 12px;
-}
-
-.site-search-content > span button {
-  display: grid;
-  width: 30px;
-  height: 30px;
-  place-items: center;
-  border: 0;
-  color: inherit;
-  background: transparent;
-  cursor: pointer;
-}
-
 .site-search-content input {
   min-width: 100px;
   flex: 1;
@@ -150,7 +126,5 @@
 }
 
 @media (max-width: 420px) {
-  .site-search-content > span { max-width: 88px; overflow: hidden; }
-  .site-search-content > span:first-of-type ~ span { display: none; }
   .site-search-menu time { display: none; }
 }

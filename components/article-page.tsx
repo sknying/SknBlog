@@ -131,7 +131,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
             <span>/</span>
             <Link href="/posts">归档</Link>
             <span>/</span>
-            <Link href={`/posts?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>
+            <Link href={`/tags?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>
             <span>/</span>
             <b>正文</b>
           </nav>
@@ -146,7 +146,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
         <div className="article-grid">
           <article className="article-card">
             <header className="article-heading">
-              <Link className="article-primary-tag" href={`/posts?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>
+              <Link className="article-primary-tag" href={`/tags?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>
               <h1 id="article-title">{article.title}</h1>
               <div className="article-meta">
                 <span><Icon icon="solar:user-circle-linear" aria-hidden="true" />Sknying</span>
@@ -155,7 +155,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                 <span><Icon icon="solar:clock-circle-linear" aria-hidden="true" />{article.read}</span>
               </div>
               <div className="article-tags" aria-label="文章标签">
-                {article.tags.map((tag) => <Link href={`/posts?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
+                {article.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
               </div>
             </header>
 

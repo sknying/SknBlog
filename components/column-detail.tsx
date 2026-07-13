@@ -65,7 +65,7 @@ function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean
         <h3><Link href={`/posts/${post.slug}`}>{post.title}</Link></h3>
         <p>{post.summary}</p>
         <div className="column-detail-article-tags">
-          {post.tags.slice(0, 3).map((tag) => <Link href={`/posts?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
+          {post.tags.slice(0, 3).map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
         </div>
         <footer>
           <time dateTime={post.publishedAt}><Icon icon="solar:calendar-linear" aria-hidden="true" />{getMonthLabel(post)}</time>
@@ -117,7 +117,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
             <p>{column.intro}</p>
             <div>
               {routeSteps.slice(0, 3).map((tag) => (
-                <Link href={`/posts?tag=${encodeURIComponent(tag)}`} key={tag}>
+                <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>
                   <Icon icon="solar:tag-linear" aria-hidden="true" />
                   {tag}
                 </Link>
@@ -152,7 +152,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
                   <span>文章列表</span>
                   <h2 id="column-articles-title">按更新时间排</h2>
                 </div>
-                <Link href={`/posts?tag=${encodeURIComponent(getPrimaryTag(primaryPost))}`}>看相关标签</Link>
+                <Link href={`/tags?tag=${encodeURIComponent(getPrimaryTag(primaryPost))}`}>看相关标签</Link>
               </header>
               <div>
                 {column.posts.map((post, index) => <ArticleRow post={post} featured={index === 0} key={post.slug} />)}

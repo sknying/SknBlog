@@ -11,10 +11,7 @@ type SiteSearchProps = {
   posts: Post[];
   value?: string;
   defaultValue?: string;
-  selectedTags?: string[];
   onValueChange?: (value: string) => void;
-  onRemoveTag?: (tag: string) => void;
-  onEmptyBackspace?: () => void;
   onSearch?: (value: string) => void;
 };
 
@@ -22,10 +19,7 @@ export function SiteSearch({
   posts,
   value,
   defaultValue = "",
-  selectedTags = [],
   onValueChange,
-  onRemoveTag,
-  onEmptyBackspace,
   onSearch
 }: SiteSearchProps) {
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -36,15 +30,13 @@ export function SiteSearch({
   const matchingPosts = useMemo(() => {
     if (!normalizedQuery) return [];
 
-    return posts.filter((post) =>
-      [post.title, post.summary, ...post.tags].some((item) => item.toLocaleLowerCase("zh-CN").includes(normalizedQuery))
-    );
+    return posts.filter((post) => post.title.toLocaleLowerCase("zh-CN").includes(normalizedQuery));
   }, [normalizedQuery]);
   const suggestions = matchingPosts.slice(0, 5);
   const showMenu = isFocused && Boolean(normalizedQuery);
   const moreHref = {
     pathname: "/search",
-    query: selectedTags[0] ? { q: query.trim(), tag: selectedTags[0] } : { q: query.trim() }
+    query: { q: query.trim() }
   };
 
   function updateValue(nextValue: string) {
@@ -72,9 +64,6 @@ export function SiteSearch({
       return;
     }
 
-    if (event.key === "Backspace" && !query && selectedTags.length > 0) {
-      onEmptyBackspace?.();
-    }
   }
 
   function handleMenuKeyDown(event: KeyboardEvent<HTMLDivElement>) {
@@ -106,14 +95,6 @@ export function SiteSearch({
       <form className="site-search" action="/search" onSubmit={submitSearch} role="search">
         <Icon icon="solar:magnifer-linear" aria-hidden="true" />
         <div className="site-search-content">
-          {selectedTags.map((tag) => (
-            <span key={tag}>
-              {tag}
-              <button type="button" onClick={() => onRemoveTag?.(tag)} aria-label={`取消标签 ${tag}`}>
-                <Icon icon="solar:close-circle-linear" aria-hidden="true" />
-              </button>
-            </span>
-          ))}
           <input
             ref={inputRef}
             name="q"
@@ -121,8 +102,8 @@ export function SiteSearch({
             onChange={(event) => updateValue(event.target.value)}
             onKeyDown={handleKeyDown}
             type="search"
-            placeholder="搜索文章、标签..."
-            aria-label="搜索文章或标签"
+            placeholder="搜索文章标题..."
+            aria-label="搜索文章标题"
             aria-expanded={showMenu}
             aria-controls="site-search-results"
             aria-autocomplete="list"
