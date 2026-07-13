@@ -305,7 +305,7 @@
 .article-code-dots i { width: 10px; height: 10px; border-radius: 50%; background: #f7768e; }
 .article-code-dots i:nth-child(2) { background: #e0af68; }
 .article-code-dots i:nth-child(3) { background: #9ece6a; }
-.article-code pre { margin: 0; overflow-x: hidden; padding: 14px 0; color: var(--code-text); background: var(--code-bg); font-family: var(--font-code); font-size: 14px; line-height: 1.75; }
+.article-code pre { margin: 0; overflow-x: hidden; padding: 14px 0; color: var(--code-text); background: var(--code-bg); font-family: var(--font-code); font-size: 18px; line-height: 1.75; }
 .article-code code { display: block; min-width: 0; font-family: var(--font-code); font-variant-ligatures: contextual; font-variant-numeric: tabular-nums; }
 
 .article-inline-code { border: 1px solid var(--code-divider); border-radius: 5px; padding: 0.13em 0.38em; color: var(--code-text); background: var(--code-bg); font-family: var(--font-code); font-size: 0.9em; }
