@@ -143,7 +143,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
                 <p>{column.summary}</p>
               </div>
               <figure>
-                <SafeImage src="/images/sakura-coast-hero.png" alt="樱花窗边的笔记" sizes="360px" />
+                <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="360px" />
               </figure>
             </section>
 
