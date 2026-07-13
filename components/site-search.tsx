@@ -43,7 +43,7 @@ export function SiteSearch({
   const suggestions = matchingPosts.slice(0, 5);
   const showMenu = isFocused && Boolean(normalizedQuery);
   const moreHref = {
-    pathname: "/posts",
+    pathname: "/search",
     query: selectedTags[0] ? { q: query.trim(), tag: selectedTags[0] } : { q: query.trim() }
   };
 
@@ -103,7 +103,7 @@ export function SiteSearch({
         if (!event.currentTarget.contains(event.relatedTarget)) setIsFocused(false);
       }}
     >
-      <form className="site-search" action="/posts" onSubmit={submitSearch} role="search">
+      <form className="site-search" action="/search" onSubmit={submitSearch} role="search">
         <Icon icon="solar:magnifer-linear" aria-hidden="true" />
         <div className="site-search-content">
           {selectedTags.map((tag) => (

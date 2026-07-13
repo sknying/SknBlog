@@ -2,6 +2,7 @@
 @import "./styles/code.css";
 @import "../components/blog-home.css";
 @import "../components/site-search.css";
+@import "../components/search-results.css";
 @import "../components/article-page.css";
 @import "../components/posts-index.css";
 @import "../components/columns-index.css";
