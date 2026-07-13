@@ -15,13 +15,24 @@
   --search-paper-strong: rgba(255, 255, 255, 0.82);
   --tags-paper: rgba(255, 255, 255, 0.68);
   --tags-paper-strong: rgba(255, 255, 255, 0.82);
+  position: relative;
+  background: transparent;
+}
+
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
+  position: fixed;
+  z-index: -2;
+  inset: 0;
+  backface-visibility: hidden;
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.14), rgba(238, 245, 252, 0.3)),
     url("/images/background.png");
   background-position: center;
   background-size: cover;
-  background-attachment: fixed;
   background-repeat: no-repeat;
+  content: "";
+  pointer-events: none;
+  transform: translateZ(0);
 }
 
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
@@ -46,6 +57,9 @@
   --search-paper-strong: rgba(31, 43, 70, 0.8);
   --tags-paper: rgba(24, 34, 58, 0.66);
   --tags-paper-strong: rgba(31, 43, 70, 0.8);
+}
+
+:root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
     url("/images/background.png");
@@ -73,6 +87,9 @@
     --search-paper-strong: rgba(31, 43, 70, 0.8);
     --tags-paper: rgba(24, 34, 58, 0.66);
     --tags-paper-strong: rgba(31, 43, 70, 0.8);
+  }
+
+  :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
       url("/images/background.png");
@@ -81,4 +98,12 @@
   :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
     background: rgba(17, 24, 42, 0.62);
   }
+}
+
+/* Chromium can paint black compositor tiles when hover states overlap
+   translucent surfaces using backdrop-filter. Keep the glass color and
+   shadow, but avoid the unstable live blur layer. */
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
 }
