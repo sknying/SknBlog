@@ -91,19 +91,25 @@
 
 .sakura-brand {
   display: flex;
-  min-height: 48px;
+  min-height: 58px;
   align-items: center;
-  gap: 10px;
-  color: var(--sakura-text);
-  font-family: var(--font-display), var(--font-body), sans-serif;
-  font-size: 24px;
-  font-weight: 700;
+  justify-content: flex-start;
 }
 
-.sakura-brand svg {
-  width: 28px;
-  height: 28px;
-  color: var(--sakura-pink);
+.sakura-brand-logo-wide {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  object-fit: contain;
+}
+
+.sakura-brand-logo-mark {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: contain;
 }
 
 .sakura-nav {
@@ -834,10 +840,18 @@
     border-bottom: 1px solid var(--sakura-line);
   }
 
-  .sakura-brand span,
+  .sakura-brand-logo-wide,
   .sakura-now-card,
   .sakura-side-footer {
     display: none;
+  }
+
+  .sakura-brand {
+    min-height: 48px;
+  }
+
+  .sakura-brand-logo-mark {
+    display: block;
   }
 
   .sakura-nav {

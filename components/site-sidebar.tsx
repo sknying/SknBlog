@@ -21,8 +21,24 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
   return (
     <aside className="sakura-sidebar">
       <Link className="sakura-brand" href="/" aria-label={`${SITE_NAME} 首页`}>
-        <Icon icon="solar:stars-line-linear" aria-hidden="true" />
-        <span>{SITE_NAME}</span>
+        <Image
+          className="sakura-brand-logo-wide"
+          src="/images/sknblog-logo-wide.png"
+          alt=""
+          width={1200}
+          height={400}
+          sizes="176px"
+          priority
+        />
+        <Image
+          className="sakura-brand-logo-mark"
+          src="/images/sknblog-logo-mark.png"
+          alt=""
+          width={512}
+          height={512}
+          sizes="42px"
+          priority
+        />
       </Link>
 
       <nav className="sakura-nav" aria-label="主导航">
