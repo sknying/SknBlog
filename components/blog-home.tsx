@@ -11,6 +11,8 @@ import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
+const RECENT_POST_LIMIT = 3;
+
 function PostCover({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
 
@@ -72,7 +74,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
   const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const columns = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const visiblePosts = posts;
-  const recentPosts = visiblePosts.slice(0, 3);
+  const recentPosts = visiblePosts.slice(0, RECENT_POST_LIMIT);
 
   return (
     <main className="sakura-site" id="top">
@@ -114,7 +116,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
                 <p>踩坑要留下。</p>
                 <div className="sakura-hero-actions">
                   <a href="#recent">阅读文章</a>
-                  <a href="#about">关于我</a>
+                  <button type="button" onClick={() => window.dispatchEvent(new Event("sknblog:open-about"))}>关于我</button>
                 </div>
               </div>
             </section>
@@ -146,9 +148,9 @@ export function BlogHome({ posts }: { posts: Post[] }) {
                 <p>Rust、Next.js、设计。</p>
               </div>
               <div className="sakura-note-stats">
-                <span><b>{visiblePosts.length}</b>文章</span>
-                <span><b>{tags.length}</b>标签</span>
-                <span><b>{columns.length}</b>专栏</span>
+                <Link href="/posts"><b>{visiblePosts.length}</b>文章</Link>
+                <Link href="/columns"><b>{columns.length}</b>专栏</Link>
+                <Link href="/tags"><b>{tags.length}</b>标签</Link>
               </div>
             </section>
           </div>
@@ -162,9 +164,9 @@ export function BlogHome({ posts }: { posts: Post[] }) {
               <p>写技术，也画界面。</p>
               <p>偶尔记录生活。</p>
               <div className="sakura-profile-stats">
-                <span><b>{visiblePosts.length}</b>文章</span>
-                <span><b>{columns.length}</b>专栏</span>
-                <span><b>{tags.length}</b>标签</span>
+                <Link href="/posts"><b>{visiblePosts.length}</b>文章</Link>
+                <Link href="/columns"><b>{columns.length}</b>专栏</Link>
+                <Link href="/tags"><b>{tags.length}</b>标签</Link>
               </div>
             </section>
 

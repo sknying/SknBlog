@@ -372,7 +372,7 @@
   margin-top: 28px;
 }
 
-.sakura-hero-actions a {
+.sakura-hero-actions :where(a, button) {
   display: inline-flex;
   min-width: 126px;
   min-height: 46px;
@@ -383,16 +383,17 @@
   color: var(--sakura-blue-deep);
   background: var(--sakura-paper-strong);
   box-shadow: 0 8px 20px rgba(76, 106, 161, 0.12);
+  cursor: pointer;
   transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
-.sakura-hero-actions a:first-child {
+.sakura-hero-actions :where(a, button):first-child {
   border-color: transparent;
   color: #fff;
   background: linear-gradient(135deg, var(--sakura-blue), var(--sakura-blue-deep));
 }
 
-.sakura-hero-actions a:hover {
+.sakura-hero-actions :where(a, button):hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 24px rgba(76, 106, 161, 0.2);
 }
@@ -592,23 +593,33 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
-.sakura-note-stats span,
-.sakura-profile-stats span {
+.sakura-note-stats > a,
+.sakura-profile-stats > a {
   display: grid;
   min-width: 74px;
+  min-height: 54px;
   justify-items: center;
+  align-content: center;
   gap: 4px;
+  border-radius: 6px;
   color: var(--sakura-muted);
   font-size: 12px;
+  transition: color 180ms ease, background 180ms ease;
 }
 
-.sakura-note-stats span + span,
-.sakura-profile-stats span + span {
+.sakura-note-stats > a + a,
+.sakura-profile-stats > a + a {
   border-left: 1px solid var(--sakura-line);
 }
 
-.sakura-note-stats b,
-.sakura-profile-stats b {
+.sakura-note-stats > a:hover,
+.sakura-profile-stats > a:hover {
+  color: var(--sakura-blue-deep);
+  background: color-mix(in srgb, var(--sakura-blue) 9%, transparent);
+}
+
+.sakura-note-stats > a b,
+.sakura-profile-stats > a b {
   color: var(--sakura-text);
   font-size: 20px;
 }
@@ -965,7 +976,7 @@
     font-size: 36px;
   }
 
-  .sakura-hero-actions a {
+  .sakura-hero-actions :where(a, button) {
     min-width: 118px;
   }
 
