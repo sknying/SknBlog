@@ -147,22 +147,6 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
               </figure>
             </section>
 
-            <section className="column-detail-panel column-detail-roadmap" aria-labelledby="column-roadmap-title">
-              <header>
-                <h2 id="column-roadmap-title"><Icon icon="solar:list-check-linear" aria-hidden="true" />学习路线</h2>
-                <Link href="#column-articles">直接看文章<Icon icon="solar:arrow-right-linear" aria-hidden="true" /></Link>
-              </header>
-              <ol>
-                {routeSteps.map((step, index) => (
-                  <li key={step}>
-                    <b>{String(index + 1).padStart(2, "0")}</b>
-                    <strong>{step}</strong>
-                    <span>{index === 0 ? "先把入口打通。" : index === routeSteps.length - 1 ? "最后写复盘。" : "中间慢慢补。"}</span>
-                  </li>
-                ))}
-              </ol>
-            </section>
-
             <section className="column-detail-panel column-detail-articles" id="column-articles" aria-labelledby="column-articles-title">
               <header>
                 <div>
