@@ -12,12 +12,14 @@
   opacity: 1;
   visibility: visible;
   transition: opacity 280ms ease-in, visibility 0s linear 280ms;
+  animation: site-loader-failsafe 280ms ease-in 4s forwards;
 }
 
 .site-loader--leaving {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  animation: none;
 }
 
 .site-loader__mark {
@@ -106,6 +108,14 @@
   45% { transform: rotate(122deg) translateX(76px) rotate(-122deg); animation-timing-function: cubic-bezier(0.18, 0.62, 0.28, 1); }
   78% { transform: rotate(304deg) translateX(76px) rotate(-304deg); animation-timing-function: ease-out; }
   100% { transform: rotate(360deg) translateX(76px) rotate(-360deg); }
+}
+
+@keyframes site-loader-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 :root[data-theme="dark"] .site-loader {
