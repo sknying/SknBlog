@@ -23,19 +23,19 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
       <Link className="sakura-brand" href="/" aria-label={`${SITE_NAME} 首页`}>
         <Image
           className="sakura-brand-logo-wide"
-          src="/images/sknblog-logo-wide.png"
+          src="/images/sknblog-logo-wide.svg"
           alt=""
-          width={1200}
-          height={400}
+          width={900}
+          height={300}
           sizes="176px"
           priority
         />
         <Image
           className="sakura-brand-logo-mark"
-          src="/images/sknblog-logo-mark.png"
+          src="/images/sknblog-logo-mark.svg"
           alt=""
-          width={512}
-          height={512}
+          width={420}
+          height={420}
           sizes="42px"
           priority
         />
