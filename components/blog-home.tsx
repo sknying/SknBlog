@@ -69,20 +69,10 @@ function HomeArticle({ post }: { post: Post }) {
 }
 
 export function BlogHome({ posts }: { posts: Post[] }) {
-  const [query, setQuery] = useState("");
   const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const columns = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const visiblePosts = posts;
-  const recentPosts = useMemo(() => {
-    const keyword = query.trim().toLocaleLowerCase("zh-CN");
-    const matched = keyword
-      ? visiblePosts.filter((post) =>
-          [post.title, post.summary, post.column ?? "", ...post.tags].some((value) => value.toLocaleLowerCase("zh-CN").includes(keyword))
-        )
-      : visiblePosts;
-
-    return matched.slice(0, 3);
-  }, [query, visiblePosts]);
+  const recentPosts = visiblePosts.slice(0, 3);
 
   return (
     <main className="sakura-site" id="top">
@@ -92,7 +82,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
 
       <div className="sakura-workspace">
         <header className="sakura-toolbar">
-          <SiteSearch posts={visiblePosts} value={query} onValueChange={setQuery} onSearch={setQuery} />
+          <SiteSearch posts={visiblePosts} />
           <div className="sakura-toolbar-actions">
             <ThemeToggle />
             <Link href="/posts" aria-label="查看文章">
