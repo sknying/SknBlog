@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
+import { SiteLogo } from "@/components/site-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
@@ -123,7 +124,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
         </div>
 
         <footer className="search-footer">
-          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
+          <SiteLogo />
           <strong>{SITE_NAME}</strong>
           <span>{SITE_COPYRIGHT}</span>
         </footer>

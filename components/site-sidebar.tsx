@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
+import { SiteLogo } from "@/components/site-logo";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
 type SiteSidebarProps = {
@@ -21,24 +22,7 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
   return (
     <aside className="sakura-sidebar">
       <Link className="sakura-brand" href="/" aria-label={`${SITE_NAME} 首页`}>
-        <Image
-          className="sakura-brand-logo-wide"
-          src="/images/sknblog-logo-wide.svg"
-          alt=""
-          width={900}
-          height={300}
-          sizes="176px"
-          priority
-        />
-        <Image
-          className="sakura-brand-logo-mark"
-          src="/images/sknblog-logo-mark.svg"
-          alt=""
-          width={420}
-          height={420}
-          sizes="42px"
-          priority
-        />
+        <SiteLogo className="sakura-brand-logo" priority sizes="72px" />
       </Link>
 
       <nav className="sakura-nav" aria-label="主导航">

@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
+import { SiteLogo } from "@/components/site-logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
@@ -188,7 +189,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
         </div>
 
         <footer className="archive-footer">
-          <Icon icon="solar:stars-line-linear" aria-hidden="true" />
+          <SiteLogo />
           <strong>{SITE_NAME}</strong>
           <span>{SITE_COPYRIGHT}</span>
         </footer>
