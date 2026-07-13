@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { SiteLogo } from "@/components/site-logo";
 
 const EXIT_DURATION = 360;
+const MAX_LOADING_DURATION = 3000;
 
 export function SiteLoader() {
   const [isVisible, setIsVisible] = useState(true);
@@ -11,11 +12,18 @@ export function SiteLoader() {
 
   useEffect(() => {
     let exitTimer: ReturnType<typeof setTimeout> | undefined;
+    let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
+    let hasFinished = false;
 
     const finishLoading = () => {
+      if (hasFinished) return;
+      hasFinished = true;
+      if (fallbackTimer) clearTimeout(fallbackTimer);
       setIsLeaving(true);
       exitTimer = setTimeout(() => setIsVisible(false), EXIT_DURATION);
     };
+
+    fallbackTimer = setTimeout(finishLoading, MAX_LOADING_DURATION);
 
     if (document.readyState === "complete") {
       finishLoading();
@@ -25,6 +33,7 @@ export function SiteLoader() {
 
     return () => {
       window.removeEventListener("load", finishLoading);
+      if (fallbackTimer) clearTimeout(fallbackTimer);
       if (exitTimer) clearTimeout(exitTimer);
     };
   }, []);
