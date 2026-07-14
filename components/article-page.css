@@ -276,8 +276,8 @@
 .article-lead-quote p { margin: 0; font-size: clamp(15px, 1.6vw, 18px); font-weight: 700; line-height: 1.7; }
 .article-lead-quote cite { color: var(--article-muted); font-size: 12px; font-style: normal; }
 
-.article-content { --font-display: "Noto Serif SC", serif; --font-body: "Noto Serif SC", serif; --font-code: "Fira Code ASCII", "Noto Serif SC", serif; display: grid; gap: 18px; margin-top: 24px; }
-.article-content > :where(p, section, figure, blockquote, h2, h3, h4) { scroll-margin-top: 24px; }
+.article-content { --font-display: "Noto Serif SC", serif; --font-body: "Noto Serif SC", serif; --font-code: "Fira Code ASCII", "Noto Serif SC", serif; display: grid; min-width: 0; max-width: 100%; gap: 18px; margin-top: 24px; }
+.article-content > :where(p, section, figure, blockquote, h2, h3, h4) { min-width: 0; max-width: 100%; scroll-margin-top: 24px; }
 .article-content > p { margin: 0; color: var(--article-muted); font-size: 16px; line-height: 1.9; }
 .article-list, .article-table-block { display: grid; gap: 12px; }
 .article-list h2, .article-table-block h2, .article-markdown-heading { position: relative; margin: 0; padding-left: 17px; color: var(--article-text); font-size: clamp(21px, 2.4vw, 28px); }
@@ -318,9 +318,9 @@
 .article-content blockquote p { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.7; }
 .article-content blockquote cite { display: block; margin-top: 8px; color: var(--article-pink); font-size: 12px; font-style: normal; }
 
-.article-image-block { display: grid; gap: 8px; margin: 0; }
-.article-image-frame { position: relative; overflow: hidden; border: 1px solid var(--article-line); border-radius: 8px; aspect-ratio: 16 / 9; }
-.article-image-frame img { object-fit: cover; }
+.article-image-block { display: grid; width: 100%; min-width: 0; max-width: 100%; gap: 8px; margin: 0; overflow: hidden; }
+.article-image-frame { position: relative; width: 100%; min-width: 0; max-width: 100%; overflow: hidden; border: 1px solid var(--article-line); border-radius: 8px; aspect-ratio: 16 / 9; }
+.article-image-frame img { display: block; max-width: 100%; object-fit: cover; }
 .article-image-block figcaption, .article-math-block figcaption { color: var(--article-muted); font-size: 12px; }
 .article-table-scroll { overflow-x: auto; border: 1px solid var(--article-line); border-radius: 8px; }
 .article-table-block table { width: 100%; min-width: 560px; border-collapse: collapse; }
