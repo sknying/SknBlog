@@ -200,6 +200,10 @@ body::selection {
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
     url("/images/background.png");
+  background-position: center top;
+  background-size: 100vw auto;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 a {
@@ -263,5 +267,9 @@ a {
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
       url("/images/background.png");
+    background-position: center top;
+    background-size: 100vw auto;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 }

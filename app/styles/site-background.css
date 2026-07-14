@@ -49,6 +49,10 @@
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
     url("/images/background.png");
+  background-position: center top;
+  background-size: 100vw auto;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 :root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
@@ -76,6 +80,10 @@
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
       url("/images/background.png");
+    background-position: center top;
+    background-size: 100vw auto;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
   }
 
   :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
