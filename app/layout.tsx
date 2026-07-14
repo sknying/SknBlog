@@ -11,6 +11,14 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "SknBlog | 半夜写代码的技术博客",
   description: "一个跟随系统明暗主题的技术博客，放 Markdown、代码笔记和一点 galgame 气味。",
+  icons: {
+    icon: [
+      { url: "/favicon.png", type: "image/png", sizes: "512x512" },
+      { url: "/images/sknblog-logo-icon.svg", type: "image/svg+xml" }
+    ],
+    shortcut: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "512x512" }]
+  },
   openGraph: {
     title: "SknBlog",
     description: "凌晨也能读的技术博客。",
