@@ -18,8 +18,8 @@
   background-image:
     linear-gradient(rgba(250, 248, 235, 0.1), rgba(244, 241, 224, 0.22)),
     url("/images/background.png");
-  background-position: center;
-  background-size: 100% auto;
+  background-position: center top;
+  background-size: 100vw auto;
   background-attachment: fixed;
   background-repeat: no-repeat;
 }

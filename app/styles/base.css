@@ -190,8 +190,8 @@ body::selection {
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.58), rgba(238, 245, 252, 0.7)),
     url("/images/background.png");
-  background-position: center;
-  background-size: 100% auto;
+  background-position: center top;
+  background-size: 100vw auto;
   background-attachment: fixed;
   background-repeat: no-repeat;
 }
