@@ -9,6 +9,7 @@ import "katex/dist/katex.min.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://sknying.github.io"),
   title: "SknBlog | 半夜写代码的技术博客",
   description: "一个跟随系统明暗主题的技术博客，放 Markdown、代码笔记和一点 galgame 气味。",
   openGraph: {

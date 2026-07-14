@@ -4,7 +4,7 @@ publishedAt: 2026-07-09T01:20:00+08:00
 column: 前端工程
 tags: [Next.js, 缓存, 排查]
 summary: 把路由缓存拆开看。少一点玄学。
-image: https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg
+image: /images/posts/next-cache-notes.jpg
 mood: 凌晨排查缓存
 intro: 缓存不是黑箱。先分层。再下手。
 ---

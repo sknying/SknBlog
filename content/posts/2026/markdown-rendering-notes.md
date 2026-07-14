@@ -4,7 +4,7 @@ publishedAt: 2026-07-06T23:40:00+08:00
 column: 写作工具
 tags: [Markdown, 渲染, 文档]
 summary: 代码块、引用、标题锚点。都别糊。
-image: https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg
+image: /images/posts/markdown-rendering-notes.jpg
 mood: 文档渲染现场
 intro: Markdown 好写。难的是好读。
 ---
@@ -18,7 +18,7 @@ intro: Markdown 好写。难的是好读。
 - 引用别像普通段落。
 - 长表格别硬塞。
 
-![桌面上的代码编辑器与笔记](https://images.pexels.com/photos/1181671/pexels-photo-1181671.jpeg)
+![桌面上的代码编辑器与笔记](/images/posts/markdown-editor.jpg)
 
 ## 渲染检查表
 
