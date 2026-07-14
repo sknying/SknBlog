@@ -92,7 +92,7 @@ function SafePostImage({ post, priority = false }: { post: Post; priority?: bool
 
 export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: ArticlePageProps) {
   const article = post;
-  const [isOutlineOpen, setIsOutlineOpen] = useState(true);
+  const [isOutlineOpen, setIsOutlineOpen] = useState(false);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
   const outlineItems = useMemo<OutlineItem[]>(
@@ -106,6 +106,15 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
     ],
     [article]
   );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 681px)");
+    const syncOutlineState = () => setIsOutlineOpen(mediaQuery.matches);
+
+    syncOutlineState();
+    mediaQuery.addEventListener("change", syncOutlineState);
+    return () => mediaQuery.removeEventListener("change", syncOutlineState);
+  }, []);
 
   useEffect(() => {
     const elements = outlineItems.map((item) => document.getElementById(item.id)).filter((element): element is HTMLElement => Boolean(element));
