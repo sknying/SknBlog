@@ -304,7 +304,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                     <figure className="article-code" data-language={language} id={id} key={id}>
                       <figcaption>
                         <span className="article-code-dots" aria-hidden="true"><i /><i /><i /></span>
-                        <span>{block.title}</span>
+                        <span className="article-code-title" title={block.title}>{block.title}</span>
                         <b>{getLanguageLabel(language)}</b>
                         <button className="article-code-copy" type="button" onClick={() => void copyCode(id, block.code)} aria-label={copiedCodeId === id ? "代码已复制" : "复制代码"} title={copiedCodeId === id ? "代码已复制" : "复制代码"}>
                           <Icon icon={copiedCodeId === id ? "solar:check-circle-linear" : "solar:copy-linear"} aria-hidden="true" />
