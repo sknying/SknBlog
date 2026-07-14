@@ -186,7 +186,7 @@ body::selection {
   will-change: transform;
 }
 
-:where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+:where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.58), rgba(238, 245, 252, 0.7)),
     url("/images/background.png");
@@ -196,7 +196,7 @@ body::selection {
   background-repeat: no-repeat;
 }
 
-:root[data-theme="dark"] :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+:root[data-theme="dark"] :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
     url("/images/background.png");
@@ -259,7 +259,7 @@ a {
 }
 
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme]) :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+  :root:not([data-theme]) :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
       url("/images/background.png");

@@ -7,6 +7,7 @@
 @import "../components/about-dialog.css";
 @import "../components/site-loader.css";
 @import "../components/navigation-progress.css";
+@import "../components/error-state.css";
 @import "../components/article-page.css";
 @import "../components/posts-index.css";
 @import "../components/columns-index.css";
