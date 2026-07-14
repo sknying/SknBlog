@@ -7,6 +7,7 @@ export function ScrollProgress() {
 
   useEffect(() => {
     let frame = 0;
+    let scrollableHeight = 0;
 
     const updateProgress = () => {
       if (frame) return;
@@ -14,7 +15,6 @@ export function ScrollProgress() {
       frame = window.requestAnimationFrame(() => {
         frame = 0;
         const scrollingElement = document.scrollingElement ?? document.documentElement;
-        const scrollableHeight = scrollingElement.scrollHeight - window.innerHeight;
         const progress = scrollableHeight > 0
           ? Math.min(1, Math.max(0, scrollingElement.scrollTop / scrollableHeight))
           : 0;
@@ -23,16 +23,23 @@ export function ScrollProgress() {
       });
     };
 
-    const resizeObserver = new ResizeObserver(updateProgress);
+    const measurePage = () => {
+      const scrollingElement = document.scrollingElement ?? document.documentElement;
+      scrollableHeight = Math.max(0, scrollingElement.scrollHeight - window.innerHeight);
+      updateProgress();
+    };
+
+    const resizeObserver = new ResizeObserver(measurePage);
     resizeObserver.observe(document.documentElement);
+    resizeObserver.observe(document.body);
     window.addEventListener("scroll", updateProgress, { passive: true });
-    window.addEventListener("resize", updateProgress);
-    updateProgress();
+    window.addEventListener("resize", measurePage);
+    measurePage();
 
     return () => {
       resizeObserver.disconnect();
       window.removeEventListener("scroll", updateProgress);
-      window.removeEventListener("resize", updateProgress);
+      window.removeEventListener("resize", measurePage);
       if (frame) window.cancelAnimationFrame(frame);
     };
   }, []);
