@@ -8,6 +8,7 @@ import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
@@ -47,6 +48,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
 
   return (
     <main className="search-page">
+      <SakuraFall />
       <div className="search-grain" aria-hidden="true" />
       <SiteSidebar />
 

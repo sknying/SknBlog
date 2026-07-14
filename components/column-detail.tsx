@@ -7,6 +7,7 @@ import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, sortPostsByDate, type ColumnGroup } from "@/lib/column-data";
@@ -90,6 +91,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
 
   return (
     <main className="column-detail-page">
+      <SakuraFall />
       <div className="column-detail-grain" aria-hidden="true" />
       <SiteSidebar active="columns" />
 

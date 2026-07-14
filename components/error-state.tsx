@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { SiteLogo } from "@/components/site-logo";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
@@ -18,6 +19,7 @@ type ErrorStateProps = {
 export function ErrorState({ code, title, message, hint, onRetry }: ErrorStateProps) {
   return (
     <main className="error-page">
+      <SakuraFall />
       <SiteSidebar />
 
       <div className="error-workspace">

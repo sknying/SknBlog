@@ -8,6 +8,7 @@ import { MathFormula } from "@/components/math-formula";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getCodeLanguage, getLanguageLabel, highlightCodeLines } from "@/lib/code-highlight";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
@@ -239,6 +240,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
 
   return (
     <main className="article-page">
+      <SakuraFall />
       <div className="article-grain" aria-hidden="true" />
 
       <SiteSidebar active="archive" />

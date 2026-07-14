@@ -6,6 +6,7 @@ import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
@@ -78,6 +79,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
 
   return (
     <main className="sakura-site" id="top">
+      <SakuraFall />
       <div className="sakura-grain" aria-hidden="true" />
 
       <SiteSidebar active="home" />

@@ -7,6 +7,7 @@ import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
@@ -76,6 +77,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
 
   return (
     <main className="archive-page">
+      <SakuraFall />
       <div className="archive-grain" aria-hidden="true" />
 
       <SiteSidebar active="archive" />
