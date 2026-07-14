@@ -1,0 +1,34 @@
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) > .sakura-sidebar {
+  z-index: 100;
+}
+
+@media (max-width: 980px) {
+  :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) > .sakura-sidebar {
+    gap: clamp(4px, 1.5vw, 18px);
+    overflow: hidden;
+    padding-inline: clamp(8px, 2vw, 18px);
+  }
+
+  .sakura-sidebar .sakura-brand {
+    flex: 0 0 48px;
+  }
+
+  .sakura-sidebar .sakura-nav {
+    display: grid;
+    width: 100%;
+    min-width: 0;
+    flex: 1 1 auto;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    overflow: hidden;
+  }
+
+  .sakura-sidebar .sakura-nav :where(a, button) {
+    width: 100%;
+    min-width: 0;
+    justify-content: center;
+    gap: clamp(4px, 1vw, 10px);
+    padding-inline: clamp(4px, 1.3vw, 12px);
+    white-space: nowrap;
+  }
+}
