@@ -19,6 +19,10 @@ type ArticlePageProps = {
   posts: Post[];
   previousPost?: Post;
   nextPost?: Post;
+  primaryContext: {
+    label: string;
+    href: string;
+  };
 };
 
 type OutlineItem = {
@@ -95,7 +99,7 @@ function SafePostImage({ post, priority = false }: { post: Post; priority?: bool
   );
 }
 
-export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: ArticlePageProps) {
+export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, primaryContext }: ArticlePageProps) {
   const article = post;
   const [isOutlineOpen, setIsOutlineOpen] = useState(false);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
@@ -261,7 +265,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
         <div className="article-grid">
           <article className="article-card">
             <header className="article-heading">
-              <Link className="article-primary-tag" href={`/tags?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>
+              <Link className="article-primary-tag" href={primaryContext.href}>{primaryContext.label}</Link>
               <h1 id="article-title">{article.title}</h1>
               <div className="article-meta">
                 <span><Icon icon="solar:user-circle-linear" aria-hidden="true" />Sknying</span>
