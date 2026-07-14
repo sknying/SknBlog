@@ -30,7 +30,7 @@
     radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.92) 0 9%, rgba(249, 181, 198, 0.88) 18% 56%, rgba(222, 115, 146, 0.7) 72%, transparent 75%) 104% 91% / 12px 8px no-repeat;
   transform: translate3d(13vw, -15vh, 0) rotate(6deg);
   will-change: transform;
-  animation: sakura-fall-drift 22s ease-in-out infinite alternate;
+  animation: sakura-fall-drift 14s ease-in-out infinite alternate;
 }
 
 @keyframes sakura-fall-drift {
@@ -42,7 +42,7 @@
   :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
     inset: -20vh -30vw;
     opacity: 0.62;
-    animation-duration: 25s;
+    animation-duration: 17s;
   }
 }
 
