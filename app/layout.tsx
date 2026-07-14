@@ -3,6 +3,7 @@ import Script from "next/script";
 import { AboutDialog } from "@/components/about-dialog";
 import { NavigationProgress } from "@/components/navigation-progress";
 import { ScrollProgress } from "@/components/scroll-progress";
+import { SakuraFall } from "@/components/sakura-fall";
 import { SiteLoader } from "@/components/site-loader";
 import { getAboutContent } from "@/lib/about-data";
 import "katex/dist/katex.min.css";
@@ -55,6 +56,7 @@ export default function RootLayout({
     <html lang="zh-CN" suppressHydrationWarning>
       <body>
         <Script id="theme-preference" strategy="beforeInteractive">{themeScript}</Script>
+        <SakuraFall />
         <SiteLoader />
         <ScrollProgress />
         <NavigationProgress />
