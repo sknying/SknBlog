@@ -24,6 +24,7 @@ type Frontmatter = {
   publishedAt?: string | Date;
   tags?: string[];
   column?: string;
+  columnOrder?: number;
   summary?: string;
   image?: string;
   mood?: string;
@@ -141,6 +142,9 @@ function readPost(fileName: string): Post | null {
     title: frontmatter.title,
     tags: Array.isArray(frontmatter.tags) ? frontmatter.tags.map(String).map((tag) => tag.trim()).filter(Boolean) : [],
     column: frontmatter.column?.trim() || undefined,
+    columnOrder: typeof frontmatter.columnOrder === "number" && Number.isFinite(frontmatter.columnOrder)
+      ? frontmatter.columnOrder
+      : undefined,
     publishedAt,
     date: dateLabel(publishedAt),
     read: frontmatter.read?.trim() || `${Math.max(1, Math.ceil(wordCount / 350))} 分钟`,

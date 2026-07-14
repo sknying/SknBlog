@@ -7,12 +7,12 @@ import { Icon } from "@/components/local-icon";
 import { MathFormula } from "@/components/math-formula";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getCodeLanguage, getLanguageLabel, highlightCodeLines } from "@/lib/code-highlight";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 type ArticlePageProps = {
   post: Post;
@@ -349,10 +349,12 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
               })}
             </div>
 
-            <nav className="article-pager" aria-label="文章导航">
-              {previousPost ? <Link href={`/posts/${previousPost.slug}`}><span>上一篇</span><strong>{previousPost.title}</strong></Link> : <span />}
-              {nextPost ? <Link href={`/posts/${nextPost.slug}`}><span>下一篇</span><strong>{nextPost.title}</strong></Link> : <span />}
-            </nav>
+            {previousPost || nextPost ? (
+              <nav className={`article-pager ${previousPost && nextPost ? "" : "article-pager-single"}`} aria-label="文章导航">
+                {previousPost ? <Link href={`/posts/${previousPost.slug}`}><span>上一篇</span><strong>{previousPost.title}</strong></Link> : null}
+                {nextPost ? <Link href={`/posts/${nextPost.slug}`}><span>下一篇</span><strong>{nextPost.title}</strong></Link> : null}
+              </nav>
+            ) : null}
           </article>
 
           <aside ref={outlineRailRef} className={`article-right-rail ${isOutlineOpen ? "" : "is-collapsed"}`} data-outline-side={outlineDock.side} style={outlineRailStyle}>
@@ -366,8 +368,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
         </div>
 
         <footer className="article-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

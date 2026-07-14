@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { SiteLogo } from "@/components/site-logo";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 type ErrorStateProps = {
   code: "404" | "500";
@@ -53,8 +54,7 @@ export function ErrorState({ code, title, message, hint, onRetry }: ErrorStatePr
         </section>
 
         <footer className="error-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

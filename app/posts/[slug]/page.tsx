@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticlePage } from "@/components/article-page";
 import { getPostBySlug, posts } from "@/lib/blog-data";
+import { getPostNavigation } from "@/lib/blog-utils";
 
 type PostPageProps = {
   params: Promise<{
@@ -39,7 +40,7 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  const index = posts.findIndex((item) => item.slug === post.slug);
+  const { previousPost, nextPost } = getPostNavigation(posts, post);
 
-  return <ArticlePage post={post} posts={posts} previousPost={posts[index - 1]} nextPost={posts[index + 1]} />;
+  return <ArticlePage post={post} posts={posts} previousPost={previousPost} nextPost={nextPost} />;
 }

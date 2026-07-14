@@ -6,12 +6,12 @@ import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
 
@@ -189,8 +189,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
         </div>
 
         <footer className="archive-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

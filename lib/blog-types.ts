@@ -13,6 +13,7 @@ export type Post = {
   title: string;
   tags: string[];
   column?: string;
+  columnOrder?: number;
   publishedAt: string;
   date: string;
   read: string;

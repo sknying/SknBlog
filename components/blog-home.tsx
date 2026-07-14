@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
@@ -203,8 +203,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
         </div>
 
         <footer className="sakura-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

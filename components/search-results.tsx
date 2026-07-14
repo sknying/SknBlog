@@ -7,11 +7,11 @@ import { useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 function SearchCover({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
@@ -125,8 +125,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
         </div>
 
         <footer className="search-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

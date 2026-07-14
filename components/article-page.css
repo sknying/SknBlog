@@ -371,6 +371,7 @@
 .article-footer svg { color: var(--article-pink); }
 .article-footer strong { color: var(--article-text); font-family: var(--font-display), var(--font-body), sans-serif; font-size: 19px; }
 .article-footer span { font-size: 11px; }
+.article-pager-single { grid-template-columns: minmax(0, 1fr); }
 
 .article-page :where(a, button, input):focus-visible { outline: 3px solid color-mix(in srgb, var(--article-blue-deep) 52%, transparent); outline-offset: 3px; }
 .article-toolbar, .article-card, .article-right-rail > * { animation: article-enter 420ms ease-out both; }

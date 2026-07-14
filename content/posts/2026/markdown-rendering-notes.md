@@ -2,6 +2,7 @@
 title: Markdown 渲染小坑
 publishedAt: 2026-07-06T23:40:00+08:00
 column: 写作工具
+columnOrder: 2
 tags: [Markdown, 渲染, 文档]
 summary: 代码块、引用、标题锚点。都别糊。
 image: https://images.pexels.com/photos/1181675/pexels-photo-1181675.jpeg
