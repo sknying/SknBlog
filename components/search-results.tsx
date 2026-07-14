@@ -73,21 +73,22 @@ export function SearchResults({ posts }: { posts: Post[] }) {
                 <div className="search-results-list">
                   {results.map((post) => (
                     <article className="search-result-card" key={post.slug}>
-                      <Link className="search-result-cover" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
+                      <Link className="search-result-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
+                      <div className="search-result-cover">
                         <SearchCover post={post} />
-                      </Link>
+                      </div>
                       <div className="search-result-copy">
                         <div className="search-result-meta">
                           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
                           {post.column ? <span>{post.column}</span> : null}
                         </div>
-                        <h2><Link href={`/posts/${post.slug}`}>{post.title}</Link></h2>
+                        <h2>{post.title}</h2>
                         <p>{post.summary}</p>
                         <div className="search-result-tags" aria-label="文章标签">
                           {post.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
                         </div>
                       </div>
-                      <Link className="search-result-open" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></Link>
+                      <span className="search-result-open" aria-hidden="true"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></span>
                     </article>
                   ))}
                 </div>

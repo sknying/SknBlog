@@ -40,17 +40,16 @@ function PostCover({ post }: { post: Post }) {
 function HomeArticle({ post }: { post: Post }) {
   return (
     <article className="sakura-post-card">
-      <Link className="sakura-post-cover" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
+      <Link className="sakura-post-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
+      <div className="sakura-post-cover">
         <PostCover post={post} />
-      </Link>
+      </div>
       <div className="sakura-post-copy">
         <div className="sakura-post-kicker">
           <span>{getPrimaryTag(post)}</span>
           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
         </div>
-        <h3>
-          <Link href={`/posts/${post.slug}`}>{post.title}</Link>
-        </h3>
+        <h3>{post.title}</h3>
         <div className="sakura-inline-tags" aria-label="文章标签">
           {post.tags.slice(0, 3).map((tag) => (
             <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>
@@ -64,9 +63,9 @@ function HomeArticle({ post }: { post: Post }) {
           {post.read}
         </span>
       </div>
-      <Link className="sakura-post-arrow" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}>
+      <span className="sakura-post-arrow" aria-hidden="true">
         <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-      </Link>
+      </span>
     </article>
   );
 }

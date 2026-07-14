@@ -58,12 +58,13 @@ function getColumnSpan(column: ColumnGroup) {
 function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean }) {
   return (
     <article className={`column-detail-article ${featured ? "is-featured" : ""}`}>
-      <Link className="column-detail-article-cover" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
+      <Link className="column-detail-article-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
+      <div className="column-detail-article-cover">
         <SafeImage src={post.image} alt={`${post.title} 封面`} sizes="(max-width: 760px) 84vw, 210px" />
-      </Link>
+      </div>
       <div className="column-detail-article-copy">
         {featured ? <span className="column-detail-featured-mark">最新</span> : null}
-        <h3><Link href={`/posts/${post.slug}`}>{post.title}</Link></h3>
+        <h3>{post.title}</h3>
         <p>{post.summary}</p>
         <div className="column-detail-article-tags">
           {post.tags.slice(0, 3).map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
@@ -74,9 +75,9 @@ function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean
           <span><Icon icon="solar:clock-circle-linear" aria-hidden="true" />{post.read}</span>
         </footer>
       </div>
-      <Link className="column-detail-article-open" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}>
+      <span className="column-detail-article-open" aria-hidden="true">
         <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-      </Link>
+      </span>
     </article>
   );
 }
