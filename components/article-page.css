@@ -403,6 +403,14 @@
   .article-meta { gap: 8px 12px; }
   .article-code { width: calc(100% + 12px); margin-inline: -6px; }
   .article-code pre { font-size: 15px; }
+  .article-code :where(pre, code, .code-line, .code-line-content) { min-width: 0; max-width: 100%; }
+  .article-code .code-line-text {
+    inline-size: 100%;
+    max-inline-size: 80ch;
+    white-space: break-spaces;
+    overflow-wrap: anywhere;
+    word-break: break-all;
+  }
   .code-line { grid-template-columns: 3.5ch minmax(0, 1fr); padding-inline: 8px; }
   .code-line-number { padding-right: 8px; }
   .code-line-content { padding-left: 9px; }
