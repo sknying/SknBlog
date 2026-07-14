@@ -197,7 +197,9 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                       <pre><code>{codeLines.map((line, lineIndex) => (
                         <span className="code-line" key={`${id}-${lineIndex}`}>
                           <span className="code-line-number" aria-hidden="true">{lineIndex + 1}</span>
-                          <span className="code-line-content" dangerouslySetInnerHTML={{ __html: line }} />
+                          <span className="code-line-content">
+                            <span className="code-line-text" dangerouslySetInnerHTML={{ __html: line }} />
+                          </span>
                         </span>
                       ))}</code></pre>
                     </figure>
