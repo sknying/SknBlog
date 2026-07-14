@@ -100,6 +100,18 @@
   }
 }
 
+@media (max-width: 980px) {
+  :root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+    background: #141c30;
+  }
+}
+
+@media (max-width: 980px) and (prefers-color-scheme: dark) {
+  :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+    background: #141c30;
+  }
+}
+
 /* Avoid Chromium black compositor tiles without changing page backgrounds. */
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) * {
   -webkit-backdrop-filter: none !important;
