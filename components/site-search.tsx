@@ -1,5 +1,8 @@
 "use client";
 
+// Search reads typed text, focus, and keyboard events in the browser. Keep
+// Markdown parsing in server-only `lib/` modules instead of this component.
+
 import Link from "next/link";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useMemo, useRef, useState } from "react";
@@ -22,11 +25,16 @@ export function SiteSearch({
   onValueChange,
   onSearch
 }: SiteSearchProps) {
+  // Support both forms:
+  // - uncontrolled: this component owns `internalValue`;
+  // - controlled: the parent supplies `value` and receives `onValueChange`.
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const query = value ?? internalValue;
   const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+  // Only re-filter the post list when the normalized query changes, not when
+  // focus moves between the input and suggestion menu.
   const matchingPosts = useMemo(() => {
     if (!normalizedQuery) return [];
 
@@ -59,6 +67,7 @@ export function SiteSearch({
     }
 
     if (event.key === "ArrowDown" && showMenu) {
+      // Move from the input into the first suggestion for keyboard users.
       event.preventDefault();
       event.currentTarget.closest(".site-search-shell")?.querySelector<HTMLAnchorElement>(".site-search-menu a")?.focus();
       return;
@@ -76,6 +85,7 @@ export function SiteSearch({
       return;
     }
 
+    // This DOM query only manages focus; React still owns the rendered list.
     const links = Array.from(event.currentTarget.querySelectorAll<HTMLAnchorElement>("a"));
     const currentIndex = links.indexOf(document.activeElement as HTMLAnchorElement);
     const nextIndex = event.key === "ArrowDown" ? Math.min(currentIndex + 1, links.length - 1) : currentIndex - 1;

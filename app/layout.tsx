@@ -8,6 +8,8 @@ import { getAboutContent } from "@/lib/about-data";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 
+// Next.js reads this object at build time and writes site-wide `<head>` data.
+// Keep browser icons, title, and social-preview defaults in this one place.
 export const metadata: Metadata = {
   metadataBase: new URL("https://sknying.github.io"),
   title: "SknBlog | 半夜写代码的技术博客",
@@ -35,6 +37,8 @@ export const viewport: Viewport = {
   ]
 };
 
+// Run before React hydrates so the saved theme is visible on the first paint.
+// This avoids the flash from light to dark (or the other way around).
 const themeScript = `
   try {
     var savedTheme = localStorage.getItem("sknblog-theme");
@@ -49,11 +53,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Markdown is read during static generation. The dialog receives finished
+  // content and never needs to read files in the browser.
   const aboutContent = getAboutContent();
 
   return (
     <html lang="zh-CN" suppressHydrationWarning>
       <body>
+        {/* `beforeInteractive` deliberately runs before interactive components. */}
         <Script id="theme-preference" strategy="beforeInteractive">{themeScript}</Script>
         <SiteLoader />
         <ScrollProgress />

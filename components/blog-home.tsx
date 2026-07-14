@@ -1,5 +1,8 @@
 "use client";
 
+// Home cards handle image failures and the About button in the browser. The
+// post data itself is still created during static generation.
+
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
@@ -13,9 +16,12 @@ import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 
+// Keep the home page focused; the archive page contains the complete list.
 const RECENT_POST_LIMIT = 3;
 
 function PostCover({ post }: { post: Post }) {
+  // `next/image` reports failures asynchronously, so use a small fallback
+  // component rather than leaving an empty image frame.
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -72,6 +78,8 @@ function HomeArticle({ post }: { post: Post }) {
 }
 
 export function BlogHome({ posts }: { posts: Post[] }) {
+  // Derive display-only metadata from posts. `useMemo` avoids rebuilding the
+  // sets during unrelated interactive re-renders.
   const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const columns = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const visiblePosts = posts;

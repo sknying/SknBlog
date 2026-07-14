@@ -86,6 +86,10 @@ public/       Logo、背景、字体和文章图片
 .github/      GitHub Pages 工作流
 ```
 
+## 前端维护
+
+刚接触 CSS、TypeScript 或 React 时，先阅读 [前端修改入门](docs/FRONTEND_GUIDE.md)。它说明主题变量、组件交互、Markdown 解析、动画和安全修改流程。
+
 ## 部署
 
 项目使用 `output: "export"`，可将 `out/` 作为静态站点目录部署。

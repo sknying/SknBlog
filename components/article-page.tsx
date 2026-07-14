@@ -1,5 +1,8 @@
 "use client";
 
+// The article body is static data, but the outline, copy button, and draggable
+// mobile dock need browser events. Keep these interactions in this component.
+
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
@@ -47,6 +50,9 @@ function countPostCharacters(post: Post) {
 }
 
 function renderInlineText(text: string) {
+  // Blocks arrive as text from the Markdown parser. This small tokenizer turns
+  // only the supported inline forms into React elements instead of injecting
+  // raw HTML from article content.
   const parts = [];
   const pattern = /(`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)|\$([^$\n]+)\$)/g;
   let lastIndex = 0;
@@ -76,6 +82,7 @@ function renderInlineText(text: string) {
 }
 
 function SafePostImage({ post, priority = false }: { post: Post; priority?: boolean }) {
+  // An unavailable cover should not leave a broken-image icon in the article.
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -110,6 +117,8 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
   const outlineDragRef = useRef<{ pointerId: number; startX: number; startY: number; startLeft: number; startTop: number; moved: boolean } | null>(null);
   const suppressOutlineToggleRef = useRef(false);
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
+  // The outline is derived from article blocks once, then used for both the
+  // desktop rail and the compact mobile control.
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
       { id: "article-title", label: article.title, level: 1 },
@@ -123,6 +132,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
   );
 
   useEffect(() => {
+    // Desktop starts expanded; mobile begins as a small movable icon.
     const mediaQuery = window.matchMedia("(min-width: 681px)");
     const syncOutlineState = () => setIsOutlineOpen(mediaQuery.matches);
 
@@ -132,6 +142,8 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
   }, []);
 
   useEffect(() => {
+    // IntersectionObserver updates the highlighted outline item without a
+    // scroll handler running for every scroll event.
     const elements = outlineItems.map((item) => document.getElementById(item.id)).filter((element): element is HTMLElement => Boolean(element));
     if (elements.length === 0) return;
 

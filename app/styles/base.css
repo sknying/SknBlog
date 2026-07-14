@@ -54,6 +54,7 @@
   unicode-range: U+0000-007F;
 }
 
+/* Global design tokens. Adjust these before changing one-off component colors. */
 :root {
   --font-display: "Noto Serif SC", serif;
   --font-body: "Noto Serif SC", serif;
@@ -85,6 +86,7 @@
   --font-code: "Fira Code ASCII", "Noto Serif SC", serif;
 }
 
+/* An explicit choice lives on the `<html data-theme="dark">` element. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #11182a;
@@ -223,6 +225,8 @@ body::selection {
   will-change: transform;
 }
 
+/* `:where()` has zero selector specificity, so component CSS can override
+   shared background defaults without escalating to `!important`. */
 :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.58), rgba(238, 245, 252, 0.7)),
@@ -257,6 +261,7 @@ textarea {
   color-scheme: inherit;
 }
 
+/* Browsers otherwise apply a bright built-in background to autofilled inputs. */
 input:autofill,
 select:autofill,
 textarea:autofill {

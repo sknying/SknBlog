@@ -1,8 +1,11 @@
+/* Roots establish a local stacking order: image layer (-2), petals (-1), then
+   regular content. That keeps petals behind cards without blocking clicks. */
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   position: relative;
   z-index: 1;
 }
 
+/* Fixed viewport layer: it takes no document space and cannot capture clicks. */
 .sakura-fall {
   position: fixed;
   inset: 0;
@@ -11,6 +14,8 @@
   pointer-events: none;
 }
 
+/* React supplies per-petal CSS variables. The animation changes only
+   compositor-friendly `transform` and `opacity`, avoiding layout work. */
 .sakura-fall-petal {
   position: absolute;
   top: -14vh;
@@ -40,6 +45,7 @@
   transform: rotate(18deg);
 }
 
+/* `@keyframes` declares named stages for one repeating animation. */
 @keyframes sakura-petal-fall {
   0% {
     opacity: 0;
@@ -73,6 +79,7 @@
   .sakura-fall-petal:nth-child(n + 11) { display: none; }
 }
 
+/* Respect the operating-system preference for reduced motion. */
 @media (prefers-reduced-motion: reduce) {
   .sakura-fall { display: none; }
 }

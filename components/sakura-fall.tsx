@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
 
+// Each tuple controls one petal. Different delay, speed, scale and horizontal
+// drift prevent all petals from moving in the same artificial rhythm.
 const petals = [
   ["3vw", "-18vw", "13.4s", "-8.2s", "0.78", "0.74", "-22deg", "326deg"],
   ["10vw", "14vw", "16.8s", "-2.9s", "0.62", "0.62", "18deg", "382deg"],
@@ -26,6 +28,8 @@ export function SakuraFall() {
         <i
           className="sakura-fall-petal"
           key={index}
+          // Values are supplied as CSS custom properties, leaving CSS to run
+          // the compositor-friendly transform and opacity animation.
           style={{
             "--sakura-left": left,
             "--sakura-drift": drift,
