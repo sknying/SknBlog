@@ -93,8 +93,9 @@
 .column-detail-articles h2 { margin: 6px 0 0; font-size: 24px; }
 .column-detail-articles > div { display: grid; gap: 10px; margin-top: 18px; }
 .column-detail-article { position: relative; display: grid; grid-template-columns: 150px minmax(0, 1fr) 34px; align-items: center; gap: 14px; padding: 10px; border: 1px solid transparent; border-radius: 8px; transition: border-color 180ms ease, background 180ms ease, transform 180ms ease; }
-.column-detail-article-overlay { position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
-.column-detail-article > :not(.column-detail-article-overlay) { position: relative; z-index: 1; }
+.column-detail-article-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.column-detail-article > :not(.column-detail-article-overlay) { position: relative; z-index: 2; pointer-events: none; }
+.column-detail-article .column-detail-article-tags a { position: relative; z-index: 3; pointer-events: auto; }
 .column-detail-article-overlay:focus-visible { outline: 3px solid color-mix(in srgb, var(--column-teal-deep) 60%, transparent); outline-offset: -3px; }
 .column-detail-article:hover { border-color: var(--column-line); background: color-mix(in srgb, var(--column-paper-strong) 72%, transparent); transform: translateY(-1px); }
 .column-detail-article.is-featured { border-color: color-mix(in srgb, var(--column-coral) 46%, var(--column-line)); background: linear-gradient(90deg, color-mix(in srgb, var(--column-coral) 8%, transparent), transparent 70%); }

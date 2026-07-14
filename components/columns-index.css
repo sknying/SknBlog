@@ -87,8 +87,8 @@
 .columns-card-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
 .columns-cover-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .columns-card { position: relative; display: grid; grid-template-rows: 124px auto auto auto; min-width: 0; overflow: hidden; border: 1px solid var(--columns-line); border-radius: 8px; background: var(--columns-paper-strong); transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease; }
-.columns-card-overlay { position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
-.columns-card > :not(.columns-card-overlay) { position: relative; z-index: 1; }
+.columns-card-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.columns-card > :not(.columns-card-overlay) { position: relative; z-index: 2; pointer-events: none; }
 .columns-card-overlay:focus-visible { outline: 3px solid color-mix(in srgb, var(--columns-blue-deep) 60%, transparent); outline-offset: -3px; }
 .columns-cover-card { grid-template-rows: 170px auto auto auto; }
 .columns-card:hover { border-color: color-mix(in srgb, var(--columns-blue) 58%, var(--columns-line)); box-shadow: 0 12px 25px rgba(74, 105, 161, 0.15); transform: translateY(-2px); }

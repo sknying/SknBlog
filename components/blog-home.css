@@ -474,8 +474,9 @@
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
 
-.sakura-post-overlay { position: absolute; inset: 0; z-index: 0; border-radius: inherit; }
-.sakura-post-card > :not(.sakura-post-overlay) { position: relative; z-index: 1; }
+.sakura-post-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.sakura-post-card > :not(.sakura-post-overlay) { position: relative; z-index: 2; pointer-events: none; }
+.sakura-post-card .sakura-inline-tags a { position: relative; z-index: 3; pointer-events: auto; }
 .sakura-post-overlay:focus-visible { outline: 3px solid color-mix(in srgb, var(--sakura-blue-deep) 60%, transparent); outline-offset: -3px; }
 
 .sakura-post-card:hover {
