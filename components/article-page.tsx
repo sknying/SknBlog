@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { Icon } from "@/components/local-icon";
 import { MathFormula } from "@/components/math-formula";
 import { SiteSearch } from "@/components/site-search";
@@ -25,6 +25,11 @@ type OutlineItem = {
   id: string;
   label: string;
   level: 1 | 2 | 3 | 4;
+};
+
+type OutlineDock = {
+  side: "left" | "right";
+  top: number;
 };
 
 function getBlockHeading(block: ArticleBlock) {
@@ -95,6 +100,10 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
   const [isOutlineOpen, setIsOutlineOpen] = useState(false);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
   const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
+  const [outlineDock, setOutlineDock] = useState<OutlineDock>({ side: "right", top: 68 });
+  const outlineRailRef = useRef<HTMLElement>(null);
+  const outlineDragRef = useRef<{ pointerId: number; startX: number; startY: number; startLeft: number; startTop: number; moved: boolean } | null>(null);
+  const suppressOutlineToggleRef = useRef(false);
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
@@ -151,6 +160,78 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
       setCopiedCodeId(null);
     }
   };
+
+  const handleOutlinePointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (isOutlineOpen || window.innerWidth > 680) return;
+
+    const rail = outlineRailRef.current;
+    if (!rail) return;
+
+    const bounds = rail.getBoundingClientRect();
+    outlineDragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startLeft: bounds.left,
+      startTop: bounds.top,
+      moved: false
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handleOutlinePointerMove = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const drag = outlineDragRef.current;
+    const rail = outlineRailRef.current;
+    if (!drag || !rail || drag.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - drag.startX;
+    const deltaY = event.clientY - drag.startY;
+    if (!drag.moved && Math.hypot(deltaX, deltaY) < 5) return;
+
+    drag.moved = true;
+    const bounds = rail.getBoundingClientRect();
+    const left = Math.min(Math.max(8, drag.startLeft + deltaX), window.innerWidth - bounds.width - 8);
+    const top = Math.min(Math.max(8, drag.startTop + deltaY), window.innerHeight - bounds.height - 8);
+    const side = left + bounds.width / 2 < window.innerWidth / 2 ? "left" : "right";
+
+    rail.classList.add("is-dragging");
+    rail.style.setProperty("--outline-drag-left", `${left}px`);
+    rail.style.setProperty("--outline-drag-top", `${top}px`);
+    rail.dataset.outlineSide = side;
+    event.preventDefault();
+  };
+
+  const handleOutlinePointerEnd = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const drag = outlineDragRef.current;
+    const rail = outlineRailRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    outlineDragRef.current = null;
+    if (!drag.moved || !rail) return;
+
+    const bounds = rail.getBoundingClientRect();
+    const top = Math.min(Math.max(8, bounds.top), window.innerHeight - bounds.height - 8);
+    const side = bounds.left + bounds.width / 2 < window.innerWidth / 2 ? "left" : "right";
+
+    rail.classList.remove("is-dragging");
+    rail.style.removeProperty("--outline-drag-left");
+    rail.style.removeProperty("--outline-drag-top");
+    setOutlineDock({ side, top });
+    suppressOutlineToggleRef.current = true;
+    window.setTimeout(() => { suppressOutlineToggleRef.current = false; }, 0);
+  };
+
+  const toggleOutline = () => {
+    if (suppressOutlineToggleRef.current) {
+      suppressOutlineToggleRef.current = false;
+      return;
+    }
+
+    setIsOutlineOpen((current) => !current);
+  };
+
+  const outlineRailStyle = { "--outline-dock-top": `${outlineDock.top}px` } as CSSProperties;
 
   return (
     <main className="article-page">
@@ -274,9 +355,9 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
             </nav>
           </article>
 
-          <aside className={`article-right-rail ${isOutlineOpen ? "" : "is-collapsed"}`}>
+          <aside ref={outlineRailRef} className={`article-right-rail ${isOutlineOpen ? "" : "is-collapsed"}`} data-outline-side={outlineDock.side} style={outlineRailStyle}>
             <section className="article-outline-panel article-rail-panel">
-              <button className="article-outline-toggle" type="button" onClick={() => setIsOutlineOpen((current) => !current)} aria-expanded={isOutlineOpen} aria-controls="article-outline-list" aria-label={isOutlineOpen ? "收起文章目录" : "展开文章目录"} title={isOutlineOpen ? "收起文章目录" : "展开文章目录"}>
+              <button className="article-outline-toggle" type="button" onClick={toggleOutline} onPointerDown={handleOutlinePointerDown} onPointerMove={handleOutlinePointerMove} onPointerUp={handleOutlinePointerEnd} onPointerCancel={handleOutlinePointerEnd} aria-expanded={isOutlineOpen} aria-controls="article-outline-list" aria-label={isOutlineOpen ? "收起文章目录" : "展开文章目录"} title={isOutlineOpen ? "收起文章目录" : "展开文章目录"}>
                 {isOutlineOpen ? <><span><Icon icon="solar:list-check-linear" aria-hidden="true" />文章目录</span><Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" /></> : <Icon icon="solar:list-check-linear" aria-hidden="true" />}
               </button>
               {isOutlineOpen ? <nav className="article-outline" id="article-outline-list">{outlineItems.map((item, index) => <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} aria-current={activeOutlineId === item.id ? "location" : undefined}><span>{index + 1}.</span>{item.label}</a>)}</nav> : null}
