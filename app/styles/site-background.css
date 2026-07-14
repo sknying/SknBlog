@@ -28,9 +28,9 @@
   background-image:
     linear-gradient(rgba(250, 248, 235, 0.1), rgba(244, 241, 224, 0.22)),
     url("/images/background.png");
-  background-position: center;
-  background-size: 100% auto;
-  background-repeat: no-repeat;
+  background-position: center top, center top;
+  background-size: 100% 100%, 100vw auto;
+  background-repeat: no-repeat, repeat-y;
   content: "";
 }
 
