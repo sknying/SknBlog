@@ -1,0 +1,36 @@
+.navigation-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 2001;
+  height: 3px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.navigation-progress > div {
+  width: 100%;
+  height: 100%;
+  background: var(--accent);
+  box-shadow: 0 0 9px color-mix(in srgb, var(--accent) 72%, transparent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  will-change: transform;
+}
+
+.navigation-progress--active {
+  opacity: 1;
+}
+
+.navigation-progress--complete {
+  opacity: 0;
+  transition-delay: 110ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navigation-progress,
+  .navigation-progress > div {
+    transition-duration: 0.01ms !important;
+  }
+}

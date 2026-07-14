@@ -1,0 +1,90 @@
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+  --surface: rgba(250, 248, 235, 0.7);
+  --surface-strong: rgba(255, 252, 240, 0.84);
+  --sakura-paper: rgba(250, 248, 235, 0.7);
+  --sakura-paper-strong: rgba(255, 252, 240, 0.84);
+  --archive-paper: rgba(250, 248, 235, 0.7);
+  --archive-paper-strong: rgba(255, 252, 240, 0.84);
+  --article-paper: rgba(250, 248, 235, 0.72);
+  --article-paper-strong: rgba(255, 252, 240, 0.86);
+  --columns-paper: rgba(250, 248, 235, 0.7);
+  --columns-paper-strong: rgba(255, 252, 240, 0.84);
+  --column-paper: rgba(250, 248, 235, 0.7);
+  --column-paper-strong: rgba(255, 252, 240, 0.84);
+  --search-paper: rgba(250, 248, 235, 0.7);
+  --search-paper-strong: rgba(255, 252, 240, 0.84);
+  --tags-paper: rgba(250, 248, 235, 0.7);
+  --tags-paper-strong: rgba(255, 252, 240, 0.84);
+  background-image:
+    linear-gradient(rgba(250, 248, 235, 0.1), rgba(244, 241, 224, 0.22)),
+    url("/images/background.png");
+  background-position: center;
+  background-size: 100% auto;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+  background: rgba(250, 248, 235, 0.6);
+  backdrop-filter: blur(22px);
+}
+
+:root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+  --surface: rgba(24, 34, 58, 0.66);
+  --surface-strong: rgba(31, 43, 70, 0.8);
+  --sakura-paper: rgba(24, 34, 58, 0.66);
+  --sakura-paper-strong: rgba(31, 43, 70, 0.8);
+  --archive-paper: rgba(24, 34, 58, 0.66);
+  --archive-paper-strong: rgba(31, 43, 70, 0.8);
+  --article-paper: rgba(24, 34, 58, 0.7);
+  --article-paper-strong: rgba(31, 43, 70, 0.84);
+  --columns-paper: rgba(24, 34, 58, 0.66);
+  --columns-paper-strong: rgba(31, 43, 70, 0.8);
+  --column-paper: rgba(24, 34, 58, 0.66);
+  --column-paper-strong: rgba(31, 43, 70, 0.8);
+  --search-paper: rgba(24, 34, 58, 0.66);
+  --search-paper-strong: rgba(31, 43, 70, 0.8);
+  --tags-paper: rgba(24, 34, 58, 0.66);
+  --tags-paper-strong: rgba(31, 43, 70, 0.8);
+  background-image:
+    linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
+    url("/images/background.png");
+}
+
+:root[data-theme="dark"] :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+  background: rgba(17, 24, 42, 0.62);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) {
+    --surface: rgba(24, 34, 58, 0.66);
+    --surface-strong: rgba(31, 43, 70, 0.8);
+    --sakura-paper: rgba(24, 34, 58, 0.66);
+    --sakura-paper-strong: rgba(31, 43, 70, 0.8);
+    --archive-paper: rgba(24, 34, 58, 0.66);
+    --archive-paper-strong: rgba(31, 43, 70, 0.8);
+    --article-paper: rgba(24, 34, 58, 0.7);
+    --article-paper-strong: rgba(31, 43, 70, 0.84);
+    --columns-paper: rgba(24, 34, 58, 0.66);
+    --columns-paper-strong: rgba(31, 43, 70, 0.8);
+    --column-paper: rgba(24, 34, 58, 0.66);
+    --column-paper-strong: rgba(31, 43, 70, 0.8);
+    --search-paper: rgba(24, 34, 58, 0.66);
+    --search-paper-strong: rgba(31, 43, 70, 0.8);
+    --tags-paper: rgba(24, 34, 58, 0.66);
+    --tags-paper-strong: rgba(31, 43, 70, 0.8);
+    background-image:
+      linear-gradient(rgba(12, 20, 38, 0.62), rgba(20, 30, 52, 0.72)),
+      url("/images/background.png");
+  }
+
+  :root:not([data-theme]) :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) > .sakura-sidebar {
+    background: rgba(17, 24, 42, 0.62);
+  }
+}
+
+/* Avoid Chromium black compositor tiles without changing page backgrounds. */
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page) * {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}

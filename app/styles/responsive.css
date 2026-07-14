@@ -112,10 +112,6 @@
     padding-bottom: 0;
   }
 
-  .article-cover {
-    min-height: 340px;
-  }
-
   .article-sidebar {
     position: sticky;
     top: 12px;
@@ -215,10 +211,6 @@
 
   .article-title-block h1 {
     font-size: 42px;
-  }
-
-  .article-cover {
-    min-height: 260px;
   }
 
   .article-mini-map a {
