@@ -94,6 +94,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
   const article = post;
   const [isOutlineOpen, setIsOutlineOpen] = useState(false);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
+  const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
@@ -128,6 +129,28 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
     elements.forEach((element) => observer.observe(element));
     return () => observer.disconnect();
   }, [outlineItems]);
+
+  const copyCode = async (id: string, code: string) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(code);
+      } else {
+        const input = document.createElement("textarea");
+        input.value = code;
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.append(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+      }
+
+      setCopiedCodeId(id);
+      window.setTimeout(() => setCopiedCodeId((current) => current === id ? null : current), 1600);
+    } catch {
+      setCopiedCodeId(null);
+    }
+  };
 
   return (
     <main className="article-page">
@@ -202,6 +225,9 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                         <span className="article-code-dots" aria-hidden="true"><i /><i /><i /></span>
                         <span>{block.title}</span>
                         <b>{getLanguageLabel(language)}</b>
+                        <button className="article-code-copy" type="button" onClick={() => void copyCode(id, block.code)} aria-label={copiedCodeId === id ? "代码已复制" : "复制代码"} title={copiedCodeId === id ? "代码已复制" : "复制代码"}>
+                          <Icon icon={copiedCodeId === id ? "solar:check-circle-linear" : "solar:copy-linear"} aria-hidden="true" />
+                        </button>
                       </figcaption>
                       <pre><code>{codeLines.map((line, lineIndex) => (
                         <span className="code-line" key={`${id}-${lineIndex}`}>
