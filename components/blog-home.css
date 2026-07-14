@@ -110,7 +110,7 @@
   color: var(--sakura-text);
   font-family: var(--font-display), var(--font-body), serif;
   font-size: 20px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 1.1;
   text-align: center;
 }
@@ -142,7 +142,7 @@
   color: var(--sakura-muted);
   background: transparent;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 400;
   text-align: left;
   transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
@@ -358,7 +358,7 @@
 .sakura-hero-eyebrow {
   color: var(--sakura-blue-deep);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .sakura-hero-copy h1 {
@@ -598,7 +598,7 @@
 .sakura-notes > div:first-child > span {
   color: var(--sakura-pink);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .sakura-notes h2 {

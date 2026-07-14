@@ -105,12 +105,12 @@
   padding: 7px 10px 3px;
   color: var(--accent-2);
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .site-search-more > span { min-width: 0; }
 .site-search-more > svg { width: 18px; height: 18px; }
-.site-search-more b { color: var(--muted); font-size: 10px; font-weight: 500; }
+.site-search-more b { color: var(--muted); font-size: 10px; font-weight: 400; }
 
 .site-search-more:hover,
 .site-search-more:focus-visible {
