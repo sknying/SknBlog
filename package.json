@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "pages:dev": "wrangler pages dev out",
+    "deploy:cloudflare": "pnpm build && wrangler pages deploy --branch main"
   },
   "dependencies": {
     "@iconify-icons/mdi": "^1.2.48",
@@ -28,6 +30,7 @@
     "@types/node": "^22.13.14",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.2",
+    "wrangler": "^4.110.0"
   }
 }
