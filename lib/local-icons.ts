@@ -10,8 +10,10 @@ import cameraLinear from "@iconify-icons/solar/camera-linear";
 import chart2Linear from "@iconify-icons/solar/chart-2-linear";
 import chatRoundLineLinear from "@iconify-icons/solar/chat-round-line-linear";
 import clockCircleLinear from "@iconify-icons/solar/clock-circle-linear";
+import checkCircleLinear from "@iconify-icons/solar/check-circle-linear";
 import closeCircleLinear from "@iconify-icons/solar/close-circle-linear";
 import codeSquareLinear from "@iconify-icons/solar/code-square-linear";
+import copyLinear from "@iconify-icons/solar/copy-linear";
 import documentTextLinear from "@iconify-icons/solar/document-text-linear";
 import galleryWideLinear from "@iconify-icons/solar/gallery-wide-linear";
 import home2Linear from "@iconify-icons/solar/home-2-linear";
@@ -39,8 +41,10 @@ export const localIcons = {
   "solar:chart-2-linear": chart2Linear,
   "solar:chat-round-line-linear": chatRoundLineLinear,
   "solar:clock-circle-linear": clockCircleLinear,
+  "solar:check-circle-linear": checkCircleLinear,
   "solar:close-circle-linear": closeCircleLinear,
   "solar:code-square-linear": codeSquareLinear,
+  "solar:copy-linear": copyLinear,
   "solar:document-text-linear": documentTextLinear,
   "solar:gallery-wide-linear": galleryWideLinear,
   "solar:home-2-linear": home2Linear,
