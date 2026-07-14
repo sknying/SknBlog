@@ -2,6 +2,7 @@
 title: Next 缓存别硬猜
 publishedAt: 2026-07-09T01:20:00+08:00
 column: 前端工程
+columnOrder: 1
 tags: [Next.js, 缓存, 排查]
 summary: 把路由缓存拆开看。少一点玄学。
 image: /images/posts/next-cache-notes.jpg

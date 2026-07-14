@@ -34,14 +34,18 @@
 .search-toolbar-actions > :where(a, button) { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid var(--search-line); border-radius: 50%; color: var(--search-blue-deep); background: var(--search-paper-strong); box-shadow: 0 6px 18px rgba(74, 104, 159, 0.11); cursor: pointer; }
 
 .search-heading { max-width: 1160px; margin: 0 auto 20px; padding: 28px 30px; border: 1px solid var(--search-line); border-radius: 8px; background: linear-gradient(105deg, color-mix(in srgb, var(--search-paper-strong) 86%, transparent), color-mix(in srgb, var(--search-blue) 8%, transparent)); box-shadow: var(--search-shadow); }
-.search-heading > span { display: inline-flex; align-items: center; gap: 7px; color: var(--search-pink); font-size: 13px; font-weight: 700; }
+.search-heading > span { display: inline-flex; align-items: center; gap: 7px; color: var(--search-pink); font-size: 13px; font-weight: 400; }
 .search-heading h1 { margin: 9px 0 5px; color: var(--search-text); font-family: var(--font-display), var(--font-body), sans-serif; font-size: clamp(30px, 4vw, 46px); }
 .search-heading p { margin: 0; color: var(--search-muted); font-size: 14px; }
 .search-layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; align-items: start; gap: 18px; max-width: 1160px; margin: 0 auto; }
 .search-results-panel, .search-rail-panel { border: 1px solid var(--search-line); border-radius: 8px; background: var(--search-paper); box-shadow: var(--search-shadow); backdrop-filter: blur(18px); }
 .search-results-panel { min-height: 320px; padding: 16px; }
 .search-results-list { display: grid; gap: 10px; }
-.search-result-card { display: grid; grid-template-columns: 154px minmax(0, 1fr) 36px; align-items: center; gap: 15px; padding: 10px; border: 1px solid transparent; border-radius: 8px; transition: transform 180ms ease, border-color 180ms ease, background 180ms ease; }
+.search-result-card { position: relative; display: grid; grid-template-columns: 154px minmax(0, 1fr) 36px; align-items: center; gap: 15px; padding: 10px; border: 1px solid transparent; border-radius: 8px; transition: transform 180ms ease, border-color 180ms ease, background 180ms ease; }
+.search-result-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.search-result-card > :not(.search-result-overlay) { position: relative; z-index: 2; pointer-events: none; }
+.search-result-card .search-result-tags a { position: relative; z-index: 3; pointer-events: auto; }
+.search-result-overlay:focus-visible { outline: 3px solid color-mix(in srgb, var(--search-blue-deep) 60%, transparent); outline-offset: -3px; }
 .search-result-card:hover { border-color: var(--search-line); background: color-mix(in srgb, var(--search-paper-strong) 72%, transparent); transform: translateY(-1px); }
 .search-result-cover { position: relative; display: block; height: 100px; overflow: hidden; border-radius: 7px; background: color-mix(in srgb, var(--search-blue) 10%, transparent); }
 .search-result-cover img { object-fit: cover; transition: transform 220ms ease; }
@@ -69,7 +73,7 @@
 .search-tip > svg { width: 24px; height: 24px; }
 .search-tip h2 { margin-top: 9px; }
 .search-tip p { margin: 7px 0 14px; color: var(--search-muted); font-size: 13px; }
-.search-tip a { display: inline-flex; align-items: center; gap: 6px; color: var(--search-blue-deep); font-size: 12px; font-weight: 700; }
+.search-tip a { display: inline-flex; align-items: center; gap: 6px; color: var(--search-blue-deep); font-size: 12px; font-weight: 400; }
 .search-footer { display: grid; min-height: 140px; justify-items: center; align-content: center; gap: 5px; width: calc(100% + 56px); margin: 34px -28px 0; border-top: 1px solid var(--search-line); color: var(--search-muted); background: radial-gradient(circle at 18% 110%, color-mix(in srgb, var(--search-blue) 24%, transparent), transparent 18rem), radial-gradient(circle at 82% 110%, color-mix(in srgb, var(--search-pink) 22%, transparent), transparent 18rem), color-mix(in srgb, var(--search-paper) 70%, transparent); }
 .search-footer svg { color: var(--search-pink); }.search-footer strong { color: var(--search-text); font-family: var(--font-display), var(--font-body), sans-serif; font-size: 19px; }.search-footer span { font-size: 11px; }
 

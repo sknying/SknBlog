@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
 import { SiteLogo } from "@/components/site-logo";
-import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { BILIBILI_URL, GITHUB_AVATAR, GITHUB_URL, SITE_COPYRIGHT, SITE_EMAIL, SITE_NAME } from "@/lib/site-config";
 
 type SiteSidebarProps = {
   active?: "home" | "archive" | "columns" | "tags";
@@ -58,9 +58,9 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
 
       <footer className="sakura-side-footer">
         <div>
-          <a href="https://github.com/sknying" aria-label="GitHub"><Icon icon="mdi:github" aria-hidden="true" /></a>
-          <Link href="/posts" aria-label="文章归档"><Icon icon="solar:archive-linear" aria-hidden="true" /></Link>
-          <Link href="/tags" aria-label="标签页"><Icon icon="solar:tag-linear" aria-hidden="true" /></Link>
+          <a href={GITHUB_URL} aria-label="GitHub" title="GitHub" target="_blank" rel="noreferrer"><Icon icon="mdi:github" aria-hidden="true" /></a>
+          <a href={`mailto:${SITE_EMAIL}`} aria-label={`发送邮件至 ${SITE_EMAIL}`} title={SITE_EMAIL}><Icon icon="solar:letter-linear" aria-hidden="true" /></a>
+          <a href={BILIBILI_URL} aria-label="哔哩哔哩" title="哔哩哔哩" target="_blank" rel="noreferrer"><Icon icon="simple-icons:bilibili" aria-hidden="true" /></a>
         </div>
         <p>{SITE_COPYRIGHT}</p>
       </footer>

@@ -142,7 +142,7 @@
   color: var(--sakura-muted);
   background: transparent;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 400;
   text-align: left;
   transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease;
 }
@@ -358,7 +358,7 @@
 .sakura-hero-eyebrow {
   color: var(--sakura-blue-deep);
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .sakura-hero-copy h1 {
@@ -461,6 +461,7 @@
 
 .sakura-post-card {
   position: relative;
+  position: relative;
   display: grid;
   grid-template-columns: 210px minmax(0, 1fr) 44px;
   min-height: 150px;
@@ -472,6 +473,11 @@
   background: var(--sakura-paper-strong);
   transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
 }
+
+.sakura-post-overlay { position: absolute; inset: 0; z-index: 1; border-radius: inherit; }
+.sakura-post-card > :not(.sakura-post-overlay) { position: relative; z-index: 2; pointer-events: none; }
+.sakura-post-card .sakura-inline-tags a { position: relative; z-index: 3; pointer-events: auto; }
+.sakura-post-overlay:focus-visible { outline: 3px solid color-mix(in srgb, var(--sakura-blue-deep) 60%, transparent); outline-offset: -3px; }
 
 .sakura-post-card:hover {
   border-color: rgba(100, 142, 228, 0.36);
@@ -592,7 +598,7 @@
 .sakura-notes > div:first-child > span {
   color: var(--sakura-pink);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .sakura-notes h2 {
@@ -850,6 +856,11 @@
     padding: 10px 18px;
     border-right: 0;
     border-bottom: 1px solid var(--sakura-line);
+    animation: none;
+    transform: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    background-clip: padding-box;
   }
 
   .sakura-now-card,

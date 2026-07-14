@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArticlePage } from "@/components/article-page";
-import { getPostBySlug, posts } from "@/lib/blog-data";
+import { columnDefinitions, getPostBySlug, posts } from "@/lib/blog-data";
+import { getColumnGroups } from "@/lib/column-data";
+import { getPostNavigation, getPrimaryTag } from "@/lib/blog-utils";
 
 type PostPageProps = {
   params: Promise<{
@@ -39,7 +41,13 @@ export default async function PostPage({ params }: PostPageProps) {
     notFound();
   }
 
-  const index = posts.findIndex((item) => item.slug === post.slug);
+  const { previousPost, nextPost } = getPostNavigation(posts, post);
+  const column = post.column
+    ? getColumnGroups(posts, columnDefinitions).find((item) => item.name === post.column)
+    : undefined;
+  const primaryContext = column
+    ? { label: column.name, href: `/columns/${column.slug}` }
+    : { label: getPrimaryTag(post), href: `/tags?tag=${encodeURIComponent(getPrimaryTag(post))}` };
 
-  return <ArticlePage post={post} posts={posts} previousPost={posts[index - 1]} nextPost={posts[index + 1]} />;
+  return <ArticlePage post={post} posts={posts} previousPost={previousPost} nextPost={nextPost} primaryContext={primaryContext} />;
 }

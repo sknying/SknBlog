@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@iconify-icons/mdi": "^1.2.48",
+    "@iconify-icons/simple-icons": "^1.2.74",
     "@iconify-icons/solar": "^1.2.3",
     "@iconify/react": "^6.0.2",
     "@types/prismjs": "^1.26.6",

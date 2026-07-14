@@ -2,6 +2,7 @@
 title: 玻璃 UI 不等于透明
 publishedAt: 2026-06-28T21:15:00+08:00
 column: 设计笔记
+columnOrder: 1
 tags: [Design, Glass UI, 可读性]
 summary: 先保证可读。再谈氛围。
 image: /images/posts/glass-ui-readable.jpg

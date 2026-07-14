@@ -149,6 +149,43 @@
 
 html {
   scroll-behavior: smooth;
+  scrollbar-color: color-mix(in srgb, var(--accent-2) 46%, transparent) transparent;
+  scrollbar-width: thin;
+}
+
+.site-footer-brand {
+  display: grid;
+  justify-items: center;
+  gap: 5px;
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.site-footer-brand:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--site-blue, #6f91e9) 52%, transparent);
+  outline-offset: 4px;
+}
+
+html::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+html::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+html::-webkit-scrollbar-thumb {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent-2) 48%, transparent);
+  background-clip: content-box;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--accent-2) 72%, transparent);
+  background-clip: content-box;
 }
 
 body {
@@ -190,20 +227,16 @@ body::selection {
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.58), rgba(238, 245, 252, 0.7)),
     url("/images/background.png");
-  background-position: center top;
-  background-size: 100vw auto;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+  background-position: center top, center top;
+  background-size: 100% 100%, 100vw auto;
+  background-attachment: fixed, fixed;
+  background-repeat: no-repeat, repeat-y;
 }
 
 :root[data-theme="dark"] :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
     url("/images/background.png");
-  background-position: center top;
-  background-size: 100vw auto;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
 }
 
 a {
@@ -267,9 +300,5 @@ a {
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
       url("/images/background.png");
-    background-position: center top;
-    background-size: 100vw auto;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
   }
 }

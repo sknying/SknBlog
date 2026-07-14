@@ -7,11 +7,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 function SearchCover({ post }: { post: Post }) {
   const [failed, setFailed] = useState(false);
@@ -47,6 +48,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
 
   return (
     <main className="search-page">
+      <SakuraFall />
       <div className="search-grain" aria-hidden="true" />
       <SiteSidebar />
 
@@ -73,21 +75,22 @@ export function SearchResults({ posts }: { posts: Post[] }) {
                 <div className="search-results-list">
                   {results.map((post) => (
                     <article className="search-result-card" key={post.slug}>
-                      <Link className="search-result-cover" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
+                      <Link className="search-result-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
+                      <div className="search-result-cover">
                         <SearchCover post={post} />
-                      </Link>
+                      </div>
                       <div className="search-result-copy">
                         <div className="search-result-meta">
                           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
                           {post.column ? <span>{post.column}</span> : null}
                         </div>
-                        <h2><Link href={`/posts/${post.slug}`}>{post.title}</Link></h2>
+                        <h2>{post.title}</h2>
                         <p>{post.summary}</p>
                         <div className="search-result-tags" aria-label="文章标签">
                           {post.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
                         </div>
                       </div>
-                      <Link className="search-result-open" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></Link>
+                      <span className="search-result-open" aria-hidden="true"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></span>
                     </article>
                   ))}
                 </div>
@@ -124,8 +127,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
         </div>
 
         <footer className="search-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

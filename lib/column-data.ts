@@ -29,6 +29,18 @@ export function sortPostsByDate(items: Post[]) {
   return [...items].sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt));
 }
 
+export function sortPostsByColumnOrder(items: Post[]) {
+  return [...items].sort((left, right) => {
+    const leftOrder = left.columnOrder;
+    const rightOrder = right.columnOrder;
+
+    if (leftOrder !== undefined && rightOrder !== undefined) return leftOrder - rightOrder || Date.parse(left.publishedAt) - Date.parse(right.publishedAt);
+    if (leftOrder !== undefined) return -1;
+    if (rightOrder !== undefined) return 1;
+    return Date.parse(right.publishedAt) - Date.parse(left.publishedAt);
+  });
+}
+
 export function columnNameToSlug(name: string) {
   const normalized = name
     .trim()
@@ -66,8 +78,8 @@ export function getColumnGroups(posts: Post[], definitions: ColumnDefinition[] =
   });
 
   return Array.from(grouped, ([name, items]) => {
-    const orderedPosts = sortPostsByDate(items);
-    const latestPost = orderedPosts[0];
+    const orderedPosts = sortPostsByColumnOrder(items);
+    const latestPost = sortPostsByDate(items)[0];
     const definition = definitionsByName.get(name);
 
     return {

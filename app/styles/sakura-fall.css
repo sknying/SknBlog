@@ -1,71 +1,78 @@
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   position: relative;
-  isolation: isolate;
+  z-index: 1;
 }
 
-:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::before,
-:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
+.sakura-fall {
   position: fixed;
-  top: -42vh;
-  right: -34vw;
+  inset: 0;
   z-index: -1;
-  width: 72vw;
-  height: 72vh;
-  content: "";
+  overflow: hidden;
   pointer-events: none;
+}
+
+.sakura-fall-petal {
+  position: absolute;
+  top: -14vh;
+  left: var(--sakura-left);
+  width: 14px;
+  height: 21px;
+  border-radius: 72% 38% 68% 42% / 62% 45% 55% 38%;
+  opacity: 0;
   background:
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.96) 0 9%, rgba(246, 155, 180, 0.92) 18% 56%, rgba(214, 104, 139, 0.78) 72%, transparent 75%) 8% 12% / 18px 12px no-repeat,
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.94) 0 9%, rgba(249, 177, 196, 0.9) 18% 56%, rgba(225, 121, 151, 0.74) 72%, transparent 75%) 31% 27% / 13px 9px no-repeat,
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.96) 0 9%, rgba(243, 143, 171, 0.9) 18% 56%, rgba(207, 91, 130, 0.76) 72%, transparent 75%) 57% 8% / 16px 11px no-repeat,
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.92) 0 9%, rgba(250, 189, 204, 0.88) 18% 56%, rgba(224, 126, 153, 0.7) 72%, transparent 75%) 82% 34% / 11px 8px no-repeat,
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.95) 0 9%, rgba(245, 157, 181, 0.9) 18% 56%, rgba(211, 98, 134, 0.74) 72%, transparent 75%) 18% 61% / 15px 10px no-repeat,
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.92) 0 9%, rgba(249, 181, 198, 0.86) 18% 56%, rgba(222, 117, 148, 0.7) 72%, transparent 75%) 46% 73% / 12px 8px no-repeat,
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.94) 0 9%, rgba(242, 145, 173, 0.88) 18% 56%, rgba(205, 88, 127, 0.72) 72%, transparent 75%) 71% 58% / 17px 11px no-repeat,
-    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.9) 0 9%, rgba(249, 187, 202, 0.84) 18% 56%, rgba(220, 115, 146, 0.68) 72%, transparent 75%) 92% 82% / 10px 7px no-repeat;
-  opacity: 0;
-  transform: translate3d(0, 0, 0) rotate(8deg);
+    radial-gradient(ellipse at 32% 25%, rgba(255, 255, 255, 0.9) 0 8%, transparent 30%),
+    linear-gradient(135deg, #ffe6ef 0%, #f7abc2 46%, #df759d 100%);
+  box-shadow: 0 2px 4px rgba(168, 84, 121, 0.18);
+  transform-origin: 52% 62%;
   will-change: transform, opacity;
-  animation: sakura-fall-drift 19s linear infinite;
+  animation: sakura-petal-fall var(--sakura-duration) cubic-bezier(0.38, 0.08, 0.68, 0.94) var(--sakura-delay) infinite;
 }
 
-:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
-  width: 64vw;
-  height: 64vh;
-  opacity: 0;
-  animation-duration: 26s;
-  animation-delay: -11s;
+.sakura-fall-petal::after {
+  position: absolute;
+  top: 18%;
+  bottom: 14%;
+  left: 49%;
+  width: 1px;
+  border-radius: 999px;
+  background: rgba(181, 83, 122, 0.32);
+  content: "";
+  transform: rotate(18deg);
 }
 
-@keyframes sakura-fall-drift {
+@keyframes sakura-petal-fall {
   0% {
     opacity: 0;
-    transform: translate3d(0, 0, 0) rotate(8deg);
+    transform: translate3d(0, -10vh, 0) rotate(var(--sakura-start-turn)) scale(var(--sakura-scale));
   }
-  9% { opacity: 0.72; }
-  44% { transform: translate3d(-62vw, 76vh, 0) rotate(118deg); }
-  88% { opacity: 0.64; }
+
+  8% { opacity: var(--sakura-opacity); }
+
+  47% {
+    opacity: calc(var(--sakura-opacity) * 0.92);
+    transform: translate3d(calc(var(--sakura-drift) * 0.42), 48vh, 0) rotate(172deg) scale(calc(var(--sakura-scale) * 0.94));
+  }
+
+  76% {
+    opacity: var(--sakura-opacity);
+    transform: translate3d(calc(var(--sakura-drift) * 0.76), 81vh, 0) rotate(264deg) scale(var(--sakura-scale));
+  }
+
   100% {
     opacity: 0;
-    transform: translate3d(-136vw, 168vh, 0) rotate(236deg);
+    transform: translate3d(var(--sakura-drift), 122vh, 0) rotate(var(--sakura-end-turn)) scale(calc(var(--sakura-scale) * 0.86));
   }
+}
+
+:root[data-theme="dark"] .sakura-fall-petal {
+  filter: saturate(0.84) brightness(0.86);
 }
 
 @media (max-width: 700px) {
-  :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
-    display: none;
-  }
-
-  :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::before {
-    width: 88vw;
-    height: 64vh;
-    animation-duration: 23s;
-  }
+  .sakura-fall-petal { width: 12px; height: 18px; }
+  .sakura-fall-petal:nth-child(n + 11) { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::before,
-  :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
-    display: none;
-    animation: none;
-  }
+  .sakura-fall { display: none; }
 }

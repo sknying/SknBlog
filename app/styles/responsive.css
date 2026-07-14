@@ -255,6 +255,19 @@
   }
 }
 
+@media (max-width: 700px) {
+  .sakura-workspace,
+  .archive-workspace,
+  .article-workspace,
+  .columns-workspace,
+  .column-detail-workspace,
+  .search-workspace,
+  .tags-workspace,
+  .error-workspace {
+    padding-inline: 8px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

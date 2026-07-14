@@ -6,12 +6,13 @@ import { useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, sortPostsByDate, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 type ColumnDetailProps = {
   column: ColumnGroup;
@@ -58,12 +59,13 @@ function getColumnSpan(column: ColumnGroup) {
 function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean }) {
   return (
     <article className={`column-detail-article ${featured ? "is-featured" : ""}`}>
-      <Link className="column-detail-article-cover" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
+      <Link className="column-detail-article-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
+      <div className="column-detail-article-cover">
         <SafeImage src={post.image} alt={`${post.title} 封面`} sizes="(max-width: 760px) 84vw, 210px" />
-      </Link>
+      </div>
       <div className="column-detail-article-copy">
         {featured ? <span className="column-detail-featured-mark">最新</span> : null}
-        <h3><Link href={`/posts/${post.slug}`}>{post.title}</Link></h3>
+        <h3>{post.title}</h3>
         <p>{post.summary}</p>
         <div className="column-detail-article-tags">
           {post.tags.slice(0, 3).map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
@@ -74,9 +76,9 @@ function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean
           <span><Icon icon="solar:clock-circle-linear" aria-hidden="true" />{post.read}</span>
         </footer>
       </div>
-      <Link className="column-detail-article-open" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}>
+      <span className="column-detail-article-open" aria-hidden="true">
         <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-      </Link>
+      </span>
     </article>
   );
 }
@@ -89,6 +91,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
 
   return (
     <main className="column-detail-page">
+      <SakuraFall />
       <div className="column-detail-grain" aria-hidden="true" />
       <SiteSidebar active="columns" />
 
@@ -212,8 +215,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
         </div>
 
         <footer className="column-detail-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

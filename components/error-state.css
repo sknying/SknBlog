@@ -98,7 +98,7 @@
   gap: 7px;
   color: var(--error-pink);
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
 }
 
 .error-kicker svg { width: 18px; height: 18px; }

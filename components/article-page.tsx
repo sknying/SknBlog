@@ -2,29 +2,39 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useEffect, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import { Icon } from "@/components/local-icon";
 import { MathFormula } from "@/components/math-formula";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { getCodeLanguage, getLanguageLabel, highlightCodeLines } from "@/lib/code-highlight";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 type ArticlePageProps = {
   post: Post;
   posts: Post[];
   previousPost?: Post;
   nextPost?: Post;
+  primaryContext: {
+    label: string;
+    href: string;
+  };
 };
 
 type OutlineItem = {
   id: string;
   label: string;
   level: 1 | 2 | 3 | 4;
+};
+
+type OutlineDock = {
+  side: "left" | "right";
+  top: number;
 };
 
 function getBlockHeading(block: ArticleBlock) {
@@ -90,10 +100,15 @@ function SafePostImage({ post, priority = false }: { post: Post; priority?: bool
   );
 }
 
-export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: ArticlePageProps) {
+export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, primaryContext }: ArticlePageProps) {
   const article = post;
-  const [isOutlineOpen, setIsOutlineOpen] = useState(true);
+  const [isOutlineOpen, setIsOutlineOpen] = useState(false);
   const [activeOutlineId, setActiveOutlineId] = useState("article-title");
+  const [copiedCodeId, setCopiedCodeId] = useState<string | null>(null);
+  const [outlineDock, setOutlineDock] = useState<OutlineDock>({ side: "right", top: 68 });
+  const outlineRailRef = useRef<HTMLElement>(null);
+  const outlineDragRef = useRef<{ pointerId: number; startX: number; startY: number; startLeft: number; startTop: number; moved: boolean } | null>(null);
+  const suppressOutlineToggleRef = useRef(false);
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
@@ -108,6 +123,15 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
   );
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 681px)");
+    const syncOutlineState = () => setIsOutlineOpen(mediaQuery.matches);
+
+    syncOutlineState();
+    mediaQuery.addEventListener("change", syncOutlineState);
+    return () => mediaQuery.removeEventListener("change", syncOutlineState);
+  }, []);
+
+  useEffect(() => {
     const elements = outlineItems.map((item) => document.getElementById(item.id)).filter((element): element is HTMLElement => Boolean(element));
     if (elements.length === 0) return;
 
@@ -120,8 +144,103 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
     return () => observer.disconnect();
   }, [outlineItems]);
 
+  const copyCode = async (id: string, code: string) => {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(code);
+      } else {
+        const input = document.createElement("textarea");
+        input.value = code;
+        input.style.position = "fixed";
+        input.style.opacity = "0";
+        document.body.append(input);
+        input.select();
+        document.execCommand("copy");
+        input.remove();
+      }
+
+      setCopiedCodeId(id);
+      window.setTimeout(() => setCopiedCodeId((current) => current === id ? null : current), 1600);
+    } catch {
+      setCopiedCodeId(null);
+    }
+  };
+
+  const handleOutlinePointerDown = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (isOutlineOpen || window.innerWidth > 680) return;
+
+    const rail = outlineRailRef.current;
+    if (!rail) return;
+
+    const bounds = rail.getBoundingClientRect();
+    outlineDragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      startLeft: bounds.left,
+      startTop: bounds.top,
+      moved: false
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  };
+
+  const handleOutlinePointerMove = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const drag = outlineDragRef.current;
+    const rail = outlineRailRef.current;
+    if (!drag || !rail || drag.pointerId !== event.pointerId) return;
+
+    const deltaX = event.clientX - drag.startX;
+    const deltaY = event.clientY - drag.startY;
+    if (!drag.moved && Math.hypot(deltaX, deltaY) < 5) return;
+
+    drag.moved = true;
+    const bounds = rail.getBoundingClientRect();
+    const left = Math.min(Math.max(8, drag.startLeft + deltaX), window.innerWidth - bounds.width - 8);
+    const top = Math.min(Math.max(8, drag.startTop + deltaY), window.innerHeight - bounds.height - 8);
+    const side = left + bounds.width / 2 < window.innerWidth / 2 ? "left" : "right";
+
+    rail.classList.add("is-dragging");
+    rail.style.setProperty("--outline-drag-left", `${left}px`);
+    rail.style.setProperty("--outline-drag-top", `${top}px`);
+    rail.dataset.outlineSide = side;
+    event.preventDefault();
+  };
+
+  const handleOutlinePointerEnd = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const drag = outlineDragRef.current;
+    const rail = outlineRailRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+    outlineDragRef.current = null;
+    if (!drag.moved || !rail) return;
+
+    const bounds = rail.getBoundingClientRect();
+    const top = Math.min(Math.max(8, bounds.top), window.innerHeight - bounds.height - 8);
+    const side = bounds.left + bounds.width / 2 < window.innerWidth / 2 ? "left" : "right";
+
+    rail.classList.remove("is-dragging");
+    rail.style.removeProperty("--outline-drag-left");
+    rail.style.removeProperty("--outline-drag-top");
+    setOutlineDock({ side, top });
+    suppressOutlineToggleRef.current = true;
+    window.setTimeout(() => { suppressOutlineToggleRef.current = false; }, 0);
+  };
+
+  const toggleOutline = () => {
+    if (suppressOutlineToggleRef.current) {
+      suppressOutlineToggleRef.current = false;
+      return;
+    }
+
+    setIsOutlineOpen((current) => !current);
+  };
+
+  const outlineRailStyle = { "--outline-dock-top": `${outlineDock.top}px` } as CSSProperties;
+
   return (
     <main className="article-page">
+      <SakuraFall />
       <div className="article-grain" aria-hidden="true" />
 
       <SiteSidebar active="archive" />
@@ -148,7 +267,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
         <div className="article-grid">
           <article className="article-card">
             <header className="article-heading">
-              <Link className="article-primary-tag" href={`/tags?tag=${encodeURIComponent(getPrimaryTag(article))}`}>{getPrimaryTag(article)}</Link>
+              <Link className="article-primary-tag" href={primaryContext.href}>{primaryContext.label}</Link>
               <h1 id="article-title">{article.title}</h1>
               <div className="article-meta">
                 <span><Icon icon="solar:user-circle-linear" aria-hidden="true" />Sknying</span>
@@ -191,13 +310,18 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
                     <figure className="article-code" data-language={language} id={id} key={id}>
                       <figcaption>
                         <span className="article-code-dots" aria-hidden="true"><i /><i /><i /></span>
-                        <span>{block.title}</span>
+                        <span className="article-code-title" title={block.title}>{block.title}</span>
                         <b>{getLanguageLabel(language)}</b>
+                        <button className="article-code-copy" type="button" onClick={() => void copyCode(id, block.code)} aria-label={copiedCodeId === id ? "代码已复制" : "复制代码"} title={copiedCodeId === id ? "代码已复制" : "复制代码"}>
+                          <Icon icon={copiedCodeId === id ? "solar:check-circle-linear" : "solar:copy-linear"} aria-hidden="true" />
+                        </button>
                       </figcaption>
                       <pre><code>{codeLines.map((line, lineIndex) => (
                         <span className="code-line" key={`${id}-${lineIndex}`}>
                           <span className="code-line-number" aria-hidden="true">{lineIndex + 1}</span>
-                          <span className="code-line-content" dangerouslySetInnerHTML={{ __html: line }} />
+                          <span className="code-line-content">
+                            <span className="code-line-text" dangerouslySetInnerHTML={{ __html: line }} />
+                          </span>
                         </span>
                       ))}</code></pre>
                     </figure>
@@ -231,15 +355,17 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
               })}
             </div>
 
-            <nav className="article-pager" aria-label="文章导航">
-              {previousPost ? <Link href={`/posts/${previousPost.slug}`}><span>上一篇</span><strong>{previousPost.title}</strong></Link> : <span />}
-              {nextPost ? <Link href={`/posts/${nextPost.slug}`}><span>下一篇</span><strong>{nextPost.title}</strong></Link> : <span />}
-            </nav>
+            {previousPost || nextPost ? (
+              <nav className={`article-pager ${previousPost && nextPost ? "" : "article-pager-single"}`} aria-label="文章导航">
+                {previousPost ? <Link href={`/posts/${previousPost.slug}`}><span>上一篇</span><strong>{previousPost.title}</strong></Link> : null}
+                {nextPost ? <Link href={`/posts/${nextPost.slug}`}><span>下一篇</span><strong>{nextPost.title}</strong></Link> : null}
+              </nav>
+            ) : null}
           </article>
 
-          <aside className={`article-right-rail ${isOutlineOpen ? "" : "is-collapsed"}`}>
+          <aside ref={outlineRailRef} className={`article-right-rail ${isOutlineOpen ? "" : "is-collapsed"}`} data-outline-side={outlineDock.side} style={outlineRailStyle}>
             <section className="article-outline-panel article-rail-panel">
-              <button className="article-outline-toggle" type="button" onClick={() => setIsOutlineOpen((current) => !current)} aria-expanded={isOutlineOpen} aria-controls="article-outline-list" aria-label={isOutlineOpen ? "收起文章目录" : "展开文章目录"} title={isOutlineOpen ? "收起文章目录" : "展开文章目录"}>
+              <button className="article-outline-toggle" type="button" onClick={toggleOutline} onPointerDown={handleOutlinePointerDown} onPointerMove={handleOutlinePointerMove} onPointerUp={handleOutlinePointerEnd} onPointerCancel={handleOutlinePointerEnd} aria-expanded={isOutlineOpen} aria-controls="article-outline-list" aria-label={isOutlineOpen ? "收起文章目录" : "展开文章目录"} title={isOutlineOpen ? "收起文章目录" : "展开文章目录"}>
                 {isOutlineOpen ? <><span><Icon icon="solar:list-check-linear" aria-hidden="true" />文章目录</span><Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" /></> : <Icon icon="solar:list-check-linear" aria-hidden="true" />}
               </button>
               {isOutlineOpen ? <nav className="article-outline" id="article-outline-list">{outlineItems.map((item, index) => <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} aria-current={activeOutlineId === item.id ? "location" : undefined}><span>{index + 1}.</span>{item.label}</a>)}</nav> : null}
@@ -248,8 +374,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost }: A
         </div>
 
         <footer className="article-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>

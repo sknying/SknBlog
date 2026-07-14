@@ -16,6 +16,7 @@ content/posts/
 title: "文章标题"
 publishedAt: "2026-07-12T20:30:00+08:00"
 column: "前端工程"
+columnOrder: 1
 tags: [Next.js, Markdown]
 summary: "列表页摘要。"
 image: "/images/cover.png"
@@ -29,8 +30,9 @@ intro: "文章开头的引言。"
 ```
 
 - `column` 是可选的单选专栏，用于归类系列文章。
+- `columnOrder` 只用于所属专栏的文章排序，数值越小越靠前；可用 10、20、30 留出插入空间。
 - `tags` 是多选标签，用于交叉筛选文章。
-- `publishedAt` 决定排序和展示时间。
+- `publishedAt` 决定无专栏文章的排序和展示时间。
 - 不同年份目录中不能有同名文件，避免 slug 冲突。
 - `wordCount` 与阅读时长在构建时从正文自动计算。
 - 标签列表直接从全部文章的 `tags` 字段聚合，不在网页中创建或删除。

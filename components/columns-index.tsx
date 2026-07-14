@@ -6,12 +6,13 @@ import { useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
-import { SiteLogo } from "@/components/site-logo";
+import { SiteFooterBrand } from "@/components/site-footer-brand";
+import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, getColumnGroups, type ColumnDefinition, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
-import { SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SITE_COPYRIGHT } from "@/lib/site-config";
 
 function ColumnCover({ group }: { group: ColumnGroup }) {
   const [failed, setFailed] = useState(false);
@@ -39,9 +40,10 @@ function ColumnCover({ group }: { group: ColumnGroup }) {
 function ColumnCard({ group }: { group: ColumnGroup }) {
   return (
     <article className="columns-card columns-cover-card">
-      <Link className="columns-card-cover" href={`/columns/${encodeURIComponent(group.slug)}`} aria-label={`打开 ${group.name} 专栏`}>
+      <Link className="columns-card-overlay" href={`/columns/${encodeURIComponent(group.slug)}`} aria-label={`打开 ${group.name} 专栏`} />
+      <div className="columns-card-cover">
         <ColumnCover group={group} />
-      </Link>
+      </div>
       <div className="columns-card-copy">
         <h3>{group.name}</h3>
         <p>{group.summary}</p>
@@ -51,10 +53,10 @@ function ColumnCard({ group }: { group: ColumnGroup }) {
         <b>{group.posts.length} 篇文章</b>
         <time dateTime={group.updatedAt}>{getPostTimeLabel(group.latestPost).slice(0, 10)} 更新</time>
       </footer>
-      <Link className="columns-card-link" href={`/columns/${encodeURIComponent(group.slug)}`}>
+      <span className="columns-card-link" aria-hidden="true">
         进入专栏
         <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-      </Link>
+      </span>
     </article>
   );
 }
@@ -66,6 +68,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
 
   return (
     <main className="columns-page">
+      <SakuraFall />
       <div className="columns-grain" aria-hidden="true" />
       <SiteSidebar active="columns" />
 
@@ -148,8 +151,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
         </div>
 
         <footer className="columns-footer">
-          <SiteLogo />
-          <strong>{SITE_NAME}</strong>
+          <SiteFooterBrand />
           <span>{SITE_COPYRIGHT}</span>
         </footer>
       </div>
