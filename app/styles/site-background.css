@@ -23,7 +23,7 @@
 :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page)::before {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: -2;
   pointer-events: none;
   background-image:
     linear-gradient(rgba(250, 248, 235, 0.1), rgba(244, 241, 224, 0.22)),

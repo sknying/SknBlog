@@ -1,0 +1,60 @@
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
+  position: relative;
+  isolation: isolate;
+}
+
+/* The background uses ::before; petals stay in the layer above it and below all content. */
+:is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
+  position: fixed;
+  top: -42vh;
+  right: -34vw;
+  z-index: -1;
+  width: 72vw;
+  height: 72vh;
+  content: "";
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.96) 0 9%, rgba(246, 155, 180, 0.92) 18% 56%, rgba(214, 104, 139, 0.78) 72%, transparent 75%) 8% 12% / 18px 12px no-repeat,
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.94) 0 9%, rgba(249, 177, 196, 0.9) 18% 56%, rgba(225, 121, 151, 0.74) 72%, transparent 75%) 31% 27% / 13px 9px no-repeat,
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.96) 0 9%, rgba(243, 143, 171, 0.9) 18% 56%, rgba(207, 91, 130, 0.76) 72%, transparent 75%) 57% 8% / 16px 11px no-repeat,
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.92) 0 9%, rgba(250, 189, 204, 0.88) 18% 56%, rgba(224, 126, 153, 0.7) 72%, transparent 75%) 82% 34% / 11px 8px no-repeat,
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.95) 0 9%, rgba(245, 157, 181, 0.9) 18% 56%, rgba(211, 98, 134, 0.74) 72%, transparent 75%) 18% 61% / 15px 10px no-repeat,
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.92) 0 9%, rgba(249, 181, 198, 0.86) 18% 56%, rgba(222, 117, 148, 0.7) 72%, transparent 75%) 46% 73% / 12px 8px no-repeat,
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.94) 0 9%, rgba(242, 145, 173, 0.88) 18% 56%, rgba(205, 88, 127, 0.72) 72%, transparent 75%) 71% 58% / 17px 11px no-repeat,
+    radial-gradient(ellipse at 35% 32%, rgba(255, 247, 250, 0.9) 0 9%, rgba(249, 187, 202, 0.84) 18% 56%, rgba(220, 115, 146, 0.68) 72%, transparent 75%) 92% 82% / 10px 7px no-repeat;
+  opacity: 0;
+  transform: translate3d(0, 0, 0) rotate(8deg);
+  will-change: transform, opacity;
+  animation: sakura-fall-drift 19s linear infinite;
+}
+
+@keyframes sakura-fall-drift {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(8deg);
+  }
+
+  9% { opacity: 0.72; }
+  44% { transform: translate3d(-62vw, 76vh, 0) rotate(118deg); }
+  88% { opacity: 0.64; }
+
+  100% {
+    opacity: 0;
+    transform: translate3d(-136vw, 168vh, 0) rotate(236deg);
+  }
+}
+
+@media (max-width: 700px) {
+  :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
+    width: 88vw;
+    height: 64vh;
+    animation-duration: 23s;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :is(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page)::after {
+    display: none;
+    animation: none;
+  }
+}
