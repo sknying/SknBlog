@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Icon } from "@/components/local-icon";
 import type { AboutContent } from "@/lib/about-data";
-import { GITHUB_URL } from "@/lib/site-config";
+import { BILIBILI_URL, GITHUB_URL, SITE_EMAIL } from "@/lib/site-config";
 
 export function AboutDialog({ content }: { content: AboutContent }) {
   const [open, setOpen] = useState(false);
@@ -52,11 +52,12 @@ export function AboutDialog({ content }: { content: AboutContent }) {
             </section>
           ))}
         </div>
-        <footer>
-          <a href={GITHUB_URL} target="_blank" rel="noreferrer" aria-label="访问 Sknying 的 GitHub">
+        <footer className="about-dialog-contacts" aria-label="联系方式">
+          <a href={GITHUB_URL} target="_blank" rel="noreferrer" aria-label="访问 Sknying 的 GitHub" title="GitHub">
             <Icon icon="mdi:github" aria-hidden="true" />
-            <span>github.com/sknying</span>
           </a>
+          <a href={`mailto:${SITE_EMAIL}`} aria-label={`发送邮件至 ${SITE_EMAIL}`} title={SITE_EMAIL}><Icon icon="solar:letter-linear" aria-hidden="true" /></a>
+          <a href={BILIBILI_URL} target="_blank" rel="noreferrer" aria-label="访问 Sknying 的哔哩哔哩" title="哔哩哔哩"><Icon icon="simple-icons:bilibili" aria-hidden="true" /></a>
         </footer>
       </section>
     </div>

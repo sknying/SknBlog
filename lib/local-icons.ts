@@ -1,4 +1,5 @@
 import github from "@iconify-icons/mdi/github";
+import bilibili from "@iconify-icons/simple-icons/bilibili";
 import addCircleLinear from "@iconify-icons/solar/add-circle-linear";
 import altArrowDownLinear from "@iconify-icons/solar/alt-arrow-down-linear";
 import archiveLinear from "@iconify-icons/solar/archive-linear";
@@ -18,6 +19,7 @@ import documentTextLinear from "@iconify-icons/solar/document-text-linear";
 import galleryWideLinear from "@iconify-icons/solar/gallery-wide-linear";
 import home2Linear from "@iconify-icons/solar/home-2-linear";
 import listCheckLinear from "@iconify-icons/solar/list-check-linear";
+import letterLinear from "@iconify-icons/solar/letter-linear";
 import magniferLinear from "@iconify-icons/solar/magnifer-linear";
 import moonLinear from "@iconify-icons/solar/moon-linear";
 import starsLineLinear from "@iconify-icons/solar/stars-line-linear";
@@ -30,6 +32,7 @@ import widget4Linear from "@iconify-icons/solar/widget-4-linear";
 
 export const localIcons = {
   "mdi:github": github,
+  "simple-icons:bilibili": bilibili,
   "solar:add-circle-linear": addCircleLinear,
   "solar:alt-arrow-down-linear": altArrowDownLinear,
   "solar:archive-linear": archiveLinear,
@@ -49,6 +52,7 @@ export const localIcons = {
   "solar:gallery-wide-linear": galleryWideLinear,
   "solar:home-2-linear": home2Linear,
   "solar:list-check-linear": listCheckLinear,
+  "solar:letter-linear": letterLinear,
   "solar:magnifer-linear": magniferLinear,
   "solar:moon-linear": moonLinear,
   "solar:stars-line-linear": starsLineLinear,
