@@ -12,5 +12,6 @@
 @import "../components/posts-index.css";
 @import "../components/columns-index.css";
 @import "../components/column-detail.css";
+@import "../components/site-sidebar.css";
 @import "./styles/responsive.css";
 @import "./styles/site-background.css";
