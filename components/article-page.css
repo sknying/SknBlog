@@ -276,7 +276,7 @@
 }
 
 .article-lead-quote > svg { position: absolute; top: 12px; left: 16px; width: 22px; height: 22px; color: var(--article-blue); opacity: 0.58; }
-.article-lead-quote p { margin: 0; font-size: clamp(15px, 1.6vw, 18px); font-weight: 400; line-height: 1.7; }
+.article-lead-quote p { margin: 0; font-size: clamp(15px, 1.6vw, 18px); font-weight: 700; line-height: 1.7; }
 .article-lead-quote cite { color: var(--article-muted); font-size: 12px; font-style: normal; }
 
 .article-content { --font-display: "Noto Serif SC", serif; --font-body: "Noto Serif SC", serif; --font-code: "Fira Code ASCII", "Noto Serif SC", serif; display: grid; min-width: 0; max-width: 100%; gap: 18px; margin-top: 24px; }
@@ -322,7 +322,7 @@
 .article-content a:hover { color: var(--article-pink); text-decoration-color: var(--article-pink); }
 
 .article-content blockquote { margin: 0; border-left: 5px solid var(--article-pink); padding: 8px 0 8px 20px; color: var(--article-text); background: linear-gradient(90deg, color-mix(in srgb, var(--article-pink) 9%, transparent), transparent); }
-.article-content blockquote p { margin: 0; font-size: 18px; font-weight: 400; line-height: 1.7; }
+.article-content blockquote p { margin: 0; font-size: 18px; font-weight: 700; line-height: 1.7; }
 .article-content blockquote cite { display: block; margin-top: 8px; color: var(--article-pink); font-size: 12px; font-style: normal; }
 
 .article-image-block { display: grid; width: 100%; min-width: 0; max-width: 100%; gap: 8px; margin: 0; overflow: hidden; }
