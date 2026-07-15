@@ -7,7 +7,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "new:content": "node scripts/create-content.mjs",
+    "new:post": "node scripts/create-content.mjs post",
+    "new:column": "node scripts/create-content.mjs column"
   },
   "dependencies": {
     "@iconify-icons/mdi": "^1.2.48",

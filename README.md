@@ -57,6 +57,17 @@ intro: "文章开头的引言。"
 
 详细字段与代码块语言说明见 [content/README.md](content/README.md)。
 
+### 快速创建 Markdown
+
+不想手写 frontmatter 时，在项目根目录运行：
+
+```bash
+pnpm new:post
+pnpm new:column
+```
+
+工具会交互式询问必填字段，并自动创建正确的年份目录、文章模板或专栏配置。文章 slug 和专栏 slug 只允许小写英文、数字与连字符，例如 `rust-async-intro`。
+
 ## 配置专栏
 
 在 `content/columns/` 创建一个 Markdown 文件：
