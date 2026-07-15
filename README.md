@@ -90,6 +90,10 @@ public/       Logo、背景、字体和文章图片
 
 刚接触 CSS、TypeScript 或 React 时，先阅读 [前端修改入门](docs/FRONTEND_GUIDE.md)。它说明主题变量、组件交互、Markdown 解析、动画和安全修改流程。
 
+## 主题
+
+当前主题为 [Spring](themes/spring/README.md)。主题源码位于 `themes/spring/`，其背景、主视觉、Logo 和 Fira Code 资源位于 `public/themes/spring/`。文章封面仍放在 `public/images/posts/`，避免内容资源与主题资源混在一起。
+
 ## 部署
 
 项目使用 `output: "export"`，可将 `out/` 作为静态站点目录部署。

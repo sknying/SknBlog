@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
 import type { ColumnDefinition } from "@/lib/column-data";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 type MdNode = {
   type: string;
@@ -162,7 +163,7 @@ function readPost(fileName: string): Post | null {
     read: frontmatter.read?.trim() || `${Math.max(1, Math.ceil(wordCount / 350))} 分钟`,
     wordCount,
     summary: frontmatter.summary?.trim() || fallbackText.slice(0, 72),
-    image: frontmatter.image?.trim() || "/images/sakura-coast-hero.png",
+    image: frontmatter.image?.trim() || SPRING_ASSETS.hero,
     mood: frontmatter.mood?.trim() || "写作记录",
     intro: frontmatter.intro?.trim() || fallbackText.slice(0, 72),
     blocks

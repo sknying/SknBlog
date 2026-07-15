@@ -15,6 +15,7 @@ import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 // Keep the home page focused; the archive page contains the complete list.
 const RECENT_POST_LIMIT = 3;
@@ -108,7 +109,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
           <div className="sakura-main-column">
             <section className="sakura-hero" aria-labelledby="home-title">
               <Image
-                src="/images/sakura-coast-hero.png"
+                src={SPRING_ASSETS.hero}
                 alt="樱花树下眺望海岸的银发女孩"
                 fill
                 sizes="(max-width: 980px) 100vw, 70vw"

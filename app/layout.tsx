@@ -5,6 +5,7 @@ import { NavigationProgress } from "@/components/navigation-progress";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SiteLoader } from "@/components/site-loader";
 import { getAboutContent } from "@/lib/about-data";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 import "katex/dist/katex.min.css";
 import "./globals.css";
 
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       { url: "/favicon.png", type: "image/png", sizes: "512x512" },
-      { url: "/images/sknblog-logo-icon.svg", type: "image/svg+xml" }
+      { url: SPRING_ASSETS.logo, type: "image/svg+xml" }
     ],
     shortcut: [{ url: "/favicon.png", type: "image/png" }],
     apple: [{ url: "/apple-touch-icon.png", type: "image/png", sizes: "512x512" }]

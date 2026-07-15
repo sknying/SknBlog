@@ -13,6 +13,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
 
@@ -101,7 +102,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
         </header>
 
         <section className="archive-banner" aria-labelledby="archive-title">
-          <Image src="/images/sakura-coast-hero.png" alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
+          <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
           <div aria-hidden="true" />
           <div className="archive-banner-copy">
             <span>从第一篇开始</span>
@@ -162,7 +163,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
                 <div><dt><Icon icon="solar:clock-circle-linear" aria-hidden="true" />运行天数</dt><dd>{runningDays} 天</dd></div>
                 <div><dt><Icon icon="solar:calendar-linear" aria-hidden="true" />最后更新</dt><dd>{newestPost ? getPostTimeLabel(newestPost).slice(0, 10) : "暂无"}</dd></div>
               </dl>
-              <div className="archive-stat-art"><Image src="/images/sakura-coast-hero.png" alt="樱花海岸插画局部" fill sizes="220px" /></div>
+              <div className="archive-stat-art"><Image src={SPRING_ASSETS.hero} alt="樱花海岸插画局部" fill sizes="220px" /></div>
             </section>
 
             <section className="archive-trend archive-panel">

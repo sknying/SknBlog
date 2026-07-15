@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Light.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Light.ttf") format("truetype");
   font-display: swap;
   font-weight: 300;
   font-style: normal;
@@ -11,7 +11,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Regular.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Regular.ttf") format("truetype");
   font-display: swap;
   font-weight: 400;
   font-style: normal;
@@ -20,7 +20,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Retina.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Retina.ttf") format("truetype");
   font-display: swap;
   font-weight: 450;
   font-style: normal;
@@ -29,7 +29,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Medium.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Medium.ttf") format("truetype");
   font-display: swap;
   font-weight: 500;
   font-style: normal;
@@ -38,7 +38,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-SemiBold.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-SemiBold.ttf") format("truetype");
   font-display: swap;
   font-weight: 600;
   font-style: normal;
@@ -47,7 +47,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Bold.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Bold.ttf") format("truetype");
   font-display: swap;
   font-weight: 700;
   font-style: normal;
@@ -230,7 +230,7 @@ body::selection {
 :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.58), rgba(238, 245, 252, 0.7)),
-    url("/images/background.png");
+    url("/themes/spring/background.png");
   background-position: center top, center top;
   background-size: 100% 100%, 100vw auto;
   background-attachment: fixed, fixed;
@@ -240,7 +240,7 @@ body::selection {
 :root[data-theme="dark"] :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
-    url("/images/background.png");
+    url("/themes/spring/background.png");
 }
 
 a {
@@ -304,6 +304,6 @@ a {
   :root:not([data-theme]) :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
-      url("/images/background.png");
+      url("/themes/spring/background.png");
   }
 }

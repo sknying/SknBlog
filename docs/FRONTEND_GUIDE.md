@@ -18,9 +18,11 @@
 | 修改专栏资料 | `content/columns/*.md` |
 | 修改全站颜色、字体、基础行为 | `app/styles/base.css` |
 | 修改页面背景和纸张卡片 | `app/styles/site-background.css` |
-| 修改某个页面或组件的布局 | 对应的 `components/*.tsx` 与 `components/*.css` |
+| 修改某个页面或组件的结构 | `components/*.tsx` |
+| 修改页面或组件的视觉样式 | `themes/spring/styles/components/*.css` |
 | 修改 Markdown 解析规则 | `lib/blog-data.ts` |
 | 修改专栏排序 | `lib/column-data.ts` |
+| 修改 Spring 主题资源与入口 | `themes/spring/` |
 
 不要手动编辑 `out/`、`.next/` 和 `tsconfig.tsbuildinfo`。它们都是构建产物。
 

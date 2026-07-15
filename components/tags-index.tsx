@@ -13,6 +13,7 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 function TagArticle({ post }: { post: Post }) {
   return (
@@ -80,7 +81,7 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
         </header>
 
         <section className="tags-hero" aria-labelledby="tags-title">
-          <Image src="/images/sakura-coast-hero.png" alt="樱花海岸与写作女孩" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
+          <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
           <div className="tags-hero-wash" aria-hidden="true" />
           <div className="tags-hero-copy">
             <span><Icon icon="solar:tag-linear" aria-hidden="true" />来自 Markdown</span>
