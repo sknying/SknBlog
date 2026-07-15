@@ -64,7 +64,7 @@ function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean
         <SafeImage src={post.image} alt={`${post.title} 封面`} sizes="(max-width: 760px) 84vw, 210px" />
       </div>
       <div className="column-detail-article-copy">
-        {featured ? <span className="column-detail-featured-mark">最新</span> : null}
+        {featured ? <span className="column-detail-featured-mark">推荐阅读</span> : null}
         <h3>{post.title}</h3>
         <p>{post.summary}</p>
         <div className="column-detail-article-tags">
@@ -154,7 +154,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
               <header>
                 <div>
                   <span>文章列表</span>
-                  <h2 id="column-articles-title">按更新时间排</h2>
+                  <h2 id="column-articles-title">按特定顺序排</h2>
                 </div>
                 <Link href={`/tags?tag=${encodeURIComponent(getPrimaryTag(primaryPost))}`}>看相关标签</Link>
               </header>

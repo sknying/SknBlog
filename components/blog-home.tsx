@@ -54,7 +54,9 @@ function HomeArticle({ post }: { post: Post }) {
       </div>
       <div className="sakura-post-copy">
         <div className="sakura-post-kicker">
-          <span>{getPrimaryTag(post)}</span>
+          {/* A column is the article's primary context. Only ungrouped posts
+              fall back to their first tag in this compact home-page label. */}
+          <span>{post.column ?? getPrimaryTag(post)}</span>
           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
         </div>
         <h3>{post.title}</h3>
