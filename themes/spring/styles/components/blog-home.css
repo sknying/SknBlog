@@ -179,11 +179,10 @@
 
 .sakura-disc {
   position: relative;
-  width: 100px;
+  width: 116px;
   aspect-ratio: 1;
   margin-bottom: 10px;
   overflow: hidden;
-  border: 8px solid var(--sakura-avatar-ring);
   border-radius: 50%;
   box-shadow: var(--sakura-avatar-shadow);
 }
@@ -678,11 +677,10 @@
 
 .sakura-profile-avatar {
   position: relative;
-  width: 82px;
-  height: 82px;
+  width: 104px;
+  height: 104px;
   margin-bottom: 12px;
   overflow: hidden;
-  border: 5px solid var(--sakura-paper-strong);
   border-radius: 50%;
   box-shadow: 0 8px 18px rgba(77, 105, 159, 0.18);
 }

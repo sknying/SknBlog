@@ -621,20 +621,6 @@
   font-weight: 400;
 }
 
-.archive-stat-art {
-  position: relative;
-  height: 100px;
-  margin-top: 15px;
-  overflow: hidden;
-  border-radius: 7px;
-  mask-image: linear-gradient(to bottom, transparent, #000 28%);
-}
-
-.archive-stat-art img {
-  object-fit: cover;
-  object-position: 66% 70%;
-}
-
 .archive-bars {
   display: flex;
   height: 150px;
@@ -1026,3 +1012,106 @@
 @media (max-width: 1180px) { .archive-year-posts a { grid-template-columns: 120px 112px minmax(0, 1fr) 36px; } .archive-year-posts a > span:not(.archive-post-cover) { display: none; } }
 @media (max-width: 980px) { .archive-year-posts a { grid-template-columns: 104px minmax(0, 1fr) 32px; min-height: 148px; } .archive-post-cover { width: 104px; height: 139px; } .archive-year-posts time { display: none; } }
 @media (max-width: 420px) { .archive-year-posts a { grid-template-columns: 84px minmax(0, 1fr) 30px; min-height: 120px; gap: 8px; } .archive-post-cover { width: 84px; height: 112px; } }
+
+/* Year selection stays horizontal; articles are grouped by month on one timeline. */
+.archive-years { padding: 22px 28px 24px; }
+.archive-years::before { display: none; }
+
+.archive-year-progress {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 28px;
+  padding: 3px 4px 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.archive-year-progress::-webkit-scrollbar { display: none; }
+
+.archive-year-progress::before {
+  position: absolute;
+  top: 27px;
+  right: 26px;
+  left: 26px;
+  height: 2px;
+  content: "";
+  background: linear-gradient(90deg, color-mix(in srgb, var(--archive-pink) 64%, var(--archive-line)), color-mix(in srgb, var(--archive-blue) 68%, var(--archive-line)));
+}
+
+.archive-year-progress button {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 94px;
+  min-height: 58px;
+  flex: 1 0 0;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  border: 0;
+  border-radius: 7px;
+  padding: 6px 12px;
+  color: var(--archive-muted);
+  background: color-mix(in srgb, var(--archive-paper-strong) 88%, transparent);
+  box-shadow: 0 5px 15px rgba(72, 102, 158, 0.08);
+  cursor: pointer;
+  transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.archive-year-progress button::before {
+  position: absolute;
+  top: 20px;
+  width: 12px;
+  height: 12px;
+  border: 3px solid var(--archive-paper-strong);
+  border-radius: 50%;
+  content: "";
+  background: var(--archive-muted);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--archive-muted) 35%, transparent);
+}
+
+.archive-year-progress button strong { padding-top: 22px; font-size: 15px; }
+.archive-year-progress button span { font-size: 10px; }
+
+.archive-year-progress button:hover,
+.archive-year-progress button.active {
+  color: var(--archive-blue-deep);
+  background: color-mix(in srgb, var(--archive-blue) 12%, var(--archive-paper-strong));
+  box-shadow: 0 8px 18px rgba(72, 102, 158, 0.15);
+  transform: translateY(-2px);
+}
+
+.archive-year-progress button.active::before { background: var(--archive-pink); box-shadow: 0 0 0 5px color-mix(in srgb, var(--archive-pink) 18%, transparent); }
+
+.archive-year { padding: 0; }
+.archive-year + .archive-year { border: 0; padding-top: 0; }
+.archive-year-heading { margin-bottom: 18px; }
+.archive-year-heading > span { display: none; }
+
+.archive-month-timeline { position: relative; display: grid; gap: 22px; padding-left: 34px; }
+.archive-month-timeline::before { position: absolute; top: 8px; bottom: 8px; left: 8px; width: 2px; content: ""; background: linear-gradient(var(--archive-pink), var(--archive-blue), color-mix(in srgb, var(--archive-blue) 12%, transparent)); }
+.archive-month-section { position: relative; }
+
+.archive-month-heading { position: relative; display: flex; min-height: 26px; align-items: center; gap: 9px; }
+.archive-month-heading > span { position: absolute; left: -33px; width: 16px; height: 16px; border: 3px solid var(--archive-paper-strong); border-radius: 50%; background: var(--archive-blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--archive-blue) 20%, transparent); }
+.archive-month-heading h3 { margin: 0; color: var(--archive-text); font-size: 16px; }
+.archive-month-heading p { margin: 0; color: var(--archive-muted); font-size: 11px; }
+.archive-month-section .archive-year-posts { margin-top: 10px; }
+
+@media (max-width: 680px) {
+  .archive-years { padding: 18px 16px 22px; }
+  .archive-year-progress { margin-bottom: 24px; padding-inline: 0; }
+  .archive-year-progress::before { right: 20px; left: 20px; }
+  .archive-year-progress button { min-width: 78px; min-height: 54px; padding-inline: 8px; }
+  .archive-year-progress button strong { font-size: 14px; }
+  .archive-month-timeline { padding-left: 28px; }
+  .archive-month-heading > span { left: -27px; }
+}
+
+@media (max-width: 420px) {
+  .archive-year-progress { gap: 7px; }
+  .archive-year-progress button { min-width: 70px; }
+  .archive-month-timeline { gap: 18px; padding-left: 24px; }
+  .archive-month-heading > span { left: -23px; width: 14px; height: 14px; }
+}

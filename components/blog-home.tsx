@@ -166,7 +166,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
           <aside className="sakura-right-rail" aria-label="博客侧栏">
             <section className="sakura-profile glass-panel" id="about">
               <div className="sakura-profile-avatar">
-                <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="88px" priority unoptimized />
+                <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="104px" priority unoptimized />
               </div>
               <h2>Sknying</h2>
               <p>写技术，也画界面。</p>
