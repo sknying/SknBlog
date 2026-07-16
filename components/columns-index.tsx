@@ -18,7 +18,7 @@ import { SPRING_ASSETS } from "@/themes/spring/theme";
 function ColumnCover({ group }: { group: ColumnGroup }) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) {
+  if (!group.coverImage || failed) {
     return (
       <span className="columns-cover-fallback">
         <Icon icon="solar:gallery-wide-linear" aria-hidden="true" />
@@ -53,7 +53,11 @@ function ColumnCard({ group }: { group: ColumnGroup }) {
         <h3>{group.name}</h3>
       </div>
       <footer className="columns-card-updated">
-        <time dateTime={group.updatedAt}>更新于 {getPostTimeLabel(group.latestPost).slice(0, 10)}</time>
+        {group.latestPost ? (
+          <time dateTime={group.updatedAt}>更新于 {getPostTimeLabel(group.latestPost).slice(0, 10)}</time>
+        ) : (
+          <span>暂无文章</span>
+        )}
       </footer>
     </article>
   );
@@ -62,7 +66,9 @@ function ColumnCard({ group }: { group: ColumnGroup }) {
 export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; columnDefinitions: ColumnDefinition[] }) {
   const groups = useMemo(() => getColumnGroups(posts, columnDefinitions), [columnDefinitions, posts]);
   const totalWords = groups.reduce((total, group) => total + group.totalWords, 0);
-  const latestGroups = groups.slice(0, 3);
+  const latestGroups = groups
+    .filter((group): group is ColumnGroup & { latestPost: Post } => group.latestPost !== null)
+    .slice(0, 3);
 
   return (
     <main className="columns-page">
@@ -130,7 +136,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
             <section className="columns-recent columns-panel">
               <h2><Icon icon="solar:clock-circle-linear" aria-hidden="true" />最近更新</h2>
               <div>
-                {latestGroups.map((group) => (
+                {latestGroups.length > 0 ? latestGroups.map((group) => (
                   <Link href={`/columns/${encodeURIComponent(group.slug)}`} key={group.slug}>
                     <span><ColumnCover group={group} /></span>
                     <div>
@@ -138,7 +144,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
                       <small>{getPostTimeLabel(group.latestPost).slice(0, 10)}</small>
                     </div>
                   </Link>
-                ))}
+                )) : <p className="columns-recent-empty">还没有文章更新。</p>}
               </div>
             </section>
 

@@ -26,14 +26,14 @@ function SafeImage({
   sizes,
   priority = false
 }: {
-  src: string;
+  src: string | null | undefined;
   alt: string;
   sizes: string;
   priority?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
 
-  if (failed) {
+  if (!src || failed) {
     return (
       <div className="column-detail-image-fallback" role="img" aria-label={alt}>
         <Icon icon="solar:gallery-wide-linear" aria-hidden="true" />
@@ -86,7 +86,7 @@ function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean
 export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
   const relatedColumns = columns.filter((item) => item.slug !== column.slug).slice(0, 4);
   const latestPosts = useMemo(() => sortPostsByDate(posts).slice(0, 4), [posts]);
-  const routeSteps = column.topTags.length > 0 ? column.topTags : ["开篇", "实践", "复盘"];
+  const routeSteps = column.topTags;
   const primaryPost = column.posts[0];
 
   return (
@@ -116,17 +116,17 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
           <div className="column-detail-main-column">
         <section className="column-detail-hero" aria-labelledby="column-detail-title">
           <div className="column-detail-hero-copy">
-            <span>{getPrimaryTag(primaryPost)}</span>
+            <span>{primaryPost ? getPrimaryTag(primaryPost) : "准备中"}</span>
             <h1 id="column-detail-title">{column.name}</h1>
             <p>{column.intro}</p>
-            <div>
+            {routeSteps.length > 0 ? <div>
               {routeSteps.slice(0, 3).map((tag) => (
                 <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>
                   <Icon icon="solar:tag-linear" aria-hidden="true" />
                   {tag}
                 </Link>
               ))}
-            </div>
+            </div> : null}
           </div>
           <figure className="column-detail-hero-portrait">
             <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
@@ -147,10 +147,15 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
                   <span>文章列表</span>
                   <h2 id="column-articles-title">按特定顺序排</h2>
                 </div>
-                <Link href={`/tags?tag=${encodeURIComponent(getPrimaryTag(primaryPost))}`}>看相关标签</Link>
+                {primaryPost ? <Link href={`/tags?tag=${encodeURIComponent(getPrimaryTag(primaryPost))}`}>看相关标签</Link> : null}
               </header>
               <div>
-                {column.posts.map((post, index) => <ArticleRow post={post} featured={index === 0} key={post.slug} />)}
+                {column.posts.length > 0 ? column.posts.map((post, index) => <ArticleRow post={post} featured={index === 0} key={post.slug} />) : (
+                  <div className="column-detail-empty">
+                    <Icon icon="solar:document-add-linear" aria-hidden="true" />
+                    <p>这个专栏还没有文章。</p>
+                  </div>
+                )}
               </div>
             </section>
           </div>
@@ -165,7 +170,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
 
             <section className="column-detail-panel column-detail-directory">
               <h2><Icon icon="solar:list-check-linear" aria-hidden="true" />系列目录</h2>
-              <ol>
+              {column.posts.length > 0 ? <ol>
                 {column.posts.map((post, index) => (
                   <li key={post.slug}>
                     <Link href={`/posts/${post.slug}`}>
@@ -175,7 +180,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
                     </Link>
                   </li>
                 ))}
-              </ol>
+              </ol> : <p className="column-detail-directory-empty">目录将在第一篇文章发布后出现。</p>}
             </section>
 
             <section className="column-detail-panel column-detail-latest">
