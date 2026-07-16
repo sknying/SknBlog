@@ -183,13 +183,19 @@
 @media (max-width: 700px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 132px; min-height: 250px; gap: 16px; padding: 24px 22px; } .columns-hero-copy { width: auto; padding: 0; } .columns-hero-portrait { width: 132px; height: 176px; } }
 @media (max-width: 420px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .columns-hero-portrait { width: 102px; height: 136px; } }
 
-/* Two-column column cards reserve enough room for a readable portrait cover and summary. */
-.columns-cover-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.columns-cover-card { grid-template-columns: 112px minmax(0, 1fr); grid-template-rows: auto auto auto; align-items: center; gap: 8px 12px; min-height: 164px; padding: 12px; overflow: visible; }
-.columns-cover-card .columns-card-cover { grid-row: 1 / 4; justify-self: start; width: 104px; height: 139px; border: 4px solid var(--columns-paper); border-radius: 7px; box-shadow: 0 9px 20px rgba(74, 105, 161, 0.18); transform: rotate(3deg); }
-.columns-cover-card .columns-card-copy, .columns-cover-card footer, .columns-cover-card .columns-card-link { grid-column: 2; }
+/* Column covers use a poster grid: cover first, compact metadata below it. */
+.columns-cover-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 3vw, 38px); }
+.columns-cover-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; gap: 12px; min-width: 0; padding: 0; overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.columns-cover-card:hover { border-color: transparent; box-shadow: none; transform: none; }
+.columns-cover-card .columns-card-cover { position: relative; grid-row: auto; width: 100%; height: auto; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid var(--columns-line); border-radius: 8px; box-shadow: 0 12px 24px rgba(74, 105, 161, 0.14); transform: none; }
+.columns-cover-card .columns-card-cover img { object-fit: cover; }
+.columns-cover-meta { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 28px 12px 10px; color: #fff; background: linear-gradient(0deg, rgba(22, 30, 43, 0.82), rgba(22, 30, 43, 0)); font-size: 12px; }
+.columns-cover-meta span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
+.columns-cover-meta svg { width: 17px; height: 17px; }
 .columns-cover-card .columns-card-copy { padding: 0; }
-.columns-cover-card footer, .columns-cover-card .columns-card-link { padding: 7px 0 0; border-top: 0; }
-.columns-cover-card .columns-card-link { justify-content: flex-start; min-height: auto; }
-@media (max-width: 700px) { .columns-cover-grid { grid-template-columns: minmax(0, 1fr); } .columns-cover-card { grid-template-columns: 102px minmax(0, 1fr); min-height: 152px; } .columns-cover-card .columns-card-cover { width: 94px; height: 125px; } }
-@media (max-width: 420px) { .columns-cover-card { grid-template-columns: 92px minmax(0, 1fr); min-height: 140px; } .columns-cover-card .columns-card-cover { width: 84px; height: 112px; } }
+.columns-cover-card .columns-card-copy h3 { font-size: 20px; line-height: 1.35; }
+.columns-cover-card .columns-card-copy :not(h3) { display: none; }
+.columns-cover-card .columns-card-updated { display: block; grid-column: auto; padding: 0; border: 0; color: var(--columns-muted); font-size: 12px; }
+.columns-cover-card .columns-card-updated time { color: inherit; }
+@media (max-width: 700px) { .columns-cover-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; } .columns-cover-card { gap: 8px; } .columns-cover-meta { justify-content: flex-end; padding: 20px 7px 7px; font-size: 10px; } .columns-cover-meta span:first-child { display: none; } .columns-cover-meta svg { width: 13px; height: 13px; } .columns-cover-card .columns-card-copy h3 { font-size: 13px; line-height: 1.4; } .columns-cover-card .columns-card-updated { font-size: 10px; white-space: nowrap; } }
+@media (max-width: 420px) { .columns-cover-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 7px; } .columns-cover-card .columns-card-copy h3 { font-size: 12px; } }

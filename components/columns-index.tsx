@@ -11,7 +11,7 @@ import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, getColumnGroups, type ColumnDefinition, type ColumnGroup } from "@/lib/column-data";
-import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
+import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
 import { SPRING_ASSETS } from "@/themes/spring/theme";
 
@@ -31,7 +31,7 @@ function ColumnCover({ group }: { group: ColumnGroup }) {
       src={group.coverImage}
       alt={`${group.name} 专栏封面`}
       fill
-      sizes="(max-width: 420px) 84px, (max-width: 700px) 94px, 104px"
+      sizes="(max-width: 700px) calc((100vw - 56px) / 3), 230px"
       unoptimized
       onError={() => setFailed(true)}
     />
@@ -44,20 +44,17 @@ function ColumnCard({ group }: { group: ColumnGroup }) {
       <Link className="columns-card-overlay" href={`/columns/${encodeURIComponent(group.slug)}`} aria-label={`打开 ${group.name} 专栏`} />
       <div className="columns-card-cover">
         <ColumnCover group={group} />
+        <div className="columns-cover-meta" aria-label="专栏统计">
+          <span><Icon icon="solar:text-linear" aria-hidden="true" />{formatCompactNumber(group.totalWords)} 字</span>
+          <span>{group.posts.length} 篇文章</span>
+        </div>
       </div>
       <div className="columns-card-copy">
         <h3>{group.name}</h3>
-        <p>{group.summary}</p>
-        <span>{group.topTags[0] ?? getPrimaryTag(group.latestPost)}</span>
       </div>
-      <footer>
-        <b>{group.posts.length} 篇文章</b>
-        <time dateTime={group.updatedAt}>{getPostTimeLabel(group.latestPost).slice(0, 10)} 更新</time>
+      <footer className="columns-card-updated">
+        <time dateTime={group.updatedAt}>更新于 {getPostTimeLabel(group.latestPost).slice(0, 10)}</time>
       </footer>
-      <span className="columns-card-link" aria-hidden="true">
-        进入专栏
-        <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-      </span>
     </article>
   );
 }

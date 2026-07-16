@@ -18,7 +18,7 @@ import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
 import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 // Keep the home page focused; the archive page contains the complete list.
-const RECENT_POST_LIMIT = 3;
+const RECENT_POST_LIMIT = 2;
 
 function PostCover({ post }: { post: Post }) {
   // `next/image` reports failures asynchronously, so use a small fallback
@@ -38,7 +38,7 @@ function PostCover({ post }: { post: Post }) {
       src={post.image}
       alt={`${post.title} 配图`}
       fill
-      sizes="(max-width: 420px) 84px, (max-width: 700px) 94px, 104px"
+      sizes="(max-width: 420px) 100px, (max-width: 700px) 112px, 150px"
       unoptimized
       onError={() => setFailed(true)}
     />

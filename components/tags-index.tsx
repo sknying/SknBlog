@@ -20,7 +20,7 @@ function TagArticle({ post }: { post: Post }) {
     <article className="tag-result-card">
       <Link className="tag-result-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
       <div className="tag-result-cover">
-        <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 74px, (max-width: 700px) 78px, 90px" unoptimized />
+        <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 100px, (max-width: 700px) 112px, 150px" unoptimized />
       </div>
       <div>
         <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>

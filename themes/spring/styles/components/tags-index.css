@@ -62,7 +62,18 @@
 @media (max-width: 700px) { .tags-hero { grid-template-columns: minmax(0, 1fr) 132px; min-height: 240px; gap: 16px; padding: 24px 22px; } .tags-hero-copy { width: auto; padding: 0; } .tags-hero-portrait { width: 132px; height: 176px; } }
 @media (max-width: 420px) { .tags-hero { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .tags-hero-portrait { width: 102px; height: 136px; } }
 
-.tag-result-card { grid-template-columns: 98px minmax(0, 1fr) 36px; min-height: 142px; overflow: visible; }
-.tag-result-cover { justify-self: start; width: 90px; height: 120px; border: 4px solid var(--tags-paper); border-radius: 7px; box-shadow: 0 9px 20px rgba(74, 105, 161, 0.18); transform: rotate(3deg); }
-@media (max-width: 700px) { .tag-result-card { grid-template-columns: 86px minmax(0, 1fr); min-height: 124px; } .tag-result-cover { width: 78px; height: 104px; } }
-@media (max-width: 420px) { .tag-result-card { grid-template-columns: 82px minmax(0, 1fr); min-height: 116px; } .tag-result-cover { width: 74px; height: 99px; } }
+.tag-result-card { grid-template-columns: 158px minmax(0, 1fr) 36px; min-height: 220px; overflow: visible; }
+.tag-result-cover { justify-self: start; width: 150px; height: 200px; border: 4px solid var(--tags-paper); border-radius: 7px; box-shadow: 0 9px 20px rgba(74, 105, 161, 0.18); transform: rotate(3deg); }
+@media (max-width: 700px) { .tag-result-card { grid-template-columns: 120px minmax(0, 1fr); min-height: 170px; } .tag-result-cover { width: 112px; height: 149px; } }
+@media (max-width: 420px) { .tag-result-card { grid-template-columns: 108px minmax(0, 1fr); min-height: 154px; } .tag-result-cover { width: 100px; height: 133px; } }
+
+/* Match the shared mobile sidebar used by the other pages. */
+@media (max-width: 980px) {
+  .tags-page > .sakura-sidebar { gap: clamp(4px, 1.5vw, 18px); overflow: hidden; padding-inline: clamp(8px, 2vw, 18px); }
+  .tags-page .sakura-nav { display: grid; width: 100%; min-width: 0; flex: 1 1 auto; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; overflow: hidden; }
+  .tags-page .sakura-nav :where(a, button) { width: 100%; min-width: 0; justify-content: center; gap: clamp(4px, 1vw, 10px); padding-inline: clamp(4px, 1.3vw, 12px); white-space: nowrap; }
+}
+@media (max-width: 420px) {
+  .tags-page .sakura-nav :where(a, button) { min-width: 52px; padding: 0 14px; }
+  .tags-page .sakura-nav :where(a, button) span { display: none; }
+}

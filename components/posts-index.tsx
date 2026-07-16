@@ -113,7 +113,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
                       {displayedPosts.map((post) => (
                         <Link href={`/posts/${post.slug}`} key={post.slug}>
                           <span className="archive-post-cover">
-                            <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 48px, (max-width: 980px) 54px, 62px" unoptimized />
+                            <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 84px, (max-width: 980px) 104px, 120px" unoptimized />
                           </span>
                           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
                           <strong>{post.title}</strong>
