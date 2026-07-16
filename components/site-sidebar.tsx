@@ -54,7 +54,7 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
 
       <div className="sakura-now-card" aria-label="当前状态">
         <div className="sakura-disc">
-          <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="112px" priority unoptimized />
+          <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="116px" priority unoptimized />
         </div>
         <span>春风与代码</span>
         <small>今天也在写</small>

@@ -52,10 +52,6 @@
   background-color: rgba(17, 24, 42, 0.82);
 }
 
-:root[data-theme="dark"] .archive-banner > div:first-of-type {
-  background: linear-gradient(90deg, rgba(18, 27, 48, 0.93), rgba(18, 27, 48, 0.55) 38%, rgba(18, 27, 48, 0.08) 68%);
-}
-
 :root[data-theme="dark"] .archive-months button,
 :root[data-theme="dark"] .archive-tag-dialog,
 :root[data-theme="dark"] .archive-tag-list > span {
@@ -359,14 +355,6 @@
   object-position: center 48%;
 }
 
-.archive-banner > div:first-of-type {
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(255, 252, 240, 0.91) 0%, rgba(250, 248, 235, 0.58) 35%, transparent 64%),
-    linear-gradient(0deg, rgba(42, 67, 108, 0.08), transparent 42%);
-}
-
 .archive-banner-copy {
   position: relative;
   z-index: 1;
@@ -408,6 +396,20 @@
   max-width: 1260px;
   margin: 18px auto 0;
 }
+
+/* Desktop mirrors the homepage: the archive banner stays in the main column
+   while the insights rail begins beside it instead of below it. */
+.archive-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 18px;
+  max-width: 1260px;
+  margin: 0 auto;
+}
+
+.archive-main-column { display: grid; min-width: 0; gap: 18px; }
+.archive-home-grid .archive-banner { max-width: none; margin: 0; }
 
 .archive-years {
   position: relative;
@@ -617,20 +619,6 @@
   color: var(--archive-blue-deep);
   font-size: 13px;
   font-weight: 400;
-}
-
-.archive-stat-art {
-  position: relative;
-  height: 100px;
-  margin-top: 15px;
-  overflow: hidden;
-  border-radius: 7px;
-  mask-image: linear-gradient(to bottom, transparent, #000 28%);
-}
-
-.archive-stat-art img {
-  object-fit: cover;
-  object-position: 66% 70%;
 }
 
 .archive-bars {
@@ -899,6 +887,7 @@
   .archive-page { grid-template-columns: 184px minmax(0, 1fr); }
   .archive-side { padding-inline: 15px; }
   .archive-content-grid { grid-template-columns: minmax(0, 1fr) 242px; }
+  .archive-home-grid { grid-template-columns: minmax(0, 1fr) 242px; }
   .archive-months { grid-template-columns: repeat(4, minmax(78px, 1fr)); }
   .archive-year-posts a { grid-template-columns: 112px minmax(0, 1fr) 36px; }
   .archive-year-posts a > span { display: none; }
@@ -907,6 +896,8 @@
 @media (max-width: 980px) {
   .archive-page { display: block; }
   .archive-content-grid { grid-template-columns: minmax(0, 1fr); }
+  .archive-home-grid { display: block; }
+  .archive-main-column { gap: 18px; }
   .archive-insights {
     position: static;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -920,9 +911,8 @@
   .archive-toolbar-icons a { display: none; }
   .archive-banner { min-height: 280px; }
   .archive-banner > img { object-position: 62% center; }
-  .archive-banner > div:first-of-type { background: linear-gradient(90deg, rgba(255, 252, 240, 0.94), rgba(250, 248, 235, 0.68) 68%, rgba(250, 248, 235, 0.18)); }
   .archive-banner-copy { width: 82%; padding: 58px 22px 32px; }
-  .archive-banner-copy h1 { font-size: 38px; }
+  .archive-banner-copy h1 { font-size: 36px; }
   .archive-years { padding: 16px 14px 20px 27px; }
   .archive-years::before { left: 22px; }
   .archive-year { padding-left: 23px; }
@@ -939,7 +929,7 @@
   .archive-search-content > span:first-of-type ~ span { display: none; }
   .archive-months { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .archive-banner-copy { width: 92%; }
-  .archive-banner-copy h1 { font-size: 34px; }
+  .archive-banner-copy h1 { font-size: 32px; }
   .archive-tag-dialog { padding: 17px; }
 }
 
@@ -974,9 +964,6 @@
     background-color: rgba(17, 24, 42, 0.82);
   }
 
-  :root:not([data-theme]) .archive-banner > div:first-of-type {
-    background: linear-gradient(90deg, rgba(18, 27, 48, 0.93), rgba(18, 27, 48, 0.55) 38%, rgba(18, 27, 48, 0.08) 68%);
-  }
 
   :root:not([data-theme]) .archive-months button,
   :root:not([data-theme]) .archive-tag-dialog,
@@ -1008,4 +995,129 @@
       radial-gradient(circle at 100% 100%, rgba(89, 129, 202, 0.2), transparent 10rem),
       var(--archive-paper);
   }
+}
+
+/* The archive heading uses a portrait frame instead of a background image. */
+.archive-banner { display: grid; grid-template-columns: minmax(0, 1fr) 220px; min-height: 300px; align-items: center; gap: clamp(18px, 4vw, 42px); padding: 30px clamp(24px, 5vw, 54px); background: color-mix(in srgb, var(--archive-paper) 90%, transparent); }
+.archive-banner.archive-banner > .archive-banner-copy { position: relative; inset: auto; width: auto; padding: 0; background: none; }
+.archive-banner-portrait { position: relative; justify-self: end; width: 220px; height: 293px; margin: 0; overflow: hidden; border: 5px solid var(--archive-paper-strong); border-radius: 8px; transform: rotate(3deg); box-shadow: 0 14px 28px rgba(72, 102, 158, 0.2); }
+.archive-banner-portrait img { object-fit: cover; object-position: 66% center; }
+@media (max-width: 700px) { .archive-banner { grid-template-columns: minmax(0, 1fr) 132px; min-height: 250px; gap: 16px; padding: 24px 22px; } .archive-banner.archive-banner > .archive-banner-copy { width: auto; padding: 0; } .archive-banner-portrait { width: 132px; height: 176px; } }
+@media (max-width: 420px) { .archive-banner { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .archive-banner-portrait { width: 102px; height: 136px; } }
+
+/* Keep the archive dense while giving every article a consistent portrait cover. */
+.archive-year-posts a { grid-template-columns: 120px 120px minmax(0, 1fr) auto 36px; min-height: 176px; }
+.archive-post-cover { position: relative; width: 120px; height: 160px; overflow: hidden; border: 4px solid var(--archive-paper-strong); border-radius: 7px; box-shadow: 0 9px 20px rgba(72, 102, 158, 0.18); transform: rotate(3deg); }
+.archive-post-cover img { object-fit: cover; }
+@media (max-width: 1180px) { .archive-year-posts a { grid-template-columns: 120px 112px minmax(0, 1fr) 36px; } .archive-year-posts a > span:not(.archive-post-cover) { display: none; } }
+@media (max-width: 980px) { .archive-year-posts a { grid-template-columns: 104px minmax(0, 1fr) 32px; grid-template-rows: minmax(0, 1fr) auto; min-height: 148px; } .archive-year-posts a > .archive-post-cover { display: block; grid-row: 1 / 3; } .archive-post-cover { width: 104px; height: 139px; } .archive-year-posts time { display: block; grid-column: 2; grid-row: 2; } .archive-year-posts strong { grid-column: 2; grid-row: 1; } .archive-year-posts a > svg { grid-column: 3; grid-row: 1 / 3; } }
+@media (max-width: 420px) { .archive-year-posts a { grid-template-columns: 84px minmax(0, 1fr) 30px; min-height: 120px; gap: 8px; } .archive-post-cover { width: 84px; height: 112px; } }
+
+/* Year selection stays horizontal; articles are grouped by month on one timeline. */
+.archive-years { padding: 22px 28px 24px; }
+.archive-years::before { display: none; }
+
+.archive-year-progress {
+  position: relative;
+  display: grid;
+  gap: 0;
+  margin-bottom: 28px;
+  padding: 0 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.archive-year-progress::-webkit-scrollbar { display: none; }
+
+.archive-year-progress::before {
+  position: absolute;
+  top: 29px;
+  right: 26px;
+  left: 26px;
+  height: 2px;
+  content: "";
+  background: linear-gradient(90deg, color-mix(in srgb, var(--archive-pink) 64%, var(--archive-line)), color-mix(in srgb, var(--archive-blue) 68%, var(--archive-line)));
+}
+
+.archive-year-progress-item {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 72px;
+  justify-self: center;
+  place-items: center;
+  gap: 5px;
+}
+
+.archive-year-progress-item > span {
+  color: var(--archive-text);
+  font-size: 14px;
+}
+
+.archive-year-progress button {
+  display: grid;
+  min-width: 44px;
+  min-height: 39px;
+  place-items: center;
+  align-content: start;
+  gap: 5px;
+  border: 0;
+  border-radius: 5px;
+  padding: 0 5px;
+  color: var(--archive-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.archive-year-progress button i {
+  width: 12px;
+  height: 12px;
+  border: 3px solid var(--archive-paper-strong);
+  border-radius: 50%;
+  background: var(--archive-muted);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--archive-muted) 35%, transparent);
+}
+
+.archive-year-progress button b { font-size: 10px; font-weight: 400; }
+
+.archive-year-progress button:hover,
+.archive-year-progress button.active {
+  color: var(--archive-blue-deep);
+  transform: translateY(-2px);
+}
+
+.archive-year-progress button.active i { background: var(--archive-pink); box-shadow: 0 0 0 5px color-mix(in srgb, var(--archive-pink) 18%, transparent); }
+
+.archive-year { padding: 0; }
+.archive-year + .archive-year { border: 0; padding-top: 0; }
+.archive-year-heading { margin-bottom: 18px; }
+.archive-year-heading > span { display: none; }
+
+.archive-month-timeline { position: relative; display: grid; gap: 22px; padding-left: 34px; }
+.archive-month-timeline::before { position: absolute; top: 8px; bottom: 8px; left: 8px; width: 2px; content: ""; background: linear-gradient(var(--archive-pink), var(--archive-blue), color-mix(in srgb, var(--archive-blue) 12%, transparent)); }
+.archive-month-section { position: relative; }
+
+.archive-month-heading { position: relative; display: flex; min-height: 26px; align-items: center; gap: 9px; }
+.archive-month-heading > span { position: absolute; left: -33px; width: 16px; height: 16px; border: 3px solid var(--archive-paper-strong); border-radius: 50%; background: var(--archive-blue); box-shadow: 0 0 0 3px color-mix(in srgb, var(--archive-blue) 20%, transparent); }
+.archive-month-heading h3 { margin: 0; color: var(--archive-text); font-size: 16px; }
+.archive-month-heading p { margin: 0; color: var(--archive-muted); font-size: 11px; }
+.archive-month-section .archive-year-posts { margin-top: 10px; }
+
+@media (max-width: 680px) {
+  .archive-years { padding: 18px 16px 22px; }
+  .archive-year-progress { margin-bottom: 24px; padding-inline: 0; }
+  .archive-year-progress::before { right: 20px; left: 20px; }
+  .archive-year-progress-item { min-width: 64px; }
+  .archive-year-progress-item > span { font-size: 13px; }
+  .archive-month-timeline { padding-left: 28px; }
+  .archive-month-heading > span { left: -27px; }
+}
+
+@media (max-width: 420px) {
+  .archive-year-progress { gap: 7px; }
+  .archive-year-progress-item { min-width: 58px; }
+  .archive-year-progress button { min-width: 40px; }
+  .archive-month-timeline { gap: 18px; padding-left: 24px; }
+  .archive-month-heading > span { left: -23px; width: 14px; height: 14px; }
 }

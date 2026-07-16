@@ -2,14 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
@@ -31,42 +30,31 @@ function formatCharacterCount(value: number) {
 }
 
 export function PostsIndex({ posts }: { posts: Post[] }) {
-  const searchParams = useSearchParams();
-  const initialQuery = searchParams.get("q") ?? "";
   const taggedPosts = posts;
-  const [draftQuery, setDraftQuery] = useState(initialQuery);
-  const [committedQuery, setCommittedQuery] = useState(initialQuery);
-  const [selectedMonth, setSelectedMonth] = useState("");
+  const [selectedYear, setSelectedYear] = useState<string | null>(null);
   const [randomIndex, setRandomIndex] = useState(0);
-
-  useEffect(() => {
-    setDraftQuery(initialQuery);
-    setCommittedQuery(initialQuery);
-    setSelectedMonth("");
-  }, [initialQuery]);
-
-  const searchedPosts = useMemo(() => {
-    const query = committedQuery.trim().toLocaleLowerCase("zh-CN");
-
-    return taggedPosts
-      .filter((post) => {
-        return !query || post.title.toLocaleLowerCase("zh-CN").includes(query);
-      })
-      .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
-  }, [committedQuery, taggedPosts]);
 
   const years = useMemo(() => {
     const sourceYears = Array.from(new Set(taggedPosts.map((post) => getYearMonth(post).year))).sort((a, b) => b.localeCompare(a));
 
     return sourceYears.map((year) => {
-      const yearPosts = searchedPosts.filter((post) => getYearMonth(post).year === year);
+      const yearPosts = taggedPosts.filter((post) => getYearMonth(post).year === year);
       return {
         year,
         posts: yearPosts,
         monthCounts: Object.fromEntries(MONTH_LABELS.map((month) => [month, yearPosts.filter((post) => getYearMonth(post).month === month).length]))
       };
     });
-  }, [searchedPosts, taggedPosts]);
+  }, [taggedPosts]);
+
+  const activeYear = years.find((group) => group.year === selectedYear) ?? years[0];
+  const activeMonths = activeYear
+    ? MONTH_LABELS.map((month) => ({
+      month,
+      posts: activeYear.posts.filter((post) => getYearMonth(post).month === month)
+    })).filter((group) => group.posts.length > 0)
+    : [];
+  const yearProgress = [...years].reverse();
 
   const totalCharacters = useMemo(() => taggedPosts.reduce((sum, post) => sum + countCharacters(post), 0), [taggedPosts]);
   const newestPost = [...taggedPosts].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))[0];
@@ -85,15 +73,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
 
       <div className="archive-workspace">
         <header className="archive-toolbar">
-          <SiteSearch
-            posts={taggedPosts}
-            value={draftQuery}
-            onValueChange={setDraftQuery}
-            onSearch={(value) => {
-              setCommittedQuery(value);
-              setSelectedMonth("");
-            }}
-          />
+          <SiteSearch posts={taggedPosts} />
           <div className="archive-toolbar-icons">
             <ThemeToggle />
             <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
@@ -101,58 +81,71 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
           </div>
         </header>
 
+        <div className="archive-home-grid">
+          <div className="archive-main-column">
         <section className="archive-banner" aria-labelledby="archive-title">
-          <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
-          <div aria-hidden="true" />
           <div className="archive-banner-copy">
             <span>从第一篇开始</span>
             <h1 id="archive-title">文章归档</h1>
             <p><Icon icon="solar:stars-line-linear" aria-hidden="true" />记录每一刻的思考</p>
           </div>
-        </section>
+          <figure className="archive-banner-portrait">
+            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
+          </figure>
+          </section>
 
-        <div className="archive-content-grid">
           <section className="archive-years archive-panel" id="years" aria-label="按年份浏览文章">
-            {years.map((group) => {
-              const displayedPosts = selectedMonth.startsWith(`${group.year}-`)
-                ? group.posts.filter((post) => getYearMonth(post).month === selectedMonth.slice(-2))
-                : selectedMonth ? [] : group.posts;
+            <div className="archive-year-progress" aria-label="年份选择" style={{ gridTemplateColumns: `repeat(${Math.max(yearProgress.length, 1)}, minmax(72px, 1fr))` }}>
+              {yearProgress.map((group) => {
+                const isActive = group.year === activeYear?.year;
 
-              return (
-                <section className="archive-year" key={group.year}>
-                  <div className="archive-year-heading">
-                    <span aria-hidden="true" />
-                    <div><h2>{group.year} 年</h2><p>共 {group.posts.length} 篇文章</p></div>
+                return (
+                  <div className="archive-year-progress-item" key={group.year}>
+                    <span>{group.year} 年</span>
+                    <button className={isActive ? "active" : ""} type="button" onClick={() => setSelectedYear(group.year)} aria-pressed={isActive} aria-label={`查看 ${group.year} 年的 ${group.posts.length} 篇文章`}>
+                      <i aria-hidden="true" />
+                      <b>{group.posts.length} 篇</b>
+                    </button>
                   </div>
-                  <div className="archive-months">
-                    {MONTH_LABELS.map((month) => {
-                      const key = `${group.year}-${month}`;
-                      const count = group.monthCounts[month] ?? 0;
-                      return (
-                        <button className={selectedMonth === key ? "active" : ""} type="button" key={key} disabled={count === 0} onClick={() => setSelectedMonth((current) => current === key ? "" : key)} aria-pressed={selectedMonth === key}>
-                          <strong>{month} 月</strong><span>{count} 篇文章</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                  {displayedPosts.length > 0 ? (
-                    <div className="archive-year-posts">
-                      {displayedPosts.map((post) => (
-                        <Link href={`/posts/${post.slug}`} key={post.slug}>
-                          <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
-                          <strong>{post.title}</strong>
-                          <span>{post.tags.slice(0, 3).join(" · ")}</span>
-                          <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
-                        </Link>
-                      ))}
-                    </div>
-                  ) : null}
-                </section>
-              );
-            })}
-            {searchedPosts.length === 0 ? <div className="archive-no-results" role="status"><Icon icon="solar:close-circle-linear" aria-hidden="true" />未查到文章</div> : null}
+                );
+              })}
+            </div>
+
+            {activeYear ? (
+              <section className="archive-year" key={activeYear.year}>
+                <div className="archive-year-heading">
+                  <div><h2>{activeYear.year} 年</h2><p>共 {activeYear.posts.length} 篇文章</p></div>
+                </div>
+
+                <div className="archive-month-timeline" aria-label={`${activeYear.year} 年文章月份时间线`}>
+                  {activeMonths.map((monthGroup) => (
+                    <section className="archive-month-section" key={monthGroup.month}>
+                      <div className="archive-month-heading">
+                        <span aria-hidden="true" />
+                        <h3>{monthGroup.month} 月</h3>
+                        <p>{monthGroup.posts.length} 篇文章</p>
+                      </div>
+                      <div className="archive-year-posts">
+                        {monthGroup.posts.map((post) => (
+                          <Link href={`/posts/${post.slug}`} key={post.slug}>
+                            <span className="archive-post-cover">
+                              <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 84px, (max-width: 980px) 104px, 120px" unoptimized />
+                            </span>
+                            <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
+                            <strong>{post.title}</strong>
+                            <span>{post.tags.slice(0, 3).join(" · ")}</span>
+                            <Icon icon="solar:arrow-right-linear" aria-hidden="true" />
+                          </Link>
+                        ))}
+                      </div>
+                    </section>
+                  ))}
+                </div>
+              </section>
+            ) : <p className="archive-no-results">还没有可以归档的文章。</p>}
             <p className="archive-year-quote"><Icon icon="solar:stars-line-linear" aria-hidden="true" />时光会走，文字留下。</p>
           </section>
+          </div>
 
           <aside className="archive-insights" id="archive-stats">
             <section className="archive-stats archive-panel">
@@ -163,7 +156,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
                 <div><dt><Icon icon="solar:clock-circle-linear" aria-hidden="true" />运行天数</dt><dd>{runningDays} 天</dd></div>
                 <div><dt><Icon icon="solar:calendar-linear" aria-hidden="true" />最后更新</dt><dd>{newestPost ? getPostTimeLabel(newestPost).slice(0, 10) : "暂无"}</dd></div>
               </dl>
-              <div className="archive-stat-art"><Image src={SPRING_ASSETS.hero} alt="樱花海岸插画局部" fill sizes="220px" /></div>
             </section>
 
             <section className="archive-trend archive-panel">

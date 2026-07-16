@@ -243,7 +243,7 @@
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  margin-top: 20px;
+  margin-bottom: 20px;
   overflow: hidden;
   border: 1px solid var(--article-line);
   border-radius: 8px;
@@ -456,6 +456,11 @@
   .article-lead-quote { padding-inline: 20px; }
   .article-content > p { font-size: 15px; }
 }
+
+/* The article's own cover is deliberately larger but follows the same framed portrait language. */
+.article-intro { display: grid; grid-template-columns: 300px minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 42px); }
+.article-cover { width: 300px; margin: 0; border: 5px solid var(--article-paper-strong); border-radius: 8px; aspect-ratio: 3 / 4; box-shadow: 0 16px 32px rgba(74, 105, 161, 0.2); transform: rotate(3deg); }
+@media (max-width: 680px) { .article-intro { grid-template-columns: minmax(0, 1fr); gap: 22px; } .article-cover { width: min(230px, 72vw); margin-inline: auto; aspect-ratio: 3 / 4; } }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme]) .article-page {

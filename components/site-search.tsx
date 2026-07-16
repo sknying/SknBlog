@@ -4,6 +4,7 @@
 // Markdown parsing in server-only `lib/` modules instead of this component.
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import type { FormEvent, KeyboardEvent } from "react";
 import { useMemo, useRef, useState } from "react";
 import { Icon } from "@/components/local-icon";
@@ -31,6 +32,8 @@ export function SiteSearch({
   const [internalValue, setInternalValue] = useState(defaultValue);
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+  const pathname = usePathname();
   const query = value ?? internalValue;
   const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
   // Only re-filter the post list when the normalized query changes, not when
@@ -53,10 +56,22 @@ export function SiteSearch({
   }
 
   function submitSearch(event: FormEvent<HTMLFormElement>) {
-    if (!onSearch) return;
     event.preventDefault();
-    onSearch(query);
     setIsFocused(false);
+
+    if (onSearch) {
+      // Archive pages can consume the confirmed query locally without a route
+      // change. Typing alone deliberately does not call this callback.
+      onSearch(query);
+      return;
+    }
+
+    const trimmedQuery = query.trim();
+    const targetUrl = trimmedQuery ? `/search?q=${encodeURIComponent(trimmedQuery)}` : "/search";
+
+    // Client navigation preserves the root layout, so an empty home search
+    // shows only the pink navigation progress bar instead of the site loader.
+    if (`${pathname}${window.location.search}` !== targetUrl) router.push(targetUrl);
   }
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
@@ -102,7 +117,7 @@ export function SiteSearch({
         if (!event.currentTarget.contains(event.relatedTarget)) setIsFocused(false);
       }}
     >
-      <form className="site-search" action="/search" onSubmit={submitSearch} role="search" autoComplete="off">
+      <form className="site-search" onSubmit={submitSearch} role="search" autoComplete="off">
         <Icon icon="solar:magnifer-linear" aria-hidden="true" />
         <div className="site-search-content">
           <input

@@ -71,6 +71,8 @@
   --accent-2: #648ee4;
   --danger: #d94a62;
   --shadow: 0 16px 44px rgba(74, 105, 161, 0.14);
+  --page-glow-left: rgba(180, 214, 255, 0.66);
+  --page-glow-right: rgba(255, 202, 218, 0.5);
   --code-bg: #f8f3df;
   --code-header: #eee7cf;
   --code-text: #3d4350;
@@ -101,6 +103,8 @@
   --accent-2: #91b4ff;
   --danger: #ff728a;
   --shadow: 0 18px 52px rgba(4, 9, 22, 0.42);
+  --page-glow-left: rgba(70, 98, 155, 0.22);
+  --page-glow-right: rgba(132, 70, 102, 0.16);
   --code-bg: #24283b;
   --code-header: #1f2335;
   --code-text: #c0caf5;
@@ -130,6 +134,8 @@
     --accent-2: #91b4ff;
     --danger: #ff728a;
     --shadow: 0 18px 52px rgba(4, 9, 22, 0.42);
+    --page-glow-left: rgba(70, 98, 155, 0.22);
+    --page-glow-right: rgba(132, 70, 102, 0.16);
     --code-bg: #24283b;
     --code-header: #1f2335;
     --code-text: #c0caf5;
@@ -150,6 +156,7 @@
 }
 
 html {
+  background: var(--bg-deep);
   scroll-behavior: smooth;
   scrollbar-color: color-mix(in srgb, var(--accent-2) 46%, transparent) transparent;
   scrollbar-width: thin;
@@ -193,9 +200,10 @@ html::-webkit-scrollbar-thumb:hover {
 body {
   margin: 0;
   color: var(--text);
+  background-color: var(--bg-deep);
   background:
-    radial-gradient(circle at 16% 12%, rgba(180, 214, 255, 0.66), transparent 30rem),
-    radial-gradient(circle at 86% 8%, rgba(255, 202, 218, 0.5), transparent 26rem),
+    radial-gradient(circle at 16% 12%, var(--page-glow-left), transparent 30rem),
+    radial-gradient(circle at 86% 8%, var(--page-glow-right), transparent 26rem),
     linear-gradient(135deg, var(--surface-strong) 0%, var(--bg) 52%, var(--bg-deep) 100%);
   font-family: var(--font-body), system-ui, sans-serif;
   min-height: 100dvh;

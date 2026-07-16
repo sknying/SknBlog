@@ -1,6 +1,7 @@
 # SknBlog
 
 一个以 Markdown 为内容源的静态个人博客。站点使用暖色纸张、半透明卡片与樱花粒子背景，支持浅色和深色模式。
+网页地址为https://www.sknblog.top
 
 ## 功能
 
