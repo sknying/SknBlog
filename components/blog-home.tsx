@@ -125,7 +125,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
                 </div>
               </div>
               <figure className="sakura-hero-portrait">
-                <Image src={SPRING_ASSETS.hero} alt="樱花树下眺望海岸的银发女孩" fill sizes="(max-width: 700px) 118px, 180px" priority />
+                <Image src={SPRING_ASSETS.hero} alt="樱花树下眺望海岸的银发女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
               </figure>
             </section>
 

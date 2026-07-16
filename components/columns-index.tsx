@@ -97,7 +97,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
             </div>
           </div>
           <figure className="columns-hero-portrait">
-            <Image src={SPRING_ASSETS.hero} alt="樱花窗边的写作桌" fill sizes="(max-width: 700px) 118px, 180px" priority />
+            <Image src={SPRING_ASSETS.hero} alt="樱花窗边的写作桌" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
           </figure>
         </section>
 

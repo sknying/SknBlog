@@ -55,9 +55,9 @@
 @media (prefers-reduced-motion: reduce) { .tags-page > .sakura-sidebar, .tags-toolbar, .tags-hero, .tags-main > *, .tags-rail > * { animation: none; }.tags-page * { scroll-behavior: auto; transition-duration: 0.01ms !important; } }
 
 /* The tag heading no longer needs a background image or contrast wash. */
-.tags-hero { display: grid; grid-template-columns: minmax(0, 1fr) 180px; min-height: 280px; align-items: center; gap: clamp(18px, 4vw, 42px); padding: 30px clamp(24px, 5vw, 50px); background: color-mix(in srgb, var(--tags-paper) 90%, transparent); }
+.tags-hero { display: grid; grid-template-columns: minmax(0, 1fr) 220px; min-height: 280px; align-items: center; gap: clamp(18px, 4vw, 42px); padding: 30px clamp(24px, 5vw, 50px); background: color-mix(in srgb, var(--tags-paper) 90%, transparent); }
 .tags-hero-copy { width: auto; padding: 0; }
-.tags-hero-portrait { position: relative; justify-self: end; width: 180px; height: 240px; margin: 0; overflow: hidden; border: 5px solid var(--tags-paper-strong); border-radius: 8px; transform: rotate(-3deg); box-shadow: 0 14px 28px rgba(74, 105, 161, 0.2); }
+.tags-hero-portrait { position: relative; justify-self: end; width: 220px; height: 293px; margin: 0; overflow: hidden; border: 5px solid var(--tags-paper-strong); border-radius: 8px; transform: rotate(3deg); box-shadow: 0 14px 28px rgba(74, 105, 161, 0.2); }
 .tags-hero-portrait img { object-fit: cover; object-position: 66% center; }
-@media (max-width: 700px) { .tags-hero { grid-template-columns: minmax(0, 1fr) 118px; min-height: 240px; gap: 16px; padding: 24px 22px; } .tags-hero-copy { width: auto; padding: 0; } .tags-hero-portrait { width: 118px; height: 158px; } }
-@media (max-width: 420px) { .tags-hero { grid-template-columns: minmax(0, 1fr) 92px; padding-inline: 18px; } .tags-hero-portrait { width: 92px; height: 123px; } }
+@media (max-width: 700px) { .tags-hero { grid-template-columns: minmax(0, 1fr) 132px; min-height: 240px; gap: 16px; padding: 24px 22px; } .tags-hero-copy { width: auto; padding: 0; } .tags-hero-portrait { width: 132px; height: 176px; } }
+@media (max-width: 420px) { .tags-hero { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .tags-hero-portrait { width: 102px; height: 136px; } }

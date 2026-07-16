@@ -91,7 +91,7 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
             <p>多选时取交集。</p>
           </div>
           <figure className="tags-hero-portrait">
-            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 700px) 118px, 180px" priority />
+            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
           </figure>
         </section>
 

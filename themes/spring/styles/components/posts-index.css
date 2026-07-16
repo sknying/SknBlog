@@ -1028,9 +1028,9 @@
 }
 
 /* The archive heading uses a portrait frame instead of a background image. */
-.archive-banner { display: grid; grid-template-columns: minmax(0, 1fr) 180px; min-height: 300px; align-items: center; gap: clamp(18px, 4vw, 42px); padding: 30px clamp(24px, 5vw, 54px); background: color-mix(in srgb, var(--archive-paper) 90%, transparent); }
+.archive-banner { display: grid; grid-template-columns: minmax(0, 1fr) 220px; min-height: 300px; align-items: center; gap: clamp(18px, 4vw, 42px); padding: 30px clamp(24px, 5vw, 54px); background: color-mix(in srgb, var(--archive-paper) 90%, transparent); }
 .archive-banner.archive-banner > .archive-banner-copy { position: relative; inset: auto; width: auto; padding: 0; background: none; }
-.archive-banner-portrait { position: relative; justify-self: end; width: 180px; height: 240px; margin: 0; overflow: hidden; border: 5px solid var(--archive-paper-strong); border-radius: 8px; transform: rotate(-3deg); box-shadow: 0 14px 28px rgba(72, 102, 158, 0.2); }
+.archive-banner-portrait { position: relative; justify-self: end; width: 220px; height: 293px; margin: 0; overflow: hidden; border: 5px solid var(--archive-paper-strong); border-radius: 8px; transform: rotate(3deg); box-shadow: 0 14px 28px rgba(72, 102, 158, 0.2); }
 .archive-banner-portrait img { object-fit: cover; object-position: 66% center; }
-@media (max-width: 700px) { .archive-banner { grid-template-columns: minmax(0, 1fr) 118px; min-height: 250px; gap: 16px; padding: 24px 22px; } .archive-banner.archive-banner > .archive-banner-copy { width: auto; padding: 0; } .archive-banner-portrait { width: 118px; height: 158px; } }
-@media (max-width: 420px) { .archive-banner { grid-template-columns: minmax(0, 1fr) 92px; padding-inline: 18px; } .archive-banner-portrait { width: 92px; height: 123px; } }
+@media (max-width: 700px) { .archive-banner { grid-template-columns: minmax(0, 1fr) 132px; min-height: 250px; gap: 16px; padding: 24px 22px; } .archive-banner.archive-banner > .archive-banner-copy { width: auto; padding: 0; } .archive-banner-portrait { width: 132px; height: 176px; } }
+@media (max-width: 420px) { .archive-banner { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .archive-banner-portrait { width: 102px; height: 136px; } }

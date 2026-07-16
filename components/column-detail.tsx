@@ -129,7 +129,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
             </div>
           </div>
           <figure className="column-detail-hero-portrait">
-            <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="(max-width: 700px) 118px, 180px" priority />
+            <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
           </figure>
         </section>
 
