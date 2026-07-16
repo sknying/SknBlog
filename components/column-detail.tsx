@@ -141,17 +141,6 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
         </section>
 
           <div className="column-detail-main">
-            <section className="column-detail-panel column-detail-intro">
-              <div>
-                <span>专栏简介</span>
-                <h2>这组文章写什么</h2>
-                <p>{column.summary}</p>
-              </div>
-              <figure>
-                <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="360px" />
-              </figure>
-            </section>
-
             <section className="column-detail-panel column-detail-articles" id="column-articles" aria-labelledby="column-articles-title">
               <header>
                 <div>
@@ -168,6 +157,12 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
           </div>
 
           <aside className="column-detail-rail" aria-label="专栏侧栏">
+            <section className="column-detail-panel column-detail-intro">
+              <span>专栏简介</span>
+              <h2>这组文章写什么</h2>
+              <p>{column.summary}</p>
+            </section>
+
             <section className="column-detail-panel column-detail-directory">
               <h2><Icon icon="solar:list-check-linear" aria-hidden="true" />系列目录</h2>
               <ol>
