@@ -83,6 +83,8 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
           </div>
         </header>
 
+        <div className="columns-home-grid">
+          <div className="columns-main-column">
         <section className="columns-hero" aria-labelledby="columns-title">
           <Image src={SPRING_ASSETS.hero} alt="樱花窗边的写作桌" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
           <div className="columns-hero-wash" aria-hidden="true" />
@@ -98,7 +100,6 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
           </div>
         </section>
 
-        <div className="columns-layout columns-cover-layout">
           <section className="columns-featured columns-panel" aria-labelledby="featured-columns-title">
             <header>
               <h2 id="featured-columns-title">
@@ -116,6 +117,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
               <p className="columns-empty">还没有专栏。</p>
             )}
           </section>
+          </div>
 
           <aside className="columns-rail" aria-label="专栏概览">
             <section className="columns-stats columns-panel">

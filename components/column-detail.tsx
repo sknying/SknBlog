@@ -112,6 +112,8 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
           </div>
         </header>
 
+        <div className="column-detail-home-grid">
+          <div className="column-detail-main-column">
         <section className="column-detail-hero" aria-labelledby="column-detail-title">
           <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="(max-width: 980px) 100vw, 78vw" priority />
           <div className="column-detail-hero-wash" aria-hidden="true" />
@@ -137,7 +139,6 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
           <div><Icon icon="solar:clock-circle-linear" aria-hidden="true" /><span>跨度</span><b>{getColumnSpan(column)}</b></div>
         </section>
 
-        <div className="column-detail-layout">
           <div className="column-detail-main">
             <section className="column-detail-panel column-detail-intro">
               <div>
@@ -162,6 +163,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
                 {column.posts.map((post, index) => <ArticleRow post={post} featured={index === 0} key={post.slug} />)}
               </div>
             </section>
+          </div>
           </div>
 
           <aside className="column-detail-rail" aria-label="专栏侧栏">

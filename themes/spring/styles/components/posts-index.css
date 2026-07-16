@@ -409,6 +409,20 @@
   margin: 18px auto 0;
 }
 
+/* Desktop mirrors the homepage: the archive banner stays in the main column
+   while the insights rail begins beside it instead of below it. */
+.archive-home-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 280px;
+  align-items: start;
+  gap: 18px;
+  max-width: 1260px;
+  margin: 0 auto;
+}
+
+.archive-main-column { display: grid; min-width: 0; gap: 18px; }
+.archive-home-grid .archive-banner { max-width: none; margin: 0; }
+
 .archive-years {
   position: relative;
   padding: 18px 24px 24px 38px;
@@ -899,6 +913,7 @@
   .archive-page { grid-template-columns: 184px minmax(0, 1fr); }
   .archive-side { padding-inline: 15px; }
   .archive-content-grid { grid-template-columns: minmax(0, 1fr) 242px; }
+  .archive-home-grid { grid-template-columns: minmax(0, 1fr) 242px; }
   .archive-months { grid-template-columns: repeat(4, minmax(78px, 1fr)); }
   .archive-year-posts a { grid-template-columns: 112px minmax(0, 1fr) 36px; }
   .archive-year-posts a > span { display: none; }
@@ -907,6 +922,8 @@
 @media (max-width: 980px) {
   .archive-page { display: block; }
   .archive-content-grid { grid-template-columns: minmax(0, 1fr); }
+  .archive-home-grid { display: block; }
+  .archive-main-column { gap: 18px; }
   .archive-insights {
     position: static;
     grid-template-columns: repeat(2, minmax(0, 1fr));

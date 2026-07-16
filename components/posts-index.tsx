@@ -72,6 +72,8 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
           </div>
         </header>
 
+        <div className="archive-home-grid">
+          <div className="archive-main-column">
         <section className="archive-banner" aria-labelledby="archive-title">
           <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
           <div aria-hidden="true" />
@@ -82,7 +84,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
           </div>
         </section>
 
-        <div className="archive-content-grid">
           <section className="archive-years archive-panel" id="years" aria-label="按年份浏览文章">
             {years.map((group) => {
               const displayedPosts = selectedMonth.startsWith(`${group.year}-`)
@@ -123,6 +124,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
             })}
             <p className="archive-year-quote"><Icon icon="solar:stars-line-linear" aria-hidden="true" />时光会走，文字留下。</p>
           </section>
+          </div>
 
           <aside className="archive-insights" id="archive-stats">
             <section className="archive-stats archive-panel">

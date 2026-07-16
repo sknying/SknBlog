@@ -81,6 +81,8 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
           </div>
         </header>
 
+        <div className="tags-home-grid">
+          <div className="tags-main-column">
         <section className="tags-hero" aria-labelledby="tags-title">
           <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
           <div className="tags-hero-wash" aria-hidden="true" />
@@ -92,7 +94,6 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
           </div>
         </section>
 
-        <div className="tags-layout">
           <div className="tags-main">
             <section className="tags-picker" aria-labelledby="tags-picker-title">
               <header>
@@ -132,6 +133,7 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
                 <div className="tag-results-empty"><Icon icon="solar:cursor-square-linear" aria-hidden="true" /><p>从上面勾选标签。</p></div>
               )}
             </section>
+          </div>
           </div>
 
           <aside className="tags-rail" aria-label="标签说明">
