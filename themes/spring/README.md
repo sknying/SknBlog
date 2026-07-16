@@ -15,8 +15,8 @@ themes/spring/
   styles/                   Tokens, code palette, component CSS, responsive rules
 
 public/themes/spring/
-  background.png            Repeating page background
-  hero.png                  Shared page header image
+  background.jpg            Repeating page background
+  sknblog.jpg               Shared page header image
   logo.svg                  Site logo
   fonts/fira-code/          ASCII code font files
 ```

@@ -238,7 +238,7 @@ body::selection {
 :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.58), rgba(238, 245, 252, 0.7)),
-    url("/themes/spring/background.png");
+    url("/themes/spring/background.jpg");
   background-position: center top, center top;
   background-size: 100% 100%, 100vw auto;
   background-attachment: fixed, fixed;
@@ -248,7 +248,7 @@ body::selection {
 :root[data-theme="dark"] :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
-    url("/themes/spring/background.png");
+    url("/themes/spring/background.jpg");
 }
 
 a {
@@ -312,6 +312,6 @@ a {
   :root:not([data-theme]) :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
-      url("/themes/spring/background.png");
+      url("/themes/spring/background.jpg");
   }
 }
