@@ -1,0 +1,10 @@
+{
+  "id": "spring",
+  "name": "Spring",
+  "version": 1,
+  "entryCss": "themes/spring/index.css",
+  "componentEntrypoints": ["themes/spring/components/sakura-fall.tsx"],
+  "styleEntrypoints": ["themes/spring/index.css"],
+  "publicAssets": "public/themes/spring",
+  "features": ["light-dark-mode", "glass-surfaces", "sakura-petals", "fira-code"]
+}

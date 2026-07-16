@@ -9,7 +9,10 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "pages:dev": "wrangler pages dev out",
-    "deploy:cloudflare": "pnpm build && wrangler pages deploy --branch main"
+    "deploy:cloudflare": "pnpm build && wrangler pages deploy --branch main",
+    "new:content": "node scripts/create-content.mjs",
+    "new:post": "node scripts/create-content.mjs post",
+    "new:column": "node scripts/create-content.mjs column"
   },
   "dependencies": {
     "@iconify-icons/mdi": "^1.2.48",

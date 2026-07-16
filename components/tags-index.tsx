@@ -13,20 +13,22 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 function TagArticle({ post }: { post: Post }) {
   return (
     <article className="tag-result-card">
-      <Link className="tag-result-cover" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
-        <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 700px) 88vw, 150px" unoptimized />
-      </Link>
+      <Link className="tag-result-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
+      <div className="tag-result-cover">
+        <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 100px, (max-width: 700px) 112px, 150px" unoptimized />
+      </div>
       <div>
         <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
-        <h2><Link href={`/posts/${post.slug}`}>{post.title}</Link></h2>
+        <h2>{post.title}</h2>
         <p>{post.summary}</p>
         <span>{post.read}</span>
       </div>
-      <Link className="tag-result-open" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></Link>
+      <span className="tag-result-open" aria-hidden="true"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></span>
     </article>
   );
 }
@@ -79,18 +81,20 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
           </div>
         </header>
 
+        <div className="tags-home-grid">
+          <div className="tags-main-column">
         <section className="tags-hero" aria-labelledby="tags-title">
-          <Image src="/images/sakura-coast-hero.png" alt="樱花海岸与写作女孩" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
-          <div className="tags-hero-wash" aria-hidden="true" />
           <div className="tags-hero-copy">
             <span><Icon icon="solar:tag-linear" aria-hidden="true" />来自 Markdown</span>
             <h1 id="tags-title">标签清单</h1>
             <p>勾选标签，筛出文章。</p>
             <p>多选时取交集。</p>
           </div>
+          <figure className="tags-hero-portrait">
+            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
+          </figure>
         </section>
 
-        <div className="tags-layout">
           <div className="tags-main">
             <section className="tags-picker" aria-labelledby="tags-picker-title">
               <header>
@@ -130,6 +134,7 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
                 <div className="tag-results-empty"><Icon icon="solar:cursor-square-linear" aria-hidden="true" /><p>从上面勾选标签。</p></div>
               )}
             </section>
+          </div>
           </div>
 
           <aside className="tags-rail" aria-label="标签说明">

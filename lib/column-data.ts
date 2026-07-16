@@ -26,10 +26,13 @@ export type ColumnGroup = {
 };
 
 export function sortPostsByDate(items: Post[]) {
+  // Copy before sorting because JavaScript's `sort()` mutates its array.
   return [...items].sort((left, right) => Date.parse(right.publishedAt) - Date.parse(left.publishedAt));
 }
 
 export function sortPostsByColumnOrder(items: Post[]) {
+  // Manual `columnOrder` is primary inside a column. Articles without it come
+  // after ordered articles, then use publish time as a stable fallback.
   return [...items].sort((left, right) => {
     const leftOrder = left.columnOrder;
     const rightOrder = right.columnOrder;
@@ -42,6 +45,8 @@ export function sortPostsByColumnOrder(items: Post[]) {
 }
 
 export function columnNameToSlug(name: string) {
+  // A column can be Chinese. Convert non-ASCII characters to a stable URL-safe
+  // base-36 form when the column definition does not provide an explicit slug.
   const normalized = name
     .trim()
     .toLocaleLowerCase("zh-CN")
@@ -72,6 +77,7 @@ export function getColumnGroups(posts: Post[], definitions: ColumnDefinition[] =
   const grouped = new Map<string, Post[]>();
   const definitionsByName = new Map(definitions.map((definition) => [definition.name, definition]));
 
+  // A `Map` groups only columns that actually contain at least one article.
   posts.forEach((post) => {
     if (!post.column) return;
     grouped.set(post.column, [...(grouped.get(post.column) ?? []), post]);

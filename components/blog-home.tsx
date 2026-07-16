@@ -1,5 +1,8 @@
 "use client";
 
+// Home cards handle image failures and the About button in the browser. The
+// post data itself is still created during static generation.
+
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
@@ -12,10 +15,14 @@ import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
-const RECENT_POST_LIMIT = 3;
+// Keep the home page focused; the archive page contains the complete list.
+const RECENT_POST_LIMIT = 2;
 
 function PostCover({ post }: { post: Post }) {
+  // `next/image` reports failures asynchronously, so use a small fallback
+  // component rather than leaving an empty image frame.
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -31,7 +38,7 @@ function PostCover({ post }: { post: Post }) {
       src={post.image}
       alt={`${post.title} 配图`}
       fill
-      sizes="(max-width: 760px) 88vw, 240px"
+      sizes="(max-width: 420px) 100px, (max-width: 700px) 112px, 150px"
       unoptimized
       onError={() => setFailed(true)}
     />
@@ -47,7 +54,9 @@ function HomeArticle({ post }: { post: Post }) {
       </div>
       <div className="sakura-post-copy">
         <div className="sakura-post-kicker">
-          <span>{getPrimaryTag(post)}</span>
+          {/* A column is the article's primary context. Only ungrouped posts
+              fall back to their first tag in this compact home-page label. */}
+          <span>{post.column ?? getPrimaryTag(post)}</span>
           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
         </div>
         <h3>{post.title}</h3>
@@ -72,6 +81,8 @@ function HomeArticle({ post }: { post: Post }) {
 }
 
 export function BlogHome({ posts }: { posts: Post[] }) {
+  // Derive display-only metadata from posts. `useMemo` avoids rebuilding the
+  // sets during unrelated interactive re-renders.
   const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const columns = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const visiblePosts = posts;
@@ -99,14 +110,6 @@ export function BlogHome({ posts }: { posts: Post[] }) {
         <div className="sakura-home-grid">
           <div className="sakura-main-column">
             <section className="sakura-hero" aria-labelledby="home-title">
-              <Image
-                src="/images/sakura-coast-hero.png"
-                alt="樱花树下眺望海岸的银发女孩"
-                fill
-                sizes="(max-width: 980px) 100vw, 70vw"
-                priority
-              />
-              <div className="sakura-hero-wash" aria-hidden="true" />
               <div className="sakura-hero-copy">
                 <span className="sakura-hero-eyebrow">写于春日 · 也写深夜</span>
                 <h1 id="home-title">
@@ -121,6 +124,9 @@ export function BlogHome({ posts }: { posts: Post[] }) {
                   <button type="button" onClick={() => window.dispatchEvent(new Event("sknblog:open-about"))}>关于我</button>
                 </div>
               </div>
+              <figure className="sakura-hero-portrait">
+                <Image src={SPRING_ASSETS.hero} alt="樱花树下眺望海岸的银发女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
+              </figure>
             </section>
 
             <section className="sakura-recent glass-panel" id="recent" aria-labelledby="recent-title">
@@ -160,7 +166,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
           <aside className="sakura-right-rail" aria-label="博客侧栏">
             <section className="sakura-profile glass-panel" id="about">
               <div className="sakura-profile-avatar">
-                <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="88px" priority unoptimized />
+                <Image src={GITHUB_AVATAR} alt={`${SITE_NAME} GitHub 头像`} fill sizes="104px" priority unoptimized />
               </div>
               <h2>Sknying</h2>
               <p>写技术，也画界面。</p>

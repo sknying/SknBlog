@@ -1,5 +1,8 @@
 "use client";
 
+// The article body is static data, but the outline, copy button, and draggable
+// mobile dock need browser events. Keep these interactions in this component.
+
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment, useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
@@ -47,6 +50,9 @@ function countPostCharacters(post: Post) {
 }
 
 function renderInlineText(text: string) {
+  // Blocks arrive as text from the Markdown parser. This small tokenizer turns
+  // only the supported inline forms into React elements instead of injecting
+  // raw HTML from article content.
   const parts = [];
   const pattern = /(`([^`]+)`|\[([^\]]+)\]\(([^)]+)\)|\$([^$\n]+)\$)/g;
   let lastIndex = 0;
@@ -76,6 +82,7 @@ function renderInlineText(text: string) {
 }
 
 function SafePostImage({ post, priority = false }: { post: Post; priority?: boolean }) {
+  // An unavailable cover should not leave a broken-image icon in the article.
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -93,7 +100,7 @@ function SafePostImage({ post, priority = false }: { post: Post; priority?: bool
       alt={`${post.title} 封面`}
       fill
       priority={priority}
-      sizes="(max-width: 760px) 92vw, 720px"
+      sizes="(max-width: 680px) 72vw, 300px"
       unoptimized
       onError={() => setFailed(true)}
     />
@@ -110,6 +117,8 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
   const outlineDragRef = useRef<{ pointerId: number; startX: number; startY: number; startLeft: number; startTop: number; moved: boolean } | null>(null);
   const suppressOutlineToggleRef = useRef(false);
   const characterCount = useMemo(() => countPostCharacters(article), [article]);
+  // The outline is derived from article blocks once, then used for both the
+  // desktop rail and the compact mobile control.
   const outlineItems = useMemo<OutlineItem[]>(
     () => [
       { id: "article-title", label: article.title, level: 1 },
@@ -123,6 +132,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
   );
 
   useEffect(() => {
+    // Desktop starts expanded; mobile begins as a small movable icon.
     const mediaQuery = window.matchMedia("(min-width: 681px)");
     const syncOutlineState = () => setIsOutlineOpen(mediaQuery.matches);
 
@@ -132,16 +142,35 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
   }, []);
 
   useEffect(() => {
+    // Determine the active heading from the complete outline, rather than
+    // only the entries included in one observer callback. This keeps an
+    // anchor jump on its selected heading until the next heading reaches the
+    // reading position near the top of the viewport.
     const elements = outlineItems.map((item) => document.getElementById(item.id)).filter((element): element is HTMLElement => Boolean(element));
     if (elements.length === 0) return;
 
-    const observer = new IntersectionObserver((entries) => {
-      const visibleEntry = entries.filter((entry) => entry.isIntersecting).sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top)[0];
-      if (visibleEntry) setActiveOutlineId(visibleEntry.target.id);
-    }, { rootMargin: "-18% 0px -68% 0px", threshold: [0, 0.2, 0.6] });
+    const activationOffset = 40;
+    let frame = 0;
+    const updateActiveOutline = () => {
+      frame = 0;
+      const nextActive = elements.reduce((activeElement, element) => (
+        element.getBoundingClientRect().top <= activationOffset ? element : activeElement
+      ), elements[0]);
 
-    elements.forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
+      setActiveOutlineId((current) => current === nextActive.id ? current : nextActive.id);
+    };
+    const scheduleActiveOutlineUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateActiveOutline);
+    };
+
+    updateActiveOutline();
+    window.addEventListener("scroll", scheduleActiveOutlineUpdate, { passive: true });
+    window.addEventListener("resize", scheduleActiveOutlineUpdate);
+    return () => {
+      window.removeEventListener("scroll", scheduleActiveOutlineUpdate);
+      window.removeEventListener("resize", scheduleActiveOutlineUpdate);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [outlineItems]);
 
   const copyCode = async (id: string, code: string) => {
@@ -266,21 +295,23 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
 
         <div className="article-grid">
           <article className="article-card">
-            <header className="article-heading">
-              <Link className="article-primary-tag" href={primaryContext.href}>{primaryContext.label}</Link>
-              <h1 id="article-title">{article.title}</h1>
-              <div className="article-meta">
-                <span><Icon icon="solar:user-circle-linear" aria-hidden="true" />Sknying</span>
-                <time dateTime={article.publishedAt}><Icon icon="solar:calendar-linear" aria-hidden="true" />{getPostTimeLabel(article)}</time>
-                <span><Icon icon="solar:text-linear" aria-hidden="true" />{characterCount} 字</span>
-                <span><Icon icon="solar:clock-circle-linear" aria-hidden="true" />{article.read}</span>
-              </div>
-              <div className="article-tags" aria-label="文章标签">
-                {article.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
-              </div>
-            </header>
+            <div className="article-intro">
+              <div className="article-cover"><SafePostImage post={article} priority /></div>
 
-            <div className="article-cover"><SafePostImage post={article} priority /></div>
+              <header className="article-heading">
+                <Link className="article-primary-tag" href={primaryContext.href}>{primaryContext.label}</Link>
+                <h1 id="article-title">{article.title}</h1>
+                <div className="article-meta">
+                  <span><Icon icon="solar:user-circle-linear" aria-hidden="true" />Sknying</span>
+                  <time dateTime={article.publishedAt}><Icon icon="solar:calendar-linear" aria-hidden="true" />{getPostTimeLabel(article)}</time>
+                  <span><Icon icon="solar:text-linear" aria-hidden="true" />{characterCount} 字</span>
+                  <span><Icon icon="solar:clock-circle-linear" aria-hidden="true" />{article.read}</span>
+                </div>
+                <div className="article-tags" aria-label="文章标签">
+                  {article.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
+                </div>
+              </header>
+            </div>
 
             <blockquote className="article-lead-quote">
               <Icon icon="solar:chat-round-line-linear" aria-hidden="true" />
@@ -368,7 +399,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
               <button className="article-outline-toggle" type="button" onClick={toggleOutline} onPointerDown={handleOutlinePointerDown} onPointerMove={handleOutlinePointerMove} onPointerUp={handleOutlinePointerEnd} onPointerCancel={handleOutlinePointerEnd} aria-expanded={isOutlineOpen} aria-controls="article-outline-list" aria-label={isOutlineOpen ? "收起文章目录" : "展开文章目录"} title={isOutlineOpen ? "收起文章目录" : "展开文章目录"}>
                 {isOutlineOpen ? <><span><Icon icon="solar:list-check-linear" aria-hidden="true" />文章目录</span><Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" /></> : <Icon icon="solar:list-check-linear" aria-hidden="true" />}
               </button>
-              {isOutlineOpen ? <nav className="article-outline" id="article-outline-list">{outlineItems.map((item, index) => <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} aria-current={activeOutlineId === item.id ? "location" : undefined}><span>{index + 1}.</span>{item.label}</a>)}</nav> : null}
+              {isOutlineOpen ? <nav className="article-outline" id="article-outline-list">{outlineItems.map((item, index) => <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} onClick={() => setActiveOutlineId(item.id)} aria-current={activeOutlineId === item.id ? "location" : undefined}><span>{index + 1}.</span>{item.label}</a>)}</nav> : null}
             </section>
           </aside>
         </div>

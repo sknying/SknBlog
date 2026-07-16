@@ -9,7 +9,7 @@
   display: grid;
   grid-template-columns: 210px minmax(0, 1fr);
   min-height: 100dvh;
-  overflow: clip;
+  overflow-x: clip;
   color: var(--error-text);
 }
 
@@ -25,6 +25,7 @@
 
 .error-workspace {
   display: grid;
+  box-sizing: border-box;
   min-width: 0;
   min-height: 100dvh;
   grid-template-rows: minmax(0, 1fr) auto;
