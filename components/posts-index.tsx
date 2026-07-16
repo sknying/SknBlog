@@ -54,6 +54,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
       posts: activeYear.posts.filter((post) => getYearMonth(post).month === month)
     })).filter((group) => group.posts.length > 0)
     : [];
+  const yearProgress = [...years].reverse();
 
   const totalCharacters = useMemo(() => taggedPosts.reduce((sum, post) => sum + countCharacters(post), 0), [taggedPosts]);
   const newestPost = [...taggedPosts].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))[0];
@@ -94,15 +95,18 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
           </section>
 
           <section className="archive-years archive-panel" id="years" aria-label="按年份浏览文章">
-            <div className="archive-year-progress" aria-label="年份选择">
-              {years.map((group) => {
+            <div className="archive-year-progress" aria-label="年份选择" style={{ gridTemplateColumns: `repeat(${Math.max(yearProgress.length, 1)}, minmax(72px, 1fr))` }}>
+              {yearProgress.map((group) => {
                 const isActive = group.year === activeYear?.year;
 
                 return (
-                  <button className={isActive ? "active" : ""} type="button" key={group.year} onClick={() => setSelectedYear(group.year)} aria-pressed={isActive}>
-                    <strong>{group.year}</strong>
-                    <span>{group.posts.length} 篇</span>
-                  </button>
+                  <div className="archive-year-progress-item" key={group.year}>
+                    <span>{group.year} 年</span>
+                    <button className={isActive ? "active" : ""} type="button" onClick={() => setSelectedYear(group.year)} aria-pressed={isActive} aria-label={`查看 ${group.year} 年的 ${group.posts.length} 篇文章`}>
+                      <i aria-hidden="true" />
+                      <b>{group.posts.length} 篇</b>
+                    </button>
+                  </div>
                 );
               })}
             </div>

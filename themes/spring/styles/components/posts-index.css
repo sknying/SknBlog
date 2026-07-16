@@ -1019,10 +1019,10 @@
 
 .archive-year-progress {
   position: relative;
-  display: flex;
-  gap: 10px;
+  display: grid;
+  gap: 0;
   margin-bottom: 28px;
-  padding: 3px 4px 0;
+  padding: 0 4px;
   overflow-x: auto;
   scrollbar-width: none;
 }
@@ -1031,7 +1031,7 @@
 
 .archive-year-progress::before {
   position: absolute;
-  top: 27px;
+  top: 29px;
   right: 26px;
   left: 26px;
   height: 2px;
@@ -1039,50 +1039,55 @@
   background: linear-gradient(90deg, color-mix(in srgb, var(--archive-pink) 64%, var(--archive-line)), color-mix(in srgb, var(--archive-blue) 68%, var(--archive-line)));
 }
 
-.archive-year-progress button {
+.archive-year-progress-item {
   position: relative;
   z-index: 1;
   display: grid;
-  min-width: 94px;
-  min-height: 58px;
-  flex: 1 0 0;
+  min-width: 72px;
+  justify-self: center;
   place-items: center;
-  align-content: center;
-  gap: 2px;
-  border: 0;
-  border-radius: 7px;
-  padding: 6px 12px;
-  color: var(--archive-muted);
-  background: color-mix(in srgb, var(--archive-paper-strong) 88%, transparent);
-  box-shadow: 0 5px 15px rgba(72, 102, 158, 0.08);
-  cursor: pointer;
-  transition: color 180ms ease, background 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  gap: 5px;
 }
 
-.archive-year-progress button::before {
-  position: absolute;
-  top: 20px;
+.archive-year-progress-item > span {
+  color: var(--archive-text);
+  font-size: 14px;
+}
+
+.archive-year-progress button {
+  display: grid;
+  min-width: 44px;
+  min-height: 39px;
+  place-items: center;
+  align-content: start;
+  gap: 5px;
+  border: 0;
+  border-radius: 5px;
+  padding: 0 5px;
+  color: var(--archive-muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.archive-year-progress button i {
   width: 12px;
   height: 12px;
   border: 3px solid var(--archive-paper-strong);
   border-radius: 50%;
-  content: "";
   background: var(--archive-muted);
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--archive-muted) 35%, transparent);
 }
 
-.archive-year-progress button strong { padding-top: 22px; font-size: 15px; }
-.archive-year-progress button span { font-size: 10px; }
+.archive-year-progress button b { font-size: 10px; font-weight: 400; }
 
 .archive-year-progress button:hover,
 .archive-year-progress button.active {
   color: var(--archive-blue-deep);
-  background: color-mix(in srgb, var(--archive-blue) 12%, var(--archive-paper-strong));
-  box-shadow: 0 8px 18px rgba(72, 102, 158, 0.15);
   transform: translateY(-2px);
 }
 
-.archive-year-progress button.active::before { background: var(--archive-pink); box-shadow: 0 0 0 5px color-mix(in srgb, var(--archive-pink) 18%, transparent); }
+.archive-year-progress button.active i { background: var(--archive-pink); box-shadow: 0 0 0 5px color-mix(in srgb, var(--archive-pink) 18%, transparent); }
 
 .archive-year { padding: 0; }
 .archive-year + .archive-year { border: 0; padding-top: 0; }
@@ -1103,15 +1108,16 @@
   .archive-years { padding: 18px 16px 22px; }
   .archive-year-progress { margin-bottom: 24px; padding-inline: 0; }
   .archive-year-progress::before { right: 20px; left: 20px; }
-  .archive-year-progress button { min-width: 78px; min-height: 54px; padding-inline: 8px; }
-  .archive-year-progress button strong { font-size: 14px; }
+  .archive-year-progress-item { min-width: 64px; }
+  .archive-year-progress-item > span { font-size: 13px; }
   .archive-month-timeline { padding-left: 28px; }
   .archive-month-heading > span { left: -27px; }
 }
 
 @media (max-width: 420px) {
   .archive-year-progress { gap: 7px; }
-  .archive-year-progress button { min-width: 70px; }
+  .archive-year-progress-item { min-width: 58px; }
+  .archive-year-progress button { min-width: 40px; }
   .archive-month-timeline { gap: 18px; padding-left: 24px; }
   .archive-month-heading > span { left: -23px; width: 14px; height: 14px; }
 }
