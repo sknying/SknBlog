@@ -38,7 +38,7 @@ function PostCover({ post }: { post: Post }) {
       src={post.image}
       alt={`${post.title} 配图`}
       fill
-      sizes="(max-width: 760px) 88vw, 240px"
+      sizes="(max-width: 420px) 84px, (max-width: 700px) 94px, 104px"
       unoptimized
       onError={() => setFailed(true)}
     />

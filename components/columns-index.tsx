@@ -31,7 +31,7 @@ function ColumnCover({ group }: { group: ColumnGroup }) {
       src={group.coverImage}
       alt={`${group.name} 专栏封面`}
       fill
-      sizes="(max-width: 760px) 88vw, 260px"
+      sizes="(max-width: 420px) 84px, (max-width: 700px) 94px, 104px"
       unoptimized
       onError={() => setFailed(true)}
     />

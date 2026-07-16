@@ -21,7 +21,7 @@ function SearchCover({ post }: { post: Post }) {
     return <span className="search-result-cover-fallback"><Icon icon="solar:gallery-wide-linear" aria-hidden="true" /></span>;
   }
 
-  return <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 700px) 88vw, 180px" unoptimized onError={() => setFailed(true)} />;
+  return <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 74px, (max-width: 700px) 84px, 100px" unoptimized onError={() => setFailed(true)} />;
 }
 
 function matchesQuery(post: Post, query: string) {

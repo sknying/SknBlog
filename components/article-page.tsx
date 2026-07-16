@@ -100,7 +100,7 @@ function SafePostImage({ post, priority = false }: { post: Post; priority?: bool
       alt={`${post.title} 封面`}
       fill
       priority={priority}
-      sizes="(max-width: 760px) 92vw, 720px"
+      sizes="(max-width: 680px) 72vw, 300px"
       unoptimized
       onError={() => setFailed(true)}
     />
@@ -295,21 +295,23 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
 
         <div className="article-grid">
           <article className="article-card">
-            <div className="article-cover"><SafePostImage post={article} priority /></div>
+            <div className="article-intro">
+              <div className="article-cover"><SafePostImage post={article} priority /></div>
 
-            <header className="article-heading">
-              <Link className="article-primary-tag" href={primaryContext.href}>{primaryContext.label}</Link>
-              <h1 id="article-title">{article.title}</h1>
-              <div className="article-meta">
-                <span><Icon icon="solar:user-circle-linear" aria-hidden="true" />Sknying</span>
-                <time dateTime={article.publishedAt}><Icon icon="solar:calendar-linear" aria-hidden="true" />{getPostTimeLabel(article)}</time>
-                <span><Icon icon="solar:text-linear" aria-hidden="true" />{characterCount} 字</span>
-                <span><Icon icon="solar:clock-circle-linear" aria-hidden="true" />{article.read}</span>
-              </div>
-              <div className="article-tags" aria-label="文章标签">
-                {article.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
-              </div>
-            </header>
+              <header className="article-heading">
+                <Link className="article-primary-tag" href={primaryContext.href}>{primaryContext.label}</Link>
+                <h1 id="article-title">{article.title}</h1>
+                <div className="article-meta">
+                  <span><Icon icon="solar:user-circle-linear" aria-hidden="true" />Sknying</span>
+                  <time dateTime={article.publishedAt}><Icon icon="solar:calendar-linear" aria-hidden="true" />{getPostTimeLabel(article)}</time>
+                  <span><Icon icon="solar:text-linear" aria-hidden="true" />{characterCount} 字</span>
+                  <span><Icon icon="solar:clock-circle-linear" aria-hidden="true" />{article.read}</span>
+                </div>
+                <div className="article-tags" aria-label="文章标签">
+                  {article.tags.map((tag) => <Link href={`/tags?tag=${encodeURIComponent(tag)}`} key={tag}>{tag}</Link>)}
+                </div>
+              </header>
+            </div>
 
             <blockquote className="article-lead-quote">
               <Icon icon="solar:chat-round-line-linear" aria-hidden="true" />

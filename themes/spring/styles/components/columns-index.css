@@ -182,3 +182,14 @@
 .columns-hero-portrait img { object-fit: cover; object-position: 66% center; }
 @media (max-width: 700px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 132px; min-height: 250px; gap: 16px; padding: 24px 22px; } .columns-hero-copy { width: auto; padding: 0; } .columns-hero-portrait { width: 132px; height: 176px; } }
 @media (max-width: 420px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .columns-hero-portrait { width: 102px; height: 136px; } }
+
+/* Two-column column cards reserve enough room for a readable portrait cover and summary. */
+.columns-cover-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.columns-cover-card { grid-template-columns: 112px minmax(0, 1fr); grid-template-rows: auto auto auto; align-items: center; gap: 8px 12px; min-height: 164px; padding: 12px; overflow: visible; }
+.columns-cover-card .columns-card-cover { grid-row: 1 / 4; justify-self: start; width: 104px; height: 139px; border: 4px solid var(--columns-paper); border-radius: 7px; box-shadow: 0 9px 20px rgba(74, 105, 161, 0.18); transform: rotate(3deg); }
+.columns-cover-card .columns-card-copy, .columns-cover-card footer, .columns-cover-card .columns-card-link { grid-column: 2; }
+.columns-cover-card .columns-card-copy { padding: 0; }
+.columns-cover-card footer, .columns-cover-card .columns-card-link { padding: 7px 0 0; border-top: 0; }
+.columns-cover-card .columns-card-link { justify-content: flex-start; min-height: auto; }
+@media (max-width: 700px) { .columns-cover-grid { grid-template-columns: minmax(0, 1fr); } .columns-cover-card { grid-template-columns: 102px minmax(0, 1fr); min-height: 152px; } .columns-cover-card .columns-card-cover { width: 94px; height: 125px; } }
+@media (max-width: 420px) { .columns-cover-card { grid-template-columns: 92px minmax(0, 1fr); min-height: 140px; } .columns-cover-card .columns-card-cover { width: 84px; height: 112px; } }

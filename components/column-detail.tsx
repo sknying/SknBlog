@@ -61,7 +61,7 @@ function ArticleRow({ post, featured = false }: { post: Post; featured?: boolean
     <article className={`column-detail-article ${featured ? "is-featured" : ""}`}>
       <Link className="column-detail-article-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
       <div className="column-detail-article-cover">
-        <SafeImage src={post.image} alt={`${post.title} 封面`} sizes="(max-width: 760px) 84vw, 210px" />
+        <SafeImage src={post.image} alt={`${post.title} 封面`} sizes="(max-width: 420px) 78px, (max-width: 700px) 88px, 104px" />
       </div>
       <div className="column-detail-article-copy">
         {featured ? <span className="column-detail-featured-mark">推荐阅读</span> : null}
@@ -188,7 +188,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
               <div>
                 {latestPosts.map((post) => (
                   <Link href={`/posts/${post.slug}`} key={post.slug}>
-                    <span><SafeImage src={post.image} alt={`${post.title} 封面`} sizes="64px" /></span>
+                    <span><SafeImage src={post.image} alt={`${post.title} 封面`} sizes="50px" /></span>
                     <div><strong>{post.title}</strong><small>{getMonthLabel(post)}</small></div>
                   </Link>
                 ))}

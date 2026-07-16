@@ -112,6 +112,9 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
                     <div className="archive-year-posts">
                       {displayedPosts.map((post) => (
                         <Link href={`/posts/${post.slug}`} key={post.slug}>
+                          <span className="archive-post-cover">
+                            <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 420px) 48px, (max-width: 980px) 54px, 62px" unoptimized />
+                          </span>
                           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
                           <strong>{post.title}</strong>
                           <span>{post.tags.slice(0, 3).join(" · ")}</span>
