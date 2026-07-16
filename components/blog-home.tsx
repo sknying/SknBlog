@@ -1,5 +1,8 @@
 "use client";
 
+// Home cards handle image failures and the About button in the browser. The
+// post data itself is still created during static generation.
+
 import Image from "next/image";
 import Link from "next/link";
 import { Icon } from "@/components/local-icon";
@@ -12,10 +15,14 @@ import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
+// Keep the home page focused; the archive page contains the complete list.
 const RECENT_POST_LIMIT = 3;
 
 function PostCover({ post }: { post: Post }) {
+  // `next/image` reports failures asynchronously, so use a small fallback
+  // component rather than leaving an empty image frame.
   const [failed, setFailed] = useState(false);
 
   if (failed) {
@@ -47,7 +54,9 @@ function HomeArticle({ post }: { post: Post }) {
       </div>
       <div className="sakura-post-copy">
         <div className="sakura-post-kicker">
-          <span>{getPrimaryTag(post)}</span>
+          {/* A column is the article's primary context. Only ungrouped posts
+              fall back to their first tag in this compact home-page label. */}
+          <span>{post.column ?? getPrimaryTag(post)}</span>
           <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
         </div>
         <h3>{post.title}</h3>
@@ -72,6 +81,8 @@ function HomeArticle({ post }: { post: Post }) {
 }
 
 export function BlogHome({ posts }: { posts: Post[] }) {
+  // Derive display-only metadata from posts. `useMemo` avoids rebuilding the
+  // sets during unrelated interactive re-renders.
   const tags = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const columns = useMemo(() => Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN")), [posts]);
   const visiblePosts = posts;
@@ -100,7 +111,7 @@ export function BlogHome({ posts }: { posts: Post[] }) {
           <div className="sakura-main-column">
             <section className="sakura-hero" aria-labelledby="home-title">
               <Image
-                src="/images/sakura-coast-hero.png"
+                src={SPRING_ASSETS.hero}
                 alt="樱花树下眺望海岸的银发女孩"
                 fill
                 sizes="(max-width: 980px) 100vw, 70vw"

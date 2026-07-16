@@ -9,6 +9,8 @@
   --sakura-pink: #f28fa8;
   --sakura-line: rgba(111, 139, 190, 0.18);
   --sakura-shadow: 0 14px 38px rgba(74, 105, 161, 0.14);
+  --sakura-avatar-ring: rgba(255, 255, 255, 0.78);
+  --sakura-avatar-shadow: 0 8px 22px rgba(85, 116, 174, 0.2);
   position: relative;
   display: grid;
   grid-template-columns: 220px minmax(0, 1fr);
@@ -33,6 +35,8 @@
   --sakura-pink: #ff9db7;
   --sakura-line: rgba(190, 207, 244, 0.2);
   --sakura-shadow: 0 16px 44px rgba(5, 10, 25, 0.36);
+  --sakura-avatar-ring: rgba(92, 119, 169, 0.68);
+  --sakura-avatar-shadow: 0 8px 22px rgba(3, 8, 20, 0.52);
   background:
     radial-gradient(circle at 72% 8%, rgba(89, 119, 179, 0.3), transparent 34rem),
     radial-gradient(circle at 90% 54%, rgba(129, 67, 100, 0.22), transparent 30rem),
@@ -179,9 +183,9 @@
   aspect-ratio: 1;
   margin-bottom: 10px;
   overflow: hidden;
-  border: 8px solid rgba(255, 255, 255, 0.78);
+  border: 8px solid var(--sakura-avatar-ring);
   border-radius: 50%;
-  box-shadow: 0 8px 22px rgba(85, 116, 174, 0.2);
+  box-shadow: var(--sakura-avatar-shadow);
 }
 
 .sakura-disc img,
@@ -1061,6 +1065,8 @@
     --sakura-pink: #ff9db7;
     --sakura-line: rgba(190, 207, 244, 0.2);
     --sakura-shadow: 0 16px 44px rgba(5, 10, 25, 0.36);
+    --sakura-avatar-ring: rgba(92, 119, 169, 0.68);
+    --sakura-avatar-shadow: 0 8px 22px rgba(3, 8, 20, 0.52);
     background:
       radial-gradient(circle at 72% 8%, rgba(89, 119, 179, 0.3), transparent 34rem),
       radial-gradient(circle at 90% 54%, rgba(129, 67, 100, 0.22), transparent 30rem),

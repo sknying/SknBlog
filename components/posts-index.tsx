@@ -2,17 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { SakuraFall } from "@/components/sakura-fall";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
 
@@ -30,42 +30,22 @@ function formatCharacterCount(value: number) {
 }
 
 export function PostsIndex({ posts }: { posts: Post[] }) {
-  const searchParams = useSearchParams();
-  const initialQuery = searchParams.get("q") ?? "";
   const taggedPosts = posts;
-  const [draftQuery, setDraftQuery] = useState(initialQuery);
-  const [committedQuery, setCommittedQuery] = useState(initialQuery);
   const [selectedMonth, setSelectedMonth] = useState("");
   const [randomIndex, setRandomIndex] = useState(0);
-
-  useEffect(() => {
-    setDraftQuery(initialQuery);
-    setCommittedQuery(initialQuery);
-    setSelectedMonth("");
-  }, [initialQuery]);
-
-  const searchedPosts = useMemo(() => {
-    const query = committedQuery.trim().toLocaleLowerCase("zh-CN");
-
-    return taggedPosts
-      .filter((post) => {
-        return !query || post.title.toLocaleLowerCase("zh-CN").includes(query);
-      })
-      .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
-  }, [committedQuery, taggedPosts]);
 
   const years = useMemo(() => {
     const sourceYears = Array.from(new Set(taggedPosts.map((post) => getYearMonth(post).year))).sort((a, b) => b.localeCompare(a));
 
     return sourceYears.map((year) => {
-      const yearPosts = searchedPosts.filter((post) => getYearMonth(post).year === year);
+      const yearPosts = taggedPosts.filter((post) => getYearMonth(post).year === year);
       return {
         year,
         posts: yearPosts,
         monthCounts: Object.fromEntries(MONTH_LABELS.map((month) => [month, yearPosts.filter((post) => getYearMonth(post).month === month).length]))
       };
     });
-  }, [searchedPosts, taggedPosts]);
+  }, [taggedPosts]);
 
   const totalCharacters = useMemo(() => taggedPosts.reduce((sum, post) => sum + countCharacters(post), 0), [taggedPosts]);
   const newestPost = [...taggedPosts].sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))[0];
@@ -84,15 +64,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
 
       <div className="archive-workspace">
         <header className="archive-toolbar">
-          <SiteSearch
-            posts={taggedPosts}
-            value={draftQuery}
-            onValueChange={setDraftQuery}
-            onSearch={(value) => {
-              setCommittedQuery(value);
-              setSelectedMonth("");
-            }}
-          />
+          <SiteSearch posts={taggedPosts} />
           <div className="archive-toolbar-icons">
             <ThemeToggle />
             <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
@@ -101,7 +73,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
         </header>
 
         <section className="archive-banner" aria-labelledby="archive-title">
-          <Image src="/images/sakura-coast-hero.png" alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
+          <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
           <div aria-hidden="true" />
           <div className="archive-banner-copy">
             <span>从第一篇开始</span>
@@ -149,7 +121,6 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
                 </section>
               );
             })}
-            {searchedPosts.length === 0 ? <div className="archive-no-results" role="status"><Icon icon="solar:close-circle-linear" aria-hidden="true" />未查到文章</div> : null}
             <p className="archive-year-quote"><Icon icon="solar:stars-line-linear" aria-hidden="true" />时光会走，文字留下。</p>
           </section>
 
@@ -162,7 +133,7 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
                 <div><dt><Icon icon="solar:clock-circle-linear" aria-hidden="true" />运行天数</dt><dd>{runningDays} 天</dd></div>
                 <div><dt><Icon icon="solar:calendar-linear" aria-hidden="true" />最后更新</dt><dd>{newestPost ? getPostTimeLabel(newestPost).slice(0, 10) : "暂无"}</dd></div>
               </dl>
-              <div className="archive-stat-art"><Image src="/images/sakura-coast-hero.png" alt="樱花海岸插画局部" fill sizes="220px" /></div>
+              <div className="archive-stat-art"><Image src={SPRING_ASSETS.hero} alt="樱花海岸插画局部" fill sizes="220px" /></div>
             </section>
 
             <section className="archive-trend archive-panel">

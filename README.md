@@ -1,6 +1,7 @@
 # SknBlog
 
 一个以 Markdown 为内容源的静态个人博客。站点使用暖色纸张、半透明卡片与樱花粒子背景，支持浅色和深色模式。
+网页地址为https://www.sknblog.top
 
 ## 功能
 
@@ -57,6 +58,17 @@ intro: "文章开头的引言。"
 
 详细字段与代码块语言说明见 [content/README.md](content/README.md)。
 
+### 快速创建 Markdown
+
+不想手写 frontmatter 时，在项目根目录运行：
+
+```bash
+pnpm new:post
+pnpm new:column
+```
+
+工具会交互式询问必填字段，并自动创建正确的年份目录、文章模板或专栏配置。文章 slug 和专栏 slug 只允许小写英文、数字与连字符，例如 `rust-async-intro`。
+
 ## 配置专栏
 
 在 `content/columns/` 创建一个 Markdown 文件：
@@ -85,6 +97,14 @@ lib/          内容解析、数据模型和工具函数
 public/       Logo、背景、字体和文章图片
 .github/      GitHub Pages 工作流
 ```
+
+## 前端维护
+
+刚接触 CSS、TypeScript 或 React 时，先阅读 [前端修改入门](docs/FRONTEND_GUIDE.md)。它说明主题变量、组件交互、Markdown 解析、动画和安全修改流程。
+
+## 主题
+
+当前主题为 [Spring](themes/spring/README.md)。主题源码位于 `themes/spring/`，其背景、主视觉、Logo 和 Fira Code 资源位于 `public/themes/spring/`。文章封面仍放在 `public/images/posts/`，避免内容资源与主题资源混在一起。
 
 ## 部署
 

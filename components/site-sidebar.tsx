@@ -10,6 +10,8 @@ type SiteSidebarProps = {
   active?: "home" | "archive" | "columns" | "tags";
 };
 
+// Keep navigation data separate from JSX. Add a normal internal link here;
+// "about" is the exception because it opens the global dialog instead.
 const navigation = [
   { id: "home", label: "首页", href: "/", icon: "solar:home-2-linear" },
   { id: "archive", label: "归档", href: "/posts", icon: "solar:archive-linear" },
@@ -31,6 +33,8 @@ export function SiteSidebar({ active }: SiteSidebarProps) {
           const className = active === item.id ? "active" : "";
 
           if (item.id === "about") {
+            // The dialog listens for this custom event in a different
+            // component, avoiding a prop chain through every page.
             return (
               <button className={className} type="button" onClick={() => window.dispatchEvent(new Event("sknblog:open-about"))} key={item.id}>
                 <Icon icon={item.icon} aria-hidden="true" />

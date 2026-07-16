@@ -13,6 +13,7 @@ import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, getColumnGroups, type ColumnDefinition, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 function ColumnCover({ group }: { group: ColumnGroup }) {
   const [failed, setFailed] = useState(false);
@@ -83,7 +84,7 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
         </header>
 
         <section className="columns-hero" aria-labelledby="columns-title">
-          <Image src="/images/sakura-coast-hero.png" alt="樱花窗边的写作桌" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
+          <Image src={SPRING_ASSETS.hero} alt="樱花窗边的写作桌" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
           <div className="columns-hero-wash" aria-hidden="true" />
           <div className="columns-hero-copy">
             <span>先选一个坑</span>

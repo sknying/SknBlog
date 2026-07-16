@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 type SiteLogoProps = {
   className?: string;
@@ -10,7 +11,7 @@ export function SiteLogo({ className = "site-logo-icon", priority = false, sizes
   return (
     <Image
       className={className}
-      src="/images/sknblog-logo-icon.svg"
+      src={SPRING_ASSETS.logo}
       alt=""
       width={512}
       height={512}

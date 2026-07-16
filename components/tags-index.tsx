@@ -13,20 +13,22 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 function TagArticle({ post }: { post: Post }) {
   return (
     <article className="tag-result-card">
-      <Link className="tag-result-cover" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`}>
+      <Link className="tag-result-overlay" href={`/posts/${post.slug}`} aria-label={`阅读 ${post.title}`} />
+      <div className="tag-result-cover">
         <Image src={post.image} alt={`${post.title} 封面`} fill sizes="(max-width: 700px) 88vw, 150px" unoptimized />
-      </Link>
+      </div>
       <div>
         <time dateTime={post.publishedAt}>{getPostTimeLabel(post)}</time>
-        <h2><Link href={`/posts/${post.slug}`}>{post.title}</Link></h2>
+        <h2>{post.title}</h2>
         <p>{post.summary}</p>
         <span>{post.read}</span>
       </div>
-      <Link className="tag-result-open" href={`/posts/${post.slug}`} aria-label={`打开 ${post.title}`}><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></Link>
+      <span className="tag-result-open" aria-hidden="true"><Icon icon="solar:arrow-right-linear" aria-hidden="true" /></span>
     </article>
   );
 }
@@ -80,7 +82,7 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
         </header>
 
         <section className="tags-hero" aria-labelledby="tags-title">
-          <Image src="/images/sakura-coast-hero.png" alt="樱花海岸与写作女孩" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
+          <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
           <div className="tags-hero-wash" aria-hidden="true" />
           <div className="tags-hero-copy">
             <span><Icon icon="solar:tag-linear" aria-hidden="true" />来自 Markdown</span>

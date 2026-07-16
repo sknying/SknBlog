@@ -2,7 +2,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Light.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Light.ttf") format("truetype");
   font-display: swap;
   font-weight: 300;
   font-style: normal;
@@ -11,7 +11,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Regular.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Regular.ttf") format("truetype");
   font-display: swap;
   font-weight: 400;
   font-style: normal;
@@ -20,7 +20,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Retina.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Retina.ttf") format("truetype");
   font-display: swap;
   font-weight: 450;
   font-style: normal;
@@ -29,7 +29,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Medium.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Medium.ttf") format("truetype");
   font-display: swap;
   font-weight: 500;
   font-style: normal;
@@ -38,7 +38,7 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-SemiBold.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-SemiBold.ttf") format("truetype");
   font-display: swap;
   font-weight: 600;
   font-style: normal;
@@ -47,13 +47,14 @@
 
 @font-face {
   font-family: "Fira Code ASCII";
-  src: url("/fonts/fira-code/FiraCode-Bold.ttf") format("truetype");
+  src: url("/themes/spring/fonts/fira-code/FiraCode-Bold.ttf") format("truetype");
   font-display: swap;
   font-weight: 700;
   font-style: normal;
   unicode-range: U+0000-007F;
 }
 
+/* Global design tokens. Adjust these before changing one-off component colors. */
 :root {
   --font-display: "Noto Serif SC", serif;
   --font-body: "Noto Serif SC", serif;
@@ -70,6 +71,8 @@
   --accent-2: #648ee4;
   --danger: #d94a62;
   --shadow: 0 16px 44px rgba(74, 105, 161, 0.14);
+  --page-glow-left: rgba(180, 214, 255, 0.66);
+  --page-glow-right: rgba(255, 202, 218, 0.5);
   --code-bg: #f8f3df;
   --code-header: #eee7cf;
   --code-text: #3d4350;
@@ -85,6 +88,7 @@
   --font-code: "Fira Code ASCII", "Noto Serif SC", serif;
 }
 
+/* An explicit choice lives on the `<html data-theme="dark">` element. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --bg: #11182a;
@@ -99,6 +103,8 @@
   --accent-2: #91b4ff;
   --danger: #ff728a;
   --shadow: 0 18px 52px rgba(4, 9, 22, 0.42);
+  --page-glow-left: rgba(70, 98, 155, 0.22);
+  --page-glow-right: rgba(132, 70, 102, 0.16);
   --code-bg: #24283b;
   --code-header: #1f2335;
   --code-text: #c0caf5;
@@ -128,6 +134,8 @@
     --accent-2: #91b4ff;
     --danger: #ff728a;
     --shadow: 0 18px 52px rgba(4, 9, 22, 0.42);
+    --page-glow-left: rgba(70, 98, 155, 0.22);
+    --page-glow-right: rgba(132, 70, 102, 0.16);
     --code-bg: #24283b;
     --code-header: #1f2335;
     --code-text: #c0caf5;
@@ -148,6 +156,7 @@
 }
 
 html {
+  background: var(--bg-deep);
   scroll-behavior: smooth;
   scrollbar-color: color-mix(in srgb, var(--accent-2) 46%, transparent) transparent;
   scrollbar-width: thin;
@@ -191,9 +200,10 @@ html::-webkit-scrollbar-thumb:hover {
 body {
   margin: 0;
   color: var(--text);
+  background-color: var(--bg-deep);
   background:
-    radial-gradient(circle at 16% 12%, rgba(180, 214, 255, 0.66), transparent 30rem),
-    radial-gradient(circle at 86% 8%, rgba(255, 202, 218, 0.5), transparent 26rem),
+    radial-gradient(circle at 16% 12%, var(--page-glow-left), transparent 30rem),
+    radial-gradient(circle at 86% 8%, var(--page-glow-right), transparent 26rem),
     linear-gradient(135deg, var(--surface-strong) 0%, var(--bg) 52%, var(--bg-deep) 100%);
   font-family: var(--font-body), system-ui, sans-serif;
   min-height: 100dvh;
@@ -223,10 +233,12 @@ body::selection {
   will-change: transform;
 }
 
+/* `:where()` has zero selector specificity, so component CSS can override
+   shared background defaults without escalating to `!important`. */
 :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(247, 251, 255, 0.58), rgba(238, 245, 252, 0.7)),
-    url("/images/background.png");
+    url("/themes/spring/background.png");
   background-position: center top, center top;
   background-size: 100% 100%, 100vw auto;
   background-attachment: fixed, fixed;
@@ -236,7 +248,7 @@ body::selection {
 :root[data-theme="dark"] :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
   background-image:
     linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
-    url("/images/background.png");
+    url("/themes/spring/background.png");
 }
 
 a {
@@ -257,6 +269,7 @@ textarea {
   color-scheme: inherit;
 }
 
+/* Browsers otherwise apply a bright built-in background to autofilled inputs. */
 input:autofill,
 select:autofill,
 textarea:autofill {
@@ -299,6 +312,6 @@ a {
   :root:not([data-theme]) :where(.sakura-site, .archive-page, .article-page, .columns-page, .column-detail-page, .search-page, .tags-page, .error-page) {
     background-image:
       linear-gradient(rgba(12, 20, 38, 0.84), rgba(20, 30, 52, 0.9)),
-      url("/images/background.png");
+      url("/themes/spring/background.png");
   }
 }

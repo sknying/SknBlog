@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Icon } from "@/components/local-icon";
 import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
@@ -33,8 +33,7 @@ function matchesQuery(post: Post, query: string) {
 export function SearchResults({ posts }: { posts: Post[] }) {
   const searchParams = useSearchParams();
   const queryFromUrl = searchParams.get("q") ?? "";
-  const [query, setQuery] = useState(queryFromUrl);
-  const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+  const normalizedQuery = queryFromUrl.trim().toLocaleLowerCase("zh-CN");
   const tags = useMemo(
     () => Array.from(new Set(posts.flatMap((post) => post.tags))).sort((left, right) => left.localeCompare(right, "zh-CN")),
     [posts]
@@ -44,8 +43,6 @@ export function SearchResults({ posts }: { posts: Post[] }) {
     [normalizedQuery, posts]
   );
 
-  useEffect(() => setQuery(queryFromUrl), [queryFromUrl]);
-
   return (
     <main className="search-page">
       <SakuraFall />
@@ -54,7 +51,9 @@ export function SearchResults({ posts }: { posts: Post[] }) {
 
       <div className="search-workspace">
         <header className="search-toolbar">
-          <SiteSearch posts={posts} value={query} onValueChange={setQuery} onSearch={setQuery} />
+          {/* The page reacts to the URL query only. The toolbar input keeps its
+              own draft text until the user explicitly submits a new search. */}
+          <SiteSearch posts={posts} />
           <div className="search-toolbar-actions">
             <ThemeToggle />
             <Link href="/" aria-label="返回首页"><Icon icon="solar:home-2-linear" aria-hidden="true" /></Link>
@@ -64,7 +63,7 @@ export function SearchResults({ posts }: { posts: Post[] }) {
 
         <section className="search-heading" aria-labelledby="search-title">
           <span><Icon icon="solar:magnifer-linear" aria-hidden="true" />全站检索</span>
-          <h1 id="search-title">{normalizedQuery ? `“${query.trim()}”` : "搜索文章"}</h1>
+          <h1 id="search-title">{normalizedQuery ? `“${queryFromUrl.trim()}”` : "搜索文章"}</h1>
           <p>{normalizedQuery ? `找到 ${results.length} 篇相关文章。` : "输入文章标题。"}</p>
         </section>
 

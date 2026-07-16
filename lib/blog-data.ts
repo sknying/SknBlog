@@ -6,6 +6,7 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import type { ArticleBlock, Post } from "@/lib/blog-types";
 import type { ColumnDefinition } from "@/lib/column-data";
+import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 type MdNode = {
   type: string;
@@ -33,11 +34,15 @@ type Frontmatter = {
   draft?: boolean;
 };
 
+// This module runs during static generation. Node's `fs` API is safe here,
+// but this file must never be imported into a Client Component.
 const contentDirectory = join(process.cwd(), "content", "posts");
 const columnsDirectory = join(process.cwd(), "content", "columns");
 const processor = remark().use(remarkGfm).use(remarkMath);
 
 function inlineMarkdown(nodes: MdNode[] = []): string {
+  // The page renderer consumes explicit article blocks, not raw HTML. Rebuild
+  // inline Markdown so links, emphasis, and math survive the conversion.
   return nodes.map((node) => {
     const value = node.value ?? "";
     const children = inlineMarkdown(node.children);
@@ -58,6 +63,8 @@ function paragraphText(node: MdNode) {
 }
 
 function parseBlocks(source: string): ArticleBlock[] {
+  // remark parses Markdown into an abstract syntax tree (AST). `flatMap`
+  // converts each top-level AST node into zero or more display blocks.
   const tree = processor.parse(source) as unknown as { children: MdNode[] };
 
   return tree.children.flatMap((node): ArticleBlock[] => {
@@ -98,6 +105,8 @@ function parseBlocks(source: string): ArticleBlock[] {
 }
 
 function countWords(source: string) {
+  // CJK text normally has no spaces, so count Han characters and Latin words
+  // separately. Markdown syntax and fenced code are removed first.
   const withoutSyntax = source.replace(/```[\s\S]*?```|`[^`]*`|!?(\[[^\]]*\]\([^)]*\))/g, " ").replace(/[#>*_~|\\]/g, " ");
   const cjk = withoutSyntax.match(/[\u3400-\u9fff]/g)?.length ?? 0;
   const latin = withoutSyntax.match(/[A-Za-z0-9]+(?:['-][A-Za-z0-9]+)*/g)?.length ?? 0;
@@ -110,6 +119,8 @@ function dateLabel(publishedAt: string) {
 }
 
 function getMarkdownFiles(directory = contentDirectory, relativeDirectory = ""): string[] {
+  // Recursion keeps content organized as `posts/YYYY/*.md` without changing
+  // the loader whenever a new year folder is added.
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
     const relativePath = join(relativeDirectory, entry.name);
 
@@ -122,6 +133,7 @@ function readPost(fileName: string): Post | null {
   const slug = parse(fileName).name;
   const parsed = matter(readFileSync(join(contentDirectory, fileName), "utf8"));
   const frontmatter = parsed.data as Frontmatter;
+  // Drafts and incomplete files remain on disk but do not enter static pages.
   if (frontmatter.draft || !frontmatter.title || !frontmatter.publishedAt) return null;
 
   const publishedAt = frontmatter.publishedAt instanceof Date
@@ -129,6 +141,7 @@ function readPost(fileName: string): Post | null {
     : String(frontmatter.publishedAt);
   const folderYear = fileName.split(/[\\/]/)[0];
 
+  // Fail the build early instead of silently putting an article in a wrong year.
   if (/^\d{4}$/.test(folderYear) && !publishedAt.startsWith(`${folderYear}-`)) {
     throw new Error(`文章 ${fileName} 的目录年份与 publishedAt 不一致。`);
   }
@@ -150,7 +163,7 @@ function readPost(fileName: string): Post | null {
     read: frontmatter.read?.trim() || `${Math.max(1, Math.ceil(wordCount / 350))} 分钟`,
     wordCount,
     summary: frontmatter.summary?.trim() || fallbackText.slice(0, 72),
-    image: frontmatter.image?.trim() || "/images/sakura-coast-hero.png",
+    image: frontmatter.image?.trim() || SPRING_ASSETS.hero,
     mood: frontmatter.mood?.trim() || "写作记录",
     intro: frontmatter.intro?.trim() || fallbackText.slice(0, 72),
     blocks
@@ -161,6 +174,8 @@ function loadPosts() {
   const loadedPosts = getMarkdownFiles()
     .map(readPost)
     .filter((post): post is Post => Boolean(post));
+  // Slugs become `/posts/<slug>` paths. Duplicates would create ambiguous
+  // static routes, so detect them before Next.js renders pages.
   const duplicateSlug = loadedPosts.find((post, index) => loadedPosts.findIndex((item) => item.slug === post.slug) !== index);
 
   if (duplicateSlug) {
@@ -186,6 +201,7 @@ function loadColumnDefinitions(): ColumnDefinition[] {
     }));
 }
 
+// These values are calculated once per build and reused by every page.
 export const posts = loadPosts();
 export const columnDefinitions = loadColumnDefinitions();
 export const columns = Array.from(new Set(posts.flatMap((post) => post.column ? [post.column] : []))).sort((left, right) => left.localeCompare(right, "zh-CN"));
