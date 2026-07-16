@@ -912,7 +912,7 @@
   .archive-banner { min-height: 280px; }
   .archive-banner > img { object-position: 62% center; }
   .archive-banner-copy { width: 82%; padding: 58px 22px 32px; }
-  .archive-banner-copy h1 { font-size: 38px; }
+  .archive-banner-copy h1 { font-size: 36px; }
   .archive-years { padding: 16px 14px 20px 27px; }
   .archive-years::before { left: 22px; }
   .archive-year { padding-left: 23px; }
@@ -929,7 +929,7 @@
   .archive-search-content > span:first-of-type ~ span { display: none; }
   .archive-months { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .archive-banner-copy { width: 92%; }
-  .archive-banner-copy h1 { font-size: 34px; }
+  .archive-banner-copy h1 { font-size: 32px; }
   .archive-tag-dialog { padding: 17px; }
 }
 
@@ -1010,7 +1010,7 @@
 .archive-post-cover { position: relative; width: 120px; height: 160px; overflow: hidden; border: 4px solid var(--archive-paper-strong); border-radius: 7px; box-shadow: 0 9px 20px rgba(72, 102, 158, 0.18); transform: rotate(3deg); }
 .archive-post-cover img { object-fit: cover; }
 @media (max-width: 1180px) { .archive-year-posts a { grid-template-columns: 120px 112px minmax(0, 1fr) 36px; } .archive-year-posts a > span:not(.archive-post-cover) { display: none; } }
-@media (max-width: 980px) { .archive-year-posts a { grid-template-columns: 104px minmax(0, 1fr) 32px; min-height: 148px; } .archive-post-cover { width: 104px; height: 139px; } .archive-year-posts time { display: none; } }
+@media (max-width: 980px) { .archive-year-posts a { grid-template-columns: 104px minmax(0, 1fr) 32px; grid-template-rows: minmax(0, 1fr) auto; min-height: 148px; } .archive-year-posts a > .archive-post-cover { display: block; grid-row: 1 / 3; } .archive-post-cover { width: 104px; height: 139px; } .archive-year-posts time { display: block; grid-column: 2; grid-row: 2; } .archive-year-posts strong { grid-column: 2; grid-row: 1; } .archive-year-posts a > svg { grid-column: 3; grid-row: 1 / 3; } }
 @media (max-width: 420px) { .archive-year-posts a { grid-template-columns: 84px minmax(0, 1fr) 30px; min-height: 120px; gap: 8px; } .archive-post-cover { width: 84px; height: 112px; } }
 
 /* Year selection stays horizontal; articles are grouped by month on one timeline. */

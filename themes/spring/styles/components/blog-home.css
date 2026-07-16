@@ -373,7 +373,7 @@
   margin: 18px 0 22px;
   color: #30384d;
   font-family: var(--font-display), var(--font-body), sans-serif;
-  font-size: 56px;
+  font-size: 48px;
   line-height: 1.28;
 }
 
@@ -972,7 +972,7 @@
   }
 
   .sakura-hero-copy h1 {
-    font-size: 42px;
+    font-size: 36px;
   }
 
   .sakura-recent {
@@ -1021,7 +1021,7 @@
   }
 
   .sakura-hero-copy h1 {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   .sakura-hero-actions :where(a, button) {
