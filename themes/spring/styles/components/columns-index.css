@@ -174,3 +174,11 @@
 
 @media (prefers-color-scheme: dark) { :root:not([data-theme]) .columns-page { --columns-bg: #18223a; --columns-paper: rgba(24, 34, 58, 0.86); --columns-paper-strong: rgba(31, 43, 70, 0.96); --columns-text: #f3f6ff; --columns-muted: #b4bfd8; --columns-blue: #91b4ff; --columns-blue-deep: #79a2f2; --columns-pink: #ff9db7; --columns-line: rgba(190, 207, 244, 0.2); --columns-shadow: 0 18px 52px rgba(4, 9, 22, 0.42); background: radial-gradient(circle at 76% 4%, rgba(76, 105, 165, 0.3), transparent 34rem), radial-gradient(circle at 90% 54%, rgba(133, 68, 102, 0.22), transparent 30rem), linear-gradient(145deg, #0f1728, var(--columns-bg) 58%, #241a2b); } :root:not([data-theme]) .columns-page > .sakura-sidebar { background: rgba(17, 24, 42, 0.78); } :root:not([data-theme]) .columns-hero-wash { background: linear-gradient(90deg, rgba(18, 27, 48, 0.93), rgba(18, 27, 48, 0.55) 38%, rgba(18, 27, 48, 0.08) 68%); } }
 @media (prefers-reduced-motion: reduce) { .columns-page > .sakura-sidebar, .columns-toolbar, .columns-hero, .columns-featured, .columns-rail > * { animation: none; } .columns-page * { scroll-behavior: auto; transition-duration: 0.01ms !important; } }
+
+/* The column heading is a paper card with a separate tilted portrait. */
+.columns-hero { display: grid; grid-template-columns: minmax(0, 1fr) 180px; min-height: 300px; align-items: center; gap: clamp(18px, 4vw, 42px); padding: 30px clamp(24px, 5vw, 54px); background: color-mix(in srgb, var(--columns-paper) 90%, transparent); }
+.columns-hero-copy { width: auto; padding: 0; }
+.columns-hero-portrait { position: relative; justify-self: end; width: 180px; height: 240px; margin: 0; overflow: hidden; border: 5px solid var(--columns-paper-strong); border-radius: 8px; transform: rotate(3deg); box-shadow: 0 14px 28px rgba(74, 105, 161, 0.2); }
+.columns-hero-portrait img { object-fit: cover; object-position: 66% center; }
+@media (max-width: 700px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 118px; min-height: 250px; gap: 16px; padding: 24px 22px; } .columns-hero-copy { width: auto; padding: 0; } .columns-hero-portrait { width: 118px; height: 158px; } }
+@media (max-width: 420px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 92px; padding-inline: 18px; } .columns-hero-portrait { width: 92px; height: 123px; } }

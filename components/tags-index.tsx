@@ -84,14 +84,15 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
         <div className="tags-home-grid">
           <div className="tags-main-column">
         <section className="tags-hero" aria-labelledby="tags-title">
-          <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 980px) 100vw, 78vw" priority />
-          <div className="tags-hero-wash" aria-hidden="true" />
           <div className="tags-hero-copy">
             <span><Icon icon="solar:tag-linear" aria-hidden="true" />来自 Markdown</span>
             <h1 id="tags-title">标签清单</h1>
             <p>勾选标签，筛出文章。</p>
             <p>多选时取交集。</p>
           </div>
+          <figure className="tags-hero-portrait">
+            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 700px) 118px, 180px" priority />
+          </figure>
         </section>
 
           <div className="tags-main">

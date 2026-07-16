@@ -75,13 +75,14 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
         <div className="archive-home-grid">
           <div className="archive-main-column">
         <section className="archive-banner" aria-labelledby="archive-title">
-          <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 900px) 100vw, 75vw" priority />
-          <div aria-hidden="true" />
           <div className="archive-banner-copy">
             <span>从第一篇开始</span>
             <h1 id="archive-title">文章归档</h1>
             <p><Icon icon="solar:stars-line-linear" aria-hidden="true" />记录每一刻的思考</p>
           </div>
+          <figure className="archive-banner-portrait">
+            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 700px) 118px, 180px" priority />
+          </figure>
         </section>
 
           <section className="archive-years archive-panel" id="years" aria-label="按年份浏览文章">

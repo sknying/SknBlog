@@ -115,8 +115,6 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
         <div className="column-detail-home-grid">
           <div className="column-detail-main-column">
         <section className="column-detail-hero" aria-labelledby="column-detail-title">
-          <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="(max-width: 980px) 100vw, 78vw" priority />
-          <div className="column-detail-hero-wash" aria-hidden="true" />
           <div className="column-detail-hero-copy">
             <span>{getPrimaryTag(primaryPost)}</span>
             <h1 id="column-detail-title">{column.name}</h1>
@@ -130,6 +128,9 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
               ))}
             </div>
           </div>
+          <figure className="column-detail-hero-portrait">
+            <SafeImage src={column.coverImage} alt={`${column.name} 专栏封面`} sizes="(max-width: 700px) 118px, 180px" priority />
+          </figure>
         </section>
 
         <section className="column-detail-stat-strip" aria-label="专栏统计">

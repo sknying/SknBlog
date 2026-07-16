@@ -110,14 +110,6 @@ export function BlogHome({ posts }: { posts: Post[] }) {
         <div className="sakura-home-grid">
           <div className="sakura-main-column">
             <section className="sakura-hero" aria-labelledby="home-title">
-              <Image
-                src={SPRING_ASSETS.hero}
-                alt="樱花树下眺望海岸的银发女孩"
-                fill
-                sizes="(max-width: 980px) 100vw, 70vw"
-                priority
-              />
-              <div className="sakura-hero-wash" aria-hidden="true" />
               <div className="sakura-hero-copy">
                 <span className="sakura-hero-eyebrow">写于春日 · 也写深夜</span>
                 <h1 id="home-title">
@@ -132,6 +124,9 @@ export function BlogHome({ posts }: { posts: Post[] }) {
                   <button type="button" onClick={() => window.dispatchEvent(new Event("sknblog:open-about"))}>关于我</button>
                 </div>
               </div>
+              <figure className="sakura-hero-portrait">
+                <Image src={SPRING_ASSETS.hero} alt="樱花树下眺望海岸的银发女孩" fill sizes="(max-width: 700px) 118px, 180px" priority />
+              </figure>
             </section>
 
             <section className="sakura-recent glass-panel" id="recent" aria-labelledby="recent-title">
