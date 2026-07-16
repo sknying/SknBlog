@@ -24,7 +24,7 @@ export async function generateMetadata({ params }: ColumnPageProps): Promise<Met
     openGraph: {
       title: `${column.name} | SknBlog`,
       description: column.summary,
-      images: [column.coverImage]
+      ...(column.coverImage ? { images: [column.coverImage] } : {})
     }
   };
 }

@@ -149,6 +149,7 @@
 .columns-recent a > span { position: relative; height: 44px; overflow: hidden; border-radius: 5px; background: color-mix(in srgb, var(--columns-blue) 10%, transparent); }
 .columns-recent strong { display: -webkit-box; overflow: hidden; color: var(--columns-text); font-size: 11px; line-height: 1.4; -webkit-box-orient: vertical; -webkit-line-clamp: 2; }
 .columns-recent small { display: block; margin-top: 3px; color: var(--columns-muted); font-size: 10px; }
+.columns-recent-empty { margin: 15px 0 0; color: var(--columns-muted); font-size: 12px; line-height: 1.6; }
 .columns-quote { position: relative; margin: 0; color: var(--columns-muted); background: radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--columns-pink) 15%, transparent), transparent 10rem), var(--columns-paper); }
 .columns-quote > svg { color: var(--columns-pink); opacity: 0.72; }
 .columns-quote p { margin: 9px 0 0; color: var(--columns-text); font-size: 13px; line-height: 1.5; }

@@ -128,7 +128,7 @@ async function createPost(terminal) {
   const tagsInput = await ask(terminal, "标签（用逗号分隔）");
   const tags = tagsInput.split(/[,，]/).map((tag) => tag.trim()).filter(Boolean);
   const summary = await ask(terminal, "摘要", "", true);
-  const image = await ask(terminal, "封面路径", "/themes/spring/hero.png", true);
+  const image = await ask(terminal, "封面路径", "/themes/spring/sknblog.jpg", true);
   const mood = await ask(terminal, "文章心情", "写作记录", true);
   const intro = await ask(terminal, "开头引言", summary, true);
 
@@ -159,7 +159,7 @@ async function createColumn(terminal) {
   requireSafeSlug(slug, "专栏 slug");
   if (getColumns().some((column) => column.name === name)) throw new Error("专栏名称已存在，请换一个名称。");
 
-  const coverImage = await ask(terminal, "专栏封面路径", "/themes/spring/hero.png", true);
+  const coverImage = await ask(terminal, "专栏封面路径", "/themes/spring/sknblog.jpg", true);
   const summary = await ask(terminal, "专栏摘要", "", true);
   const intro = await ask(terminal, "专栏介绍", summary, true);
   const mood = await ask(terminal, "专栏签名", "持续整理中。", true);

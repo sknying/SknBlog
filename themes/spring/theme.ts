@@ -10,7 +10,7 @@ export const SPRING_THEME = {
 } as const;
 
 export const SPRING_ASSETS = {
-  background: "/themes/spring/background.png",
-  hero: "/themes/spring/hero.png",
+  background: "/themes/spring/background.jpg",
+  hero: "/themes/spring/sknblog.jpg",
   logo: "/themes/spring/logo.svg"
 } as const;

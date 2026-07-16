@@ -14,8 +14,8 @@ export type ColumnGroup = {
   slug: string;
   name: string;
   posts: Post[];
-  latestPost: Post;
-  coverImage: string;
+  latestPost: Post | null;
+  coverImage: string | null;
   summary: string;
   intro: string;
   mood: string;
@@ -77,15 +77,19 @@ export function getColumnGroups(posts: Post[], definitions: ColumnDefinition[] =
   const grouped = new Map<string, Post[]>();
   const definitionsByName = new Map(definitions.map((definition) => [definition.name, definition]));
 
-  // A `Map` groups only columns that actually contain at least one article.
+  // Definitions are the source of truth for the column index. Add article-only
+  // names afterwards so older content without a definition remains visible.
   posts.forEach((post) => {
     if (!post.column) return;
     grouped.set(post.column, [...(grouped.get(post.column) ?? []), post]);
   });
 
-  return Array.from(grouped, ([name, items]) => {
+  const columnNames = new Set([...definitions.map((definition) => definition.name), ...grouped.keys()]);
+
+  return Array.from(columnNames, (name) => {
+    const items = grouped.get(name) ?? [];
     const orderedPosts = sortPostsByColumnOrder(items);
-    const latestPost = sortPostsByDate(items)[0];
+    const latestPost = sortPostsByDate(items)[0] ?? null;
     const definition = definitionsByName.get(name);
 
     return {
@@ -93,16 +97,19 @@ export function getColumnGroups(posts: Post[], definitions: ColumnDefinition[] =
       name,
       posts: orderedPosts,
       latestPost,
-      coverImage: definition?.coverImage || latestPost.image,
-      summary: definition?.summary || latestPost.summary,
-      intro: definition?.intro || latestPost.intro,
-      mood: definition?.mood || latestPost.mood,
+      coverImage: definition?.coverImage || latestPost?.image || null,
+      summary: definition?.summary || latestPost?.summary || "这个专栏还在准备中。",
+      intro: definition?.intro || latestPost?.intro || "文章正在整理。",
+      mood: definition?.mood || latestPost?.mood || "先把方向定下来。",
       topTags: getTopTags(orderedPosts),
       totalWords: orderedPosts.reduce((total, post) => total + post.wordCount, 0),
-      updatedAt: latestPost.publishedAt,
+      updatedAt: latestPost?.publishedAt ?? "",
       order: definition?.order ?? Number.MAX_SAFE_INTEGER
     };
-  }).sort((left, right) => left.order - right.order || Date.parse(right.updatedAt) - Date.parse(left.updatedAt));
+  }).sort((left, right) => {
+    if (left.order !== right.order) return left.order - right.order;
+    return Date.parse(right.updatedAt || "1970-01-01") - Date.parse(left.updatedAt || "1970-01-01");
+  });
 }
 
 export function getColumnBySlug(posts: Post[], slug: string, definitions: ColumnDefinition[] = []) {
