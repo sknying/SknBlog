@@ -1,41 +1,35 @@
-# Spring Theme
+# Spring 主题
 
-`spring` is SknBlog's current visual theme. It packages the shared design
-tokens, code palette, background treatment, falling-petal component, and the
-assets those files require.
+`spring` 是 SknBlog 当前使用的视觉主题。它包含共享设计变量、代码配色、背景处理、樱花飘落组件，以及这些功能所需的静态资源。
 
-## Structure
+## 目录结构
 
 ```text
 themes/spring/
-  index.css                 Theme CSS entry point
-  theme.ts                  Public asset paths and theme identity
-  theme.json                Machine-readable manifest
+  index.css                 主题 CSS 入口
+  theme.ts                  公共资源路径与主题标识
+  theme.json                机器可读的主题清单
   components/sakura-fall.tsx
-  styles/                   Tokens, code palette, component CSS, responsive rules
+  styles/                   设计变量、代码配色、组件 CSS 与响应式规则
 
 public/themes/spring/
-  background.jpg            Repeating page background
-  sknblog.jpg               Shared page header image
-  logo.svg                  Site logo
-  fonts/fira-code/          ASCII code font files
+  background.jpg            重复平铺的页面背景
+  sknblog.jpg               全站共享的横幅图片
+  logo.svg                  网站 Logo
+  fonts/fira-code/          ASCII 范围的代码字体文件
 ```
 
-Article covers under `public/images/posts/` are content assets, not theme
-assets. Keep them outside this package. React page components remain in
-`components/`; they provide the site structure and content wiring, while all
-visual CSS is owned by this theme.
+`public/images/posts/` 下的文章封面属于内容资源，不属于主题资源，应继续放在主题目录之外。React 页面组件仍位于 `components/`，负责页面结构与内容连接；所有视觉 CSS 由本主题管理。
 
-## Enable It In This Project
+## 在本项目启用
 
-`app/globals.css` imports the theme once:
+`app/globals.css` 只需导入一次主题入口：
 
 ```css
 @import "../themes/spring/index.css";
 ```
 
-For the petal layer, render the theme component through the compatibility
-export in `components/sakura-fall.tsx`:
+需要樱花图层时，通过 `components/sakura-fall.tsx` 的兼容导出渲染主题组件：
 
 ```tsx
 import { SakuraFall } from "@/components/sakura-fall";
@@ -46,17 +40,14 @@ import { SakuraFall } from "@/components/sakura-fall";
 </main>
 ```
 
-Use `SPRING_ASSETS` from `themes/spring/theme.ts` for logo, hero, and fallback
-image paths. This prevents future pages from hard-coding old asset locations.
+Logo、横幅与回退图片路径应使用 `themes/spring/theme.ts` 的 `SPRING_ASSETS`。这样新页面不会硬编码旧资源路径。
 
-## Move It To Another Next.js Site
+## 迁移到其他 Next.js 网站
 
-1. Copy `themes/spring/` into the new repository.
-2. Copy `public/themes/spring/` into the new repository.
-3. Import `themes/spring/index.css` from the new root layout's global CSS.
-4. Copy the `SakuraFall` component or remove its CSS import if petals are not needed.
-5. Ensure the new site uses the same page root classes, or replace the root
-   selectors in `styles/site-background.css` and `styles/sakura-fall.css`.
+1. 将 `themes/spring/` 复制到新仓库。
+2. 将 `public/themes/spring/` 复制到新仓库。
+3. 在新项目根布局的全局 CSS 中导入 `themes/spring/index.css`。
+4. 复制 `SakuraFall` 组件；若不需要花瓣，则删除对应 CSS 导入。
+5. 确保新网站使用相同的页面根类名，或改写 `styles/site-background.css` 与 `styles/sakura-fall.css` 中的根选择器。
 
-The theme assumes a Next.js App Router project and static assets served from
-`public/` at root-relative URLs.
+该主题假定项目使用 Next.js App Router，且静态资源由 `public/` 目录以根相对路径提供。
