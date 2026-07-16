@@ -142,18 +142,35 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
   }, []);
 
   useEffect(() => {
-    // IntersectionObserver updates the highlighted outline item without a
-    // scroll handler running for every scroll event.
+    // Determine the active heading from the complete outline, rather than
+    // only the entries included in one observer callback. This keeps an
+    // anchor jump on its selected heading until the next heading reaches the
+    // reading position near the top of the viewport.
     const elements = outlineItems.map((item) => document.getElementById(item.id)).filter((element): element is HTMLElement => Boolean(element));
     if (elements.length === 0) return;
 
-    const observer = new IntersectionObserver((entries) => {
-      const visibleEntry = entries.filter((entry) => entry.isIntersecting).sort((left, right) => left.boundingClientRect.top - right.boundingClientRect.top)[0];
-      if (visibleEntry) setActiveOutlineId(visibleEntry.target.id);
-    }, { rootMargin: "-18% 0px -68% 0px", threshold: [0, 0.2, 0.6] });
+    const activationOffset = 40;
+    let frame = 0;
+    const updateActiveOutline = () => {
+      frame = 0;
+      const nextActive = elements.reduce((activeElement, element) => (
+        element.getBoundingClientRect().top <= activationOffset ? element : activeElement
+      ), elements[0]);
 
-    elements.forEach((element) => observer.observe(element));
-    return () => observer.disconnect();
+      setActiveOutlineId((current) => current === nextActive.id ? current : nextActive.id);
+    };
+    const scheduleActiveOutlineUpdate = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateActiveOutline);
+    };
+
+    updateActiveOutline();
+    window.addEventListener("scroll", scheduleActiveOutlineUpdate, { passive: true });
+    window.addEventListener("resize", scheduleActiveOutlineUpdate);
+    return () => {
+      window.removeEventListener("scroll", scheduleActiveOutlineUpdate);
+      window.removeEventListener("resize", scheduleActiveOutlineUpdate);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, [outlineItems]);
 
   const copyCode = async (id: string, code: string) => {
@@ -380,7 +397,7 @@ export function ArticlePage({ post, posts: allPosts, previousPost, nextPost, pri
               <button className="article-outline-toggle" type="button" onClick={toggleOutline} onPointerDown={handleOutlinePointerDown} onPointerMove={handleOutlinePointerMove} onPointerUp={handleOutlinePointerEnd} onPointerCancel={handleOutlinePointerEnd} aria-expanded={isOutlineOpen} aria-controls="article-outline-list" aria-label={isOutlineOpen ? "收起文章目录" : "展开文章目录"} title={isOutlineOpen ? "收起文章目录" : "展开文章目录"}>
                 {isOutlineOpen ? <><span><Icon icon="solar:list-check-linear" aria-hidden="true" />文章目录</span><Icon icon="solar:alt-arrow-down-linear" aria-hidden="true" /></> : <Icon icon="solar:list-check-linear" aria-hidden="true" />}
               </button>
-              {isOutlineOpen ? <nav className="article-outline" id="article-outline-list">{outlineItems.map((item, index) => <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} aria-current={activeOutlineId === item.id ? "location" : undefined}><span>{index + 1}.</span>{item.label}</a>)}</nav> : null}
+              {isOutlineOpen ? <nav className="article-outline" id="article-outline-list">{outlineItems.map((item, index) => <a className={`level-${item.level} ${activeOutlineId === item.id ? "active" : ""}`} href={`#${item.id}`} key={item.id} onClick={() => setActiveOutlineId(item.id)} aria-current={activeOutlineId === item.id ? "location" : undefined}><span>{index + 1}.</span>{item.label}</a>)}</nav> : null}
             </section>
           </aside>
         </div>
