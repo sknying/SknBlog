@@ -58,6 +58,7 @@ coverImage: "/images/columns/frontend.png"
 summary: "Next.js、性能和架构。"
 intro: "从页面到构建流程。"
 mood: "持续整理中。"
+quoteAuthor: "Sknying"
 order: 10
 ---
 ```
@@ -65,6 +66,7 @@ order: 10
 - `slug` 决定专栏详情页链接，例如 `/columns/frontend`。
 - `coverImage` 是专栏封面，优先级高于文章封面。
 - `summary`、`intro` 与 `mood` 分别用于专栏卡片、横幅和签名区。
+- `quoteAuthor` 用于详情页签名区的署名；省略时默认显示 `Sknying`。
 - `order` 越小越靠前；省略时按最近更新时间排序。
 
 执行 `pnpm new:column` 可以快速生成同样格式的专栏配置，并自动建议下一个 `order`。
