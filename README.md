@@ -81,11 +81,12 @@ coverImage: "/images/posts/next-cache-notes.jpg"
 summary: "Next.js、缓存和构建流程。"
 intro: "从页面到发布。"
 mood: "持续整理中。"
+quoteAuthor: "Sknying"
 order: 10
 ---
 ```
 
-文章的 `column` 必须与 `name` 完全一致。`slug` 决定专栏详情页路径。
+文章的 `column` 必须与 `name` 完全一致。`slug` 决定专栏详情页路径。`quoteAuthor` 是详情页签名区的署名，不填写时默认显示 `Sknying`。
 
 ## 目录
 

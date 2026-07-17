@@ -212,7 +212,7 @@ export function ColumnDetail({ column, columns, posts }: ColumnDetailProps) {
             <blockquote className="column-detail-panel column-detail-quote">
               <Icon icon="solar:chat-round-line-linear" aria-hidden="true" />
               <p>{column.mood}</p>
-              <cite>Sknying</cite>
+              <cite>{column.quoteAuthor}</cite>
             </blockquote>
           </aside>
         </div>

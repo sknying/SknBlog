@@ -197,6 +197,7 @@ function loadColumnDefinitions(): ColumnDefinition[] {
       summary: definition.summary?.trim() || undefined,
       intro: definition.intro?.trim() || undefined,
       mood: definition.mood?.trim() || undefined,
+      quoteAuthor: definition.quoteAuthor?.trim() || undefined,
       order: typeof definition.order === "number" ? definition.order : undefined
     }));
 }

@@ -163,6 +163,7 @@ async function createColumn(terminal) {
   const summary = await ask(terminal, "专栏摘要", "", true);
   const intro = await ask(terminal, "专栏介绍", summary, true);
   const mood = await ask(terminal, "专栏签名", "持续整理中。", true);
+  const quoteAuthor = await ask(terminal, "签名署名", "Sknying", true);
   const order = await ask(terminal, "展示排序（越小越靠前）", String(getNextColumnOrder()), true);
   if (!/^\d+$/.test(order)) throw new Error("展示排序必须是整数。");
 
@@ -174,6 +175,7 @@ async function createColumn(terminal) {
     `summary: ${yamlString(summary)}`,
     `intro: ${yamlString(intro)}`,
     `mood: ${yamlString(mood)}`,
+    `quoteAuthor: ${yamlString(quoteAuthor)}`,
     `order: ${order}`,
     "---",
     ""

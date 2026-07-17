@@ -7,6 +7,7 @@ export type ColumnDefinition = {
   summary?: string;
   intro?: string;
   mood?: string;
+  quoteAuthor?: string;
   order?: number;
 };
 
@@ -19,6 +20,7 @@ export type ColumnGroup = {
   summary: string;
   intro: string;
   mood: string;
+  quoteAuthor: string;
   topTags: string[];
   totalWords: number;
   updatedAt: string;
@@ -101,6 +103,7 @@ export function getColumnGroups(posts: Post[], definitions: ColumnDefinition[] =
       summary: definition?.summary || latestPost?.summary || "这个专栏还在准备中。",
       intro: definition?.intro || latestPost?.intro || "文章正在整理。",
       mood: definition?.mood || latestPost?.mood || "先把方向定下来。",
+      quoteAuthor: definition?.quoteAuthor || "Sknying",
       topTags: getTopTags(orderedPosts),
       totalWords: orderedPosts.reduce((total, post) => total + post.wordCount, 0),
       updatedAt: latestPost?.publishedAt ?? "",
