@@ -179,16 +179,16 @@
 /* The column heading is a paper card with a separate tilted portrait. */
 .columns-hero { display: grid; grid-template-columns: minmax(0, 1fr) 220px; min-height: 300px; align-items: center; gap: clamp(18px, 4vw, 42px); padding: 30px clamp(24px, 5vw, 54px); background: color-mix(in srgb, var(--columns-paper) 90%, transparent); }
 .columns-hero-copy { width: auto; padding: 0; }
-.columns-hero-portrait { position: relative; justify-self: end; width: 220px; height: 293px; margin: 0; overflow: hidden; border: 5px solid var(--columns-paper-strong); border-radius: 8px; transform: rotate(3deg); box-shadow: 0 14px 28px rgba(74, 105, 161, 0.2); }
+.columns-hero-portrait { position: relative; justify-self: end; width: 220px; height: 330px; margin: 0; overflow: hidden; border: 5px solid var(--columns-paper-strong); border-radius: 8px; transform: rotate(3deg); box-shadow: 0 14px 28px rgba(74, 105, 161, 0.2); }
 .columns-hero-portrait img { object-fit: cover; object-position: 66% center; }
-@media (max-width: 700px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 132px; min-height: 250px; gap: 16px; padding: 24px 22px; } .columns-hero-copy { width: auto; padding: 0; } .columns-hero-portrait { width: 132px; height: 176px; } }
-@media (max-width: 420px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .columns-hero-portrait { width: 102px; height: 136px; } }
+@media (max-width: 700px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 132px; min-height: 250px; gap: 16px; padding: 24px 22px; } .columns-hero-copy { width: auto; padding: 0; } .columns-hero-portrait { width: 132px; height: 198px; } }
+@media (max-width: 420px) { .columns-hero { grid-template-columns: minmax(0, 1fr) 102px; padding-inline: 18px; } .columns-hero-portrait { width: 102px; height: 153px; } }
 
 /* Column covers use a poster grid: cover first, compact metadata below it. */
 .columns-cover-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 3vw, 38px); }
 .columns-cover-card { display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto auto; gap: 12px; min-width: 0; padding: 0; overflow: visible; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 .columns-cover-card:hover { border-color: transparent; box-shadow: none; transform: none; }
-.columns-cover-card .columns-card-cover { position: relative; grid-row: auto; width: 100%; height: auto; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid var(--columns-line); border-radius: 8px; box-shadow: 0 12px 24px rgba(74, 105, 161, 0.14); transform: none; }
+.columns-cover-card .columns-card-cover { position: relative; grid-row: auto; width: 100%; height: auto; aspect-ratio: 2 / 3; overflow: hidden; border: 1px solid var(--columns-line); border-radius: 8px; box-shadow: 0 12px 24px rgba(74, 105, 161, 0.14); transform: none; }
 .columns-cover-card .columns-card-cover img { object-fit: cover; }
 .columns-cover-meta { position: absolute; z-index: 2; right: 0; bottom: 0; left: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 28px 12px 10px; color: #fff; background: linear-gradient(0deg, rgba(22, 30, 43, 0.82), rgba(22, 30, 43, 0)); font-size: 12px; }
 .columns-cover-meta span { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; }
