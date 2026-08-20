@@ -43,7 +43,7 @@ const INNER_SPOKES = Array.from({ length: 8 }, (_, index) => index * 45);
 const ROMAN_NUMERALS = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"] as const;
 const ROMAN_MARKS = ROMAN_NUMERALS.map((label, index) => {
   const angle = (index * 30 - 90) * (Math.PI / 180);
-  const radius = 42;
+  const radius = 72;
 
   return {
     label,
@@ -171,13 +171,13 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
           </g>
 
           <g className="mechanical-clock__hand mechanical-clock__hand--hour" style={{ "--clock-hand-angle": `${hourAngle}deg` } as ClockStyle}>
-            <path d="M120 131L113.5 120L117 86L120 78L123 86L126.5 120Z" />
+            <path d="M120 133L112.5 120L116.5 37L120 26L123.5 37L127.5 120Z" />
           </g>
           <g className="mechanical-clock__hand mechanical-clock__hand--minute" style={{ "--clock-hand-angle": `${minuteAngle}deg` } as ClockStyle}>
-            <path d="M120 133L114.5 120L117.5 66L120 57L122.5 66L125.5 120Z" />
+            <path d="M120 135L114 120L117.5 29L120 18L122.5 29L126 120Z" />
           </g>
           <g className="mechanical-clock__hand mechanical-clock__hand--second" style={{ "--clock-hand-angle": `${secondAngle}deg` } as ClockStyle}>
-            <path d="M119.3 136L119.5 119L120 51L120.5 119L120.7 136Z" />
+            <path d="M119.1 139L119.4 119L120 12L120.6 119L120.9 139Z" />
           </g>
 
           <circle className="mechanical-clock__pin-halo" cx="120" cy="120" r="8" stroke={`url(#${gradientId})`} />
