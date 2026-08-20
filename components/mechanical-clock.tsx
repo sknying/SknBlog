@@ -40,6 +40,17 @@ const SCALE_TICKS = Array.from({ length: 60 }, (_, index) => ({
   cardinal: index % 15 === 0
 }));
 const INNER_SPOKES = Array.from({ length: 8 }, (_, index) => index * 45);
+const ROMAN_NUMERALS = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"] as const;
+const ROMAN_MARKS = ROMAN_NUMERALS.map((label, index) => {
+  const angle = (index * 30 - 90) * (Math.PI / 180);
+  const radius = 42;
+
+  return {
+    label,
+    x: (VIEWBOX_CENTER + Math.cos(angle) * radius).toFixed(3),
+    y: (VIEWBOX_CENTER + Math.sin(angle) * radius).toFixed(3)
+  };
+});
 const TIME_FORMATTER = new Intl.DateTimeFormat("zh-CN", {
   hour: "2-digit",
   minute: "2-digit",
@@ -94,12 +105,12 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
         <svg className="mechanical-clock__machine" viewBox="0 0 240 240">
           <defs>
             <linearGradient id={gradientId} x1="120" y1="5" x2="120" y2="235" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#a77cff" />
-              <stop offset="0.2" stopColor="#6d8cff" />
-              <stop offset="0.4" stopColor="#44c8e8" />
-              <stop offset="0.58" stopColor="#58d49b" />
-              <stop offset="0.76" stopColor="#efc95c" />
-              <stop offset="1" stopColor="#f05d68" />
+              <stop offset="0" stopColor="#8b5cf6" />
+              <stop offset="0.2" stopColor="#3b82f6" />
+              <stop offset="0.4" stopColor="#06b6d4" />
+              <stop offset="0.58" stopColor="#22c55e" />
+              <stop offset="0.77" stopColor="#f59e0b" />
+              <stop offset="1" stopColor="#ef4444" />
             </linearGradient>
             <mask id={outerMaskId} x="0" y="0" width="240" height="240" maskUnits="userSpaceOnUse">
               <polygon points={OUTER_GEAR_POINTS} fill="white" />
@@ -131,7 +142,7 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
             ))}
           </g>
 
-          <g className="mechanical-clock__scale" stroke={`url(#${gradientId})`}>
+          <g className="mechanical-clock__scale">
             <circle className="mechanical-clock__scale-track" cx="120" cy="120" r="94" />
             {SCALE_TICKS.map(({ angle, major, cardinal }, index) => (
               <line
@@ -147,20 +158,26 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
           </g>
 
           <g className="mechanical-clock__dial">
-            <circle className="mechanical-clock__dial-glow" cx="120" cy="120" r="61" stroke={`url(#${gradientId})`} />
-            <circle className="mechanical-clock__face" cx="120" cy="120" r="55" />
-            <circle className="mechanical-clock__face-ring" cx="120" cy="120" r="47" />
-            <path className="mechanical-clock__face-crosshair" d="M120 69V78M120 162V171M69 120H78M162 120H171" />
+            <circle className="mechanical-clock__dial-glow" cx="120" cy="120" r="64" stroke={`url(#${gradientId})`} />
+            <circle className="mechanical-clock__face" cx="120" cy="120" r="58" />
+            <circle className="mechanical-clock__face-ring" cx="120" cy="120" r="51" />
+            <path className="mechanical-clock__face-crosshair" d="M120 63V70M120 170V177M63 120H70M170 120H177" />
+          </g>
+
+          <g className="mechanical-clock__roman-numerals">
+            {ROMAN_MARKS.map(({ label, x, y }) => (
+              <text x={x} y={y} textAnchor="middle" dominantBaseline="central" key={label}>{label}</text>
+            ))}
           </g>
 
           <g className="mechanical-clock__hand mechanical-clock__hand--hour" style={{ "--clock-hand-angle": `${hourAngle}deg` } as ClockStyle}>
-            <path d="M120 126L115.5 119L120 82L124.5 119Z" />
+            <path d="M120 131L113.5 120L117 86L120 78L123 86L126.5 120Z" />
           </g>
           <g className="mechanical-clock__hand mechanical-clock__hand--minute" style={{ "--clock-hand-angle": `${minuteAngle}deg` } as ClockStyle}>
-            <path d="M120 130L116.5 119L120 64L123.5 119Z" />
+            <path d="M120 133L114.5 120L117.5 66L120 57L122.5 66L125.5 120Z" />
           </g>
           <g className="mechanical-clock__hand mechanical-clock__hand--second" style={{ "--clock-hand-angle": `${secondAngle}deg` } as ClockStyle}>
-            <path d="M118.8 132L119.2 119L120 57L120.8 119L121.2 132Z" />
+            <path d="M119.3 136L119.5 119L120 51L120.5 119L120.7 136Z" />
           </g>
 
           <circle className="mechanical-clock__pin-halo" cx="120" cy="120" r="8" stroke={`url(#${gradientId})`} />

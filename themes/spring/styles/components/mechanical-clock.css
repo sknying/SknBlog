@@ -5,7 +5,16 @@
   border: 0;
   background: transparent;
   box-shadow: none;
+  width: 280px;
+  height: 280px;
   transform: none;
+}
+
+.sakura-hero,
+.archive-banner,
+.columns-hero,
+.tags-hero {
+  grid-template-columns: minmax(0, 1fr) 280px;
 }
 
 .mechanical-clock {
@@ -15,7 +24,7 @@
   --clock-pink: var(--sakura-pink, var(--archive-pink, var(--columns-pink, var(--tags-pink, #f28fa8))));
   position: relative;
   display: grid;
-  width: min(100%, 220px);
+  width: min(100%, 280px);
   min-width: 44px;
   aspect-ratio: 1;
   place-items: center;
@@ -96,11 +105,11 @@
 }
 
 .mechanical-clock__gear-fill {
-  opacity: 0.82;
+  opacity: 0.96;
 }
 
 .mechanical-clock__gear--inner .mechanical-clock__gear-fill {
-  opacity: 0.68;
+  opacity: 0.82;
 }
 
 .mechanical-clock__gear-edge,
@@ -126,23 +135,27 @@
 
 .mechanical-clock__scale-track {
   fill: none;
-  stroke-width: 1;
-  opacity: 0.46;
+  stroke: rgba(248, 251, 255, 0.86);
+  stroke-width: 1.4;
+  opacity: 0.94;
+  filter: drop-shadow(0 0 1.2px rgba(15, 23, 42, 0.94));
 }
 
 .mechanical-clock__tick {
+  stroke: #f8fbff;
   stroke-linecap: square;
-  stroke-width: 1.1;
-  opacity: 0.58;
+  stroke-width: 1.6;
+  opacity: 0.96;
+  filter: drop-shadow(0 0 1.2px rgba(15, 23, 42, 0.98));
 }
 
 .mechanical-clock__tick--major {
-  stroke-width: 2;
-  opacity: 0.88;
+  stroke-width: 2.8;
+  opacity: 1;
 }
 
 .mechanical-clock__tick--cardinal {
-  stroke-width: 3.2;
+  stroke-width: 4;
   opacity: 1;
 }
 
@@ -173,6 +186,17 @@
   stroke-width: 1.4;
 }
 
+.mechanical-clock__roman-numerals {
+  fill: var(--clock-ink);
+  stroke: color-mix(in srgb, var(--clock-paper) 92%, transparent);
+  stroke-width: 1.8;
+  paint-order: stroke fill;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
 .mechanical-clock__hand {
   transform-box: view-box;
   transform-origin: 120px 120px;
@@ -181,13 +205,14 @@
 
 .mechanical-clock__hand--hour path,
 .mechanical-clock__hand--minute path {
-  fill: color-mix(in srgb, var(--clock-ink) 86%, transparent);
-  stroke: color-mix(in srgb, var(--clock-paper) 72%, transparent);
-  stroke-width: 0.8;
+  fill: color-mix(in srgb, var(--clock-ink) 94%, transparent);
+  stroke: color-mix(in srgb, var(--clock-paper) 88%, transparent);
+  stroke-width: 1.2;
+  filter: drop-shadow(0 1px 1px color-mix(in srgb, var(--clock-ink) 32%, transparent));
 }
 
 .mechanical-clock__hand--minute path {
-  fill: color-mix(in srgb, var(--clock-blue) 76%, var(--clock-ink));
+  fill: color-mix(in srgb, var(--clock-blue) 82%, var(--clock-ink));
 }
 
 .mechanical-clock__hand--second path {
@@ -234,14 +259,30 @@
 }
 
 @media (max-width: 700px) {
-  .mechanical-clock { width: min(100%, 130px); }
-  .mechanical-clock__tick:not(.mechanical-clock__tick--major) { opacity: 0.42; }
+  .sakura-hero,
+  .archive-banner,
+  .columns-hero,
+  .tags-hero { grid-template-columns: minmax(0, 1fr) 180px; }
+  .mechanical-clock-frame { width: 180px; height: 180px; }
+  .mechanical-clock { width: min(100%, 180px); }
   .mechanical-clock__speed-light { width: 7px; }
 }
 
-@media (max-width: 420px) {
-  .mechanical-clock { width: min(100%, 100px); }
-  .mechanical-clock__tick:not(.mechanical-clock__tick--major) { display: none; }
+@media (max-width: 520px) {
+  .sakura-hero,
+  .archive-banner,
+  .columns-hero,
+  .tags-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .mechanical-clock-frame {
+    justify-self: center;
+    width: min(58vw, 210px);
+    height: auto;
+  }
+  .mechanical-clock { width: min(58vw, 210px); }
+  .mechanical-clock__roman-numerals { font-size: 9.5px; }
   .mechanical-clock__gear-edge { stroke-width: 1.5; }
 }
 
