@@ -13,22 +13,9 @@
   --clock-paper: var(--sakura-paper-strong, var(--archive-paper-strong, var(--columns-paper-strong, var(--tags-paper-strong, #fffaf0))));
   --clock-blue: var(--sakura-blue-deep, var(--archive-blue-deep, var(--columns-blue-deep, var(--tags-blue-deep, #4774d2))));
   --clock-pink: var(--sakura-pink, var(--archive-pink, var(--columns-pink, var(--tags-pink, #f28fa8))));
-  --clock-spectrum: conic-gradient(
-    from 0deg,
-    #9b7cf7 0deg,
-    #7188ff 45deg,
-    #45bce5 90deg,
-    #4ac79a 125deg,
-    #d2cf4f 155deg,
-    #ef5c63 180deg,
-    #ee765f 215deg,
-    #ec7094 255deg,
-    #cd70d6 310deg,
-    #9b7cf7 360deg
-  );
   position: relative;
   display: grid;
-  width: min(100%, 210px);
+  width: min(100%, 220px);
   min-width: 44px;
   aspect-ratio: 1;
   place-items: center;
@@ -40,15 +27,26 @@
   cursor: pointer;
   isolation: isolate;
   touch-action: manipulation;
-  transition: filter 200ms ease, opacity 200ms ease;
+  transition: filter 200ms ease, opacity 160ms ease;
+}
+
+.mechanical-clock::before {
+  position: absolute;
+  z-index: -1;
+  width: 76%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--clock-blue) 17%, transparent), transparent 68%);
+  content: "";
+  filter: blur(10px);
 }
 
 .mechanical-clock:hover {
-  filter: saturate(1.1) drop-shadow(0 12px 18px color-mix(in srgb, var(--clock-blue) 24%, transparent));
+  filter: saturate(1.14) drop-shadow(0 12px 18px color-mix(in srgb, var(--clock-blue) 26%, transparent));
 }
 
 .mechanical-clock:active {
-  opacity: 0.82;
+  opacity: 0.78;
 }
 
 .mechanical-clock:focus-visible {
@@ -56,81 +54,37 @@
   outline-offset: 5px;
 }
 
-.mechanical-clock__visual,
-.mechanical-clock__gear,
-.mechanical-clock__dial,
-.mechanical-clock__face,
-.mechanical-clock__spectrum {
-  position: absolute;
-  border-radius: 50%;
-}
-
 .mechanical-clock__visual {
+  position: absolute;
   inset: 0;
 }
 
+.mechanical-clock__machine {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
 .mechanical-clock__gear {
-  border: 3px solid var(--clock-gear-color);
+  transform-box: view-box;
+  transform-origin: 120px 120px;
   animation-duration: var(--clock-gear-duration);
   animation-timing-function: linear;
   animation-iteration-count: infinite;
   will-change: transform;
 }
 
-.mechanical-clock__gear::before,
-.mechanical-clock__gear::after {
-  position: absolute;
-  content: "";
-}
-
-.mechanical-clock__gear::after {
-  border: 3px solid var(--clock-gear-color);
-  border-radius: 50%;
-  box-shadow: inset 0 0 9px color-mix(in srgb, var(--clock-gear-color) 36%, transparent);
-}
-
 .mechanical-clock__gear--outer {
-  --clock-gear-duration: 72s;
-  --clock-gear-color: color-mix(in srgb, var(--clock-blue) 60%, #a17bf2);
-  inset: 0;
+  --clock-gear-duration: 84s;
   animation-name: mechanical-clock-counterclockwise;
-}
-
-.mechanical-clock__gear--outer::before {
-  inset: -5px;
-  background: repeating-conic-gradient(
-    from -3deg,
-    var(--clock-gear-color) 0deg 5deg,
-    transparent 5deg 12deg
-  );
-  -webkit-mask: radial-gradient(circle, transparent 0 77%, #000 78% 100%);
-  mask: radial-gradient(circle, transparent 0 77%, #000 78% 100%);
-}
-
-.mechanical-clock__gear--outer::after {
-  inset: 14%;
+  filter: drop-shadow(0 3px 5px color-mix(in srgb, var(--clock-blue) 24%, transparent));
 }
 
 .mechanical-clock__gear--inner {
-  --clock-gear-duration: 54s;
-  --clock-gear-color: color-mix(in srgb, var(--clock-pink) 58%, #ef5c63);
-  inset: 10%;
+  --clock-gear-duration: 62s;
   animation-name: mechanical-clock-clockwise;
-}
-
-.mechanical-clock__gear--inner::before {
-  inset: -4px;
-  background: repeating-conic-gradient(
-    from 0deg,
-    var(--clock-gear-color) 0deg 6deg,
-    transparent 6deg 15deg
-  );
-  -webkit-mask: radial-gradient(circle, transparent 0 73%, #000 74% 100%);
-  mask: radial-gradient(circle, transparent 0 73%, #000 74% 100%);
-}
-
-.mechanical-clock__gear--inner::after {
-  inset: 17%;
+  filter: drop-shadow(0 2px 4px color-mix(in srgb, var(--clock-pink) 22%, transparent));
 }
 
 .mechanical-clock.is-fast .mechanical-clock__gear--outer {
@@ -141,110 +95,115 @@
   --clock-gear-duration: 7s;
 }
 
-.mechanical-clock__dial {
-  inset: 19%;
-  padding: 5px;
-  background: var(--clock-spectrum);
-  box-shadow:
-    0 0 0 2px color-mix(in srgb, var(--clock-paper) 74%, transparent),
-    0 10px 28px color-mix(in srgb, var(--clock-blue) 20%, transparent);
+.mechanical-clock__gear-fill {
+  opacity: 0.82;
 }
 
-.mechanical-clock__spectrum {
-  inset: 0;
-  background: var(--clock-spectrum);
-  filter: blur(8px);
-  opacity: 0.42;
+.mechanical-clock__gear--inner .mechanical-clock__gear-fill {
+  opacity: 0.68;
+}
+
+.mechanical-clock__gear-edge,
+.mechanical-clock__gear-rim {
+  fill: none;
+  stroke: color-mix(in srgb, var(--clock-ink) 28%, transparent);
+  vector-effect: non-scaling-stroke;
+}
+
+.mechanical-clock__gear-edge {
+  stroke-width: 1.2;
+}
+
+.mechanical-clock__gear-rim {
+  stroke-width: 1.6;
+}
+
+.mechanical-clock__gear-bolt {
+  fill: color-mix(in srgb, var(--clock-paper) 78%, transparent);
+  stroke: color-mix(in srgb, var(--clock-ink) 36%, transparent);
+  stroke-width: 1.2;
+}
+
+.mechanical-clock__scale-track {
+  fill: none;
+  stroke-width: 1;
+  opacity: 0.46;
+}
+
+.mechanical-clock__tick {
+  stroke-linecap: square;
+  stroke-width: 1.1;
+  opacity: 0.58;
+}
+
+.mechanical-clock__tick--major {
+  stroke-width: 2;
+  opacity: 0.88;
+}
+
+.mechanical-clock__tick--cardinal {
+  stroke-width: 3.2;
+  opacity: 1;
+}
+
+.mechanical-clock__dial-glow {
+  fill: color-mix(in srgb, var(--clock-paper) 34%, transparent);
+  stroke-width: 3;
+  opacity: 0.86;
+  filter: drop-shadow(0 0 5px color-mix(in srgb, var(--clock-blue) 38%, transparent));
 }
 
 .mechanical-clock__face {
-  inset: 5px;
-  overflow: hidden;
-  color: var(--clock-ink);
-  background:
-    radial-gradient(circle at 36% 28%, rgba(255, 255, 255, 0.44), transparent 34%),
-    color-mix(in srgb, var(--clock-paper) 94%, transparent);
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, var(--clock-ink) 10%, transparent),
-    inset 0 -14px 24px color-mix(in srgb, var(--clock-blue) 7%, transparent);
+  fill: color-mix(in srgb, var(--clock-paper) 88%, transparent);
+  stroke: color-mix(in srgb, var(--clock-ink) 20%, transparent);
+  stroke-width: 1.4;
 }
 
-.mechanical-clock__marker {
-  position: absolute;
-  inset: 7%;
-  transform: rotate(var(--clock-marker-angle));
+.mechanical-clock__face-ring {
+  fill: none;
+  stroke: color-mix(in srgb, var(--clock-blue) 20%, transparent);
+  stroke-dasharray: 2 4;
+  stroke-width: 1;
 }
 
-.mechanical-clock__marker::before {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: 3px;
-  height: 10px;
-  border-radius: 2px;
-  background: var(--clock-marker-color);
-  box-shadow: 0 0 6px color-mix(in srgb, var(--clock-marker-color) 55%, transparent);
-  content: "";
-  transform: translateX(-50%);
-}
-
-.mechanical-clock__cardinal {
-  position: absolute;
-  left: 50%;
-  font-family: var(--font-code), monospace;
-  font-size: 10px;
-  line-height: 1;
-  transform: translateX(-50%);
-}
-
-.mechanical-clock__cardinal--twelve {
-  top: 15%;
-  color: #8f6cf0;
-}
-
-.mechanical-clock__cardinal--six {
-  bottom: 15%;
-  color: #e74f58;
+.mechanical-clock__face-crosshair {
+  fill: none;
+  stroke: color-mix(in srgb, var(--clock-ink) 34%, transparent);
+  stroke-linecap: square;
+  stroke-width: 1.4;
 }
 
 .mechanical-clock__hand {
-  position: absolute;
-  bottom: 50%;
-  left: 50%;
-  border-radius: 999px 999px 3px 3px;
-  background: currentColor;
-  box-shadow: 0 2px 4px color-mix(in srgb, var(--clock-ink) 24%, transparent);
-  transform: translateX(-50%) rotate(var(--clock-hand-angle));
-  transform-origin: 50% 100%;
+  transform-box: view-box;
+  transform-origin: 120px 120px;
+  transform: rotate(var(--clock-hand-angle));
 }
 
-.mechanical-clock__hand--hour {
-  width: 4px;
-  height: 25%;
+.mechanical-clock__hand--hour path,
+.mechanical-clock__hand--minute path {
+  fill: color-mix(in srgb, var(--clock-ink) 86%, transparent);
+  stroke: color-mix(in srgb, var(--clock-paper) 72%, transparent);
+  stroke-width: 0.8;
 }
 
-.mechanical-clock__hand--minute {
-  width: 3px;
-  height: 34%;
+.mechanical-clock__hand--minute path {
+  fill: color-mix(in srgb, var(--clock-blue) 76%, var(--clock-ink));
 }
 
-.mechanical-clock__hand--second {
-  width: 2px;
-  height: 38%;
-  color: #e9505b;
+.mechanical-clock__hand--second path {
+  fill: #eb5967;
+  filter: drop-shadow(0 0 2px color-mix(in srgb, #eb5967 54%, transparent));
+}
+
+.mechanical-clock__pin-halo {
+  fill: color-mix(in srgb, var(--clock-paper) 74%, transparent);
+  stroke-width: 2.4;
 }
 
 .mechanical-clock__pin {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 10px;
-  aspect-ratio: 1;
-  border: 2px solid color-mix(in srgb, var(--clock-paper) 80%, transparent);
-  border-radius: 50%;
-  background: var(--clock-spectrum);
-  box-shadow: 0 0 8px color-mix(in srgb, var(--clock-pink) 45%, transparent);
-  transform: translate(-50%, -50%);
+  fill: color-mix(in srgb, var(--clock-ink) 88%, var(--clock-blue));
+  stroke: color-mix(in srgb, var(--clock-paper) 72%, transparent);
+  stroke-width: 1;
 }
 
 .mechanical-clock__speed-light {
@@ -255,7 +214,7 @@
   aspect-ratio: 1;
   border: 2px solid color-mix(in srgb, var(--clock-paper) 78%, transparent);
   border-radius: 50%;
-  background: color-mix(in srgb, var(--clock-blue) 55%, transparent);
+  background: color-mix(in srgb, var(--clock-blue) 58%, transparent);
   box-shadow: 0 0 0 transparent;
   transition: background-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
 }
@@ -275,18 +234,15 @@
 }
 
 @media (max-width: 700px) {
-  .mechanical-clock { width: min(100%, 126px); }
-  .mechanical-clock__marker::before { width: 2px; height: 7px; }
-  .mechanical-clock__pin { width: 8px; }
+  .mechanical-clock { width: min(100%, 130px); }
+  .mechanical-clock__tick:not(.mechanical-clock__tick--major) { opacity: 0.42; }
   .mechanical-clock__speed-light { width: 7px; }
 }
 
 @media (max-width: 420px) {
-  .mechanical-clock { width: min(100%, 98px); }
-  .mechanical-clock__dial { padding: 3px; }
-  .mechanical-clock__face { inset: 3px; }
-  .mechanical-clock__marker::before { height: 5px; }
-  .mechanical-clock__cardinal { display: none; }
+  .mechanical-clock { width: min(100%, 100px); }
+  .mechanical-clock__tick:not(.mechanical-clock__tick--major) { display: none; }
+  .mechanical-clock__gear-edge { stroke-width: 1.5; }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,38 +1,60 @@
 "use client";
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useId, useState, type CSSProperties } from "react";
 
-const HOUR_MARKERS = [
-  "#9b7cf7",
-  "#7789ff",
-  "#4bb9e8",
-  "#43c5a3",
-  "#9fd052",
-  "#f1aa4d",
-  "#ef5c63",
-  "#ed6e8d",
-  "#dd70b5",
-  "#c66fd3",
-  "#b075e8",
-  "#a17bf2"
-] as const;
+const VIEWBOX_CENTER = 120;
 
 type ClockStyle = CSSProperties & Record<`--${string}`, string>;
 
-function formatTime(value: Date | null) {
-  if (!value) {
-    return "正在校准当前时间";
+function createGearPoints(teeth: number, rootRadius: number, outerRadius: number) {
+  const points: string[] = [];
+  const toothStep = (Math.PI * 2) / teeth;
+  const profile = [
+    [0, rootRadius],
+    [0.12, rootRadius],
+    [0.22, (rootRadius + outerRadius) / 2],
+    [0.3, outerRadius],
+    [0.7, outerRadius],
+    [0.78, (rootRadius + outerRadius) / 2],
+    [0.88, rootRadius],
+    [1, rootRadius]
+  ] as const;
+
+  for (let tooth = 0; tooth < teeth; tooth += 1) {
+    for (const [progress, radius] of profile) {
+      const angle = tooth * toothStep + progress * toothStep - Math.PI / 2;
+      const x = VIEWBOX_CENTER + Math.cos(angle) * radius;
+      const y = VIEWBOX_CENTER + Math.sin(angle) * radius;
+      points.push(`${x.toFixed(2)},${y.toFixed(2)}`);
+    }
   }
 
-  return new Intl.DateTimeFormat("zh-CN", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: false
-  }).format(value);
+  return points.join(" ");
+}
+
+const OUTER_GEAR_POINTS = createGearPoints(30, 101, 115);
+const INNER_GEAR_POINTS = createGearPoints(20, 79, 91);
+const SCALE_TICKS = Array.from({ length: 60 }, (_, index) => ({
+  angle: index * 6,
+  major: index % 5 === 0,
+  cardinal: index % 15 === 0
+}));
+const INNER_SPOKES = Array.from({ length: 8 }, (_, index) => index * 45);
+const TIME_FORMATTER = new Intl.DateTimeFormat("zh-CN", {
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hourCycle: "h23"
+});
+
+function formatTime(value: Date | null) {
+  return value ? TIME_FORMATTER.format(value) : "正在校准当前时间";
 }
 
 export function MechanicalClock({ className = "" }: { className?: string }) {
+  const gradientId = `clock-spectrum-${useId().replaceAll(":", "")}`;
+  const outerMaskId = `${gradientId}-outer-mask`;
+  const innerMaskId = `${gradientId}-inner-mask`;
   const [now, setNow] = useState<Date | null>(null);
   const [isFast, setIsFast] = useState(false);
 
@@ -57,49 +79,93 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
   const secondAngle = seconds * 6;
   const timeLabel = formatTime(now);
   const speedLabel = isFast ? "快速" : "慢速";
+  const accessibleTime = now ? `当前时间 ${timeLabel}` : timeLabel;
 
   return (
     <button
       className={`mechanical-clock${isFast ? " is-fast" : ""}${className ? ` ${className}` : ""}`}
       type="button"
-      aria-label={`当前时间 ${timeLabel}，齿轮正在${speedLabel}旋转，点击切换速度`}
+      aria-label={`${accessibleTime}，齿轮正在${speedLabel}旋转，点击切换速度`}
       aria-pressed={isFast}
-      title={`当前时间 ${timeLabel} · 点击切换齿轮速度`}
+      title={`${accessibleTime} · 点击切换齿轮速度`}
       onClick={() => setIsFast((current) => !current)}
     >
       <span className="mechanical-clock__visual" aria-hidden="true">
-        <span className="mechanical-clock__gear mechanical-clock__gear--outer" />
-        <span className="mechanical-clock__gear mechanical-clock__gear--inner" />
-        <span className="mechanical-clock__dial">
-          <span className="mechanical-clock__spectrum" />
-          <span className="mechanical-clock__face">
-            {HOUR_MARKERS.map((color, index) => (
-              <span
-                className="mechanical-clock__marker"
-                key={color}
-                style={{
-                  "--clock-marker-angle": `${index * 30}deg`,
-                  "--clock-marker-color": color
-                } as ClockStyle}
+        <svg className="mechanical-clock__machine" viewBox="0 0 240 240">
+          <defs>
+            <linearGradient id={gradientId} x1="120" y1="5" x2="120" y2="235" gradientUnits="userSpaceOnUse">
+              <stop offset="0" stopColor="#a77cff" />
+              <stop offset="0.2" stopColor="#6d8cff" />
+              <stop offset="0.4" stopColor="#44c8e8" />
+              <stop offset="0.58" stopColor="#58d49b" />
+              <stop offset="0.76" stopColor="#efc95c" />
+              <stop offset="1" stopColor="#f05d68" />
+            </linearGradient>
+            <mask id={outerMaskId} x="0" y="0" width="240" height="240" maskUnits="userSpaceOnUse">
+              <polygon points={OUTER_GEAR_POINTS} fill="white" />
+              <circle cx="120" cy="120" r="84" fill="black" />
+            </mask>
+            <mask id={innerMaskId} x="0" y="0" width="240" height="240" maskUnits="userSpaceOnUse">
+              <polygon points={INNER_GEAR_POINTS} fill="white" />
+              <circle cx="120" cy="120" r="61" fill="black" />
+              {INNER_SPOKES.map((angle) => (
+                <rect x="116" y="44" width="8" height="80" rx="3" fill="white" transform={`rotate(${angle} 120 120)`} key={angle} />
+              ))}
+              <circle cx="120" cy="120" r="25" fill="white" />
+              <circle cx="120" cy="120" r="9" fill="black" />
+            </mask>
+          </defs>
+
+          <g className="mechanical-clock__gear mechanical-clock__gear--outer">
+            <rect className="mechanical-clock__gear-fill" width="240" height="240" fill={`url(#${gradientId})`} mask={`url(#${outerMaskId})`} />
+            <polygon className="mechanical-clock__gear-edge" points={OUTER_GEAR_POINTS} />
+            <circle className="mechanical-clock__gear-rim" cx="120" cy="120" r="84" />
+          </g>
+
+          <g className="mechanical-clock__gear mechanical-clock__gear--inner">
+            <rect className="mechanical-clock__gear-fill" width="240" height="240" fill={`url(#${gradientId})`} mask={`url(#${innerMaskId})`} />
+            <polygon className="mechanical-clock__gear-edge" points={INNER_GEAR_POINTS} />
+            <circle className="mechanical-clock__gear-rim" cx="120" cy="120" r="61" />
+            {INNER_SPOKES.map((angle) => (
+              <circle className="mechanical-clock__gear-bolt" cx="120" cy="72" r="3.4" transform={`rotate(${angle} 120 120)`} key={angle} />
+            ))}
+          </g>
+
+          <g className="mechanical-clock__scale" stroke={`url(#${gradientId})`}>
+            <circle className="mechanical-clock__scale-track" cx="120" cy="120" r="94" />
+            {SCALE_TICKS.map(({ angle, major, cardinal }, index) => (
+              <line
+                className={`mechanical-clock__tick${major ? " mechanical-clock__tick--major" : ""}${cardinal ? " mechanical-clock__tick--cardinal" : ""}`}
+                x1="120"
+                y1={cardinal ? 18 : major ? 20 : 23}
+                x2="120"
+                y2={cardinal ? 34 : major ? 32 : 29}
+                transform={`rotate(${angle} 120 120)`}
+                key={index}
               />
             ))}
-            <span className="mechanical-clock__cardinal mechanical-clock__cardinal--twelve">12</span>
-            <span className="mechanical-clock__cardinal mechanical-clock__cardinal--six">6</span>
-            <span
-              className="mechanical-clock__hand mechanical-clock__hand--hour"
-              style={{ "--clock-hand-angle": `${hourAngle}deg` } as ClockStyle}
-            />
-            <span
-              className="mechanical-clock__hand mechanical-clock__hand--minute"
-              style={{ "--clock-hand-angle": `${minuteAngle}deg` } as ClockStyle}
-            />
-            <span
-              className="mechanical-clock__hand mechanical-clock__hand--second"
-              style={{ "--clock-hand-angle": `${secondAngle}deg` } as ClockStyle}
-            />
-            <span className="mechanical-clock__pin" />
-          </span>
-        </span>
+          </g>
+
+          <g className="mechanical-clock__dial">
+            <circle className="mechanical-clock__dial-glow" cx="120" cy="120" r="61" stroke={`url(#${gradientId})`} />
+            <circle className="mechanical-clock__face" cx="120" cy="120" r="55" />
+            <circle className="mechanical-clock__face-ring" cx="120" cy="120" r="47" />
+            <path className="mechanical-clock__face-crosshair" d="M120 69V78M120 162V171M69 120H78M162 120H171" />
+          </g>
+
+          <g className="mechanical-clock__hand mechanical-clock__hand--hour" style={{ "--clock-hand-angle": `${hourAngle}deg` } as ClockStyle}>
+            <path d="M120 126L115.5 119L120 82L124.5 119Z" />
+          </g>
+          <g className="mechanical-clock__hand mechanical-clock__hand--minute" style={{ "--clock-hand-angle": `${minuteAngle}deg` } as ClockStyle}>
+            <path d="M120 130L116.5 119L120 64L123.5 119Z" />
+          </g>
+          <g className="mechanical-clock__hand mechanical-clock__hand--second" style={{ "--clock-hand-angle": `${secondAngle}deg` } as ClockStyle}>
+            <path d="M118.8 132L119.2 119L120 57L120.8 119L121.2 132Z" />
+          </g>
+
+          <circle className="mechanical-clock__pin-halo" cx="120" cy="120" r="8" stroke={`url(#${gradientId})`} />
+          <circle className="mechanical-clock__pin" cx="120" cy="120" r="4" />
+        </svg>
         <span className="mechanical-clock__speed-light" />
       </span>
     </button>
