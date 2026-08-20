@@ -66,9 +66,6 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
   const gradientId = `clock-spectrum-${useId().replaceAll(":", "")}`;
   const outerMaskId = `${gradientId}-outer-mask`;
   const innerMaskId = `${gradientId}-inner-mask`;
-  const hourHandGradientId = `${gradientId}-hour-hand`;
-  const minuteHandGradientId = `${gradientId}-minute-hand`;
-  const secondHandGradientId = `${gradientId}-second-hand`;
   const [now, setNow] = useState<Date | null>(null);
   const [isFast, setIsFast] = useState(false);
 
@@ -114,24 +111,6 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
               <stop offset="0.58" stopColor="#22c55e" />
               <stop offset="0.77" stopColor="#f59e0b" />
               <stop offset="1" stopColor="#ef4444" />
-            </linearGradient>
-            <linearGradient id={hourHandGradientId} x1="112" y1="120" x2="128" y2="120" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#151b2b" />
-              <stop offset="0.34" stopColor="#f8fafc" />
-              <stop offset="0.54" stopColor="#687386" />
-              <stop offset="1" stopColor="#111827" />
-            </linearGradient>
-            <linearGradient id={minuteHandGradientId} x1="114" y1="120" x2="126" y2="120" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#172554" />
-              <stop offset="0.34" stopColor="#dbeafe" />
-              <stop offset="0.54" stopColor="#4774d2" />
-              <stop offset="1" stopColor="#1e3a8a" />
-            </linearGradient>
-            <linearGradient id={secondHandGradientId} x1="119" y1="120" x2="121" y2="120" gradientUnits="userSpaceOnUse">
-              <stop offset="0" stopColor="#881337" />
-              <stop offset="0.34" stopColor="#ffe4e6" />
-              <stop offset="0.56" stopColor="#ef5c63" />
-              <stop offset="1" stopColor="#7f1d1d" />
             </linearGradient>
             <mask id={outerMaskId} x="0" y="0" width="240" height="240" maskUnits="userSpaceOnUse">
               <polygon points={OUTER_GEAR_POINTS} fill="white" />
@@ -192,13 +171,13 @@ export function MechanicalClock({ className = "" }: { className?: string }) {
           </g>
 
           <g className="mechanical-clock__hand mechanical-clock__hand--hour" style={{ "--clock-hand-angle": `${hourAngle}deg` } as ClockStyle}>
-            <path d="M120 133L112.5 120L116.5 37L120 26L123.5 37L127.5 120Z" fill={`url(#${hourHandGradientId})`} />
+            <path d="M120 136L109 120L116.5 48L120 26L123.5 48L131 120Z" />
           </g>
           <g className="mechanical-clock__hand mechanical-clock__hand--minute" style={{ "--clock-hand-angle": `${minuteAngle}deg` } as ClockStyle}>
-            <path d="M120 135L114 120L117.5 29L120 18L122.5 29L126 120Z" fill={`url(#${minuteHandGradientId})`} />
+            <path d="M120 137L111.5 120L117.5 38L120 18L122.5 38L128.5 120Z" />
           </g>
           <g className="mechanical-clock__hand mechanical-clock__hand--second" style={{ "--clock-hand-angle": `${secondAngle}deg` } as ClockStyle}>
-            <path d="M119.1 139L119.4 119L120 12L120.6 119L120.9 139Z" fill={`url(#${secondHandGradientId})`} />
+            <path d="M120 140L117.8 120L119.55 25L120 12L120.45 25L122.2 120Z" />
           </g>
 
           <circle className="mechanical-clock__pin-halo" cx="120" cy="120" r="8" stroke={`url(#${gradientId})`} />

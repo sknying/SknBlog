@@ -22,6 +22,10 @@
   --clock-paper: var(--sakura-paper-strong, var(--archive-paper-strong, var(--columns-paper-strong, var(--tags-paper-strong, #fffaf0))));
   --clock-blue: var(--sakura-blue-deep, var(--archive-blue-deep, var(--columns-blue-deep, var(--tags-blue-deep, #4774d2))));
   --clock-pink: var(--sakura-pink, var(--archive-pink, var(--columns-pink, var(--tags-pink, #f28fa8))));
+  --clock-mark: #f8fbff;
+  --clock-shadow-far: rgba(3, 7, 18, 0.46);
+  --clock-shadow-near: rgba(15, 23, 42, 0.38);
+  --clock-hand-shadow: rgba(15, 23, 42, 0.66);
   position: relative;
   display: grid;
   width: min(100%, 280px);
@@ -37,6 +41,12 @@
   isolation: isolate;
   touch-action: manipulation;
   transition: filter 200ms ease, opacity 160ms ease;
+}
+
+:root[data-theme="dark"] .mechanical-clock {
+  --clock-shadow-far: rgba(255, 255, 255, 0.28);
+  --clock-shadow-near: rgba(255, 255, 255, 0.18);
+  --clock-hand-shadow: rgba(255, 255, 255, 0.38);
 }
 
 .mechanical-clock::before {
@@ -74,8 +84,8 @@
   height: 100%;
   overflow: visible;
   filter:
-    drop-shadow(0 11px 9px rgba(3, 7, 18, 0.46))
-    drop-shadow(0 2px 1.5px rgba(15, 23, 42, 0.38));
+    drop-shadow(0 11px 9px var(--clock-shadow-far))
+    drop-shadow(0 2px 1.5px var(--clock-shadow-near));
 }
 
 .mechanical-clock__gear {
@@ -138,14 +148,14 @@
 
 .mechanical-clock__scale-track {
   fill: none;
-  stroke: rgba(248, 251, 255, 0.86);
+  stroke: var(--clock-mark);
   stroke-width: 1.4;
-  opacity: 0.94;
+  opacity: 0.82;
   filter: drop-shadow(0 0 1.2px rgba(15, 23, 42, 0.94));
 }
 
 .mechanical-clock__tick {
-  stroke: #f8fbff;
+  stroke: var(--clock-mark);
   stroke-linecap: square;
   stroke-width: 1.6;
   opacity: 0.96;
@@ -190,10 +200,8 @@
 }
 
 .mechanical-clock__roman-numerals {
-  fill: var(--clock-ink);
-  stroke: color-mix(in srgb, var(--clock-paper) 92%, transparent);
-  stroke-width: 1.8;
-  paint-order: stroke fill;
+  fill: var(--clock-mark);
+  stroke: none;
   font-family: Georgia, "Times New Roman", serif;
   font-size: 9px;
   font-weight: 700;
@@ -208,25 +216,19 @@
 
 .mechanical-clock__hand--hour path,
 .mechanical-clock__hand--minute path {
-  stroke: color-mix(in srgb, var(--clock-paper) 72%, transparent);
-  stroke-width: 0.9;
-  paint-order: stroke fill;
-  filter:
-    drop-shadow(1.5px 2px 1.2px rgba(15, 23, 42, 0.66))
-    drop-shadow(-0.5px -0.8px 0.45px rgba(255, 255, 255, 0.46));
+  fill: #374151;
+  stroke: none;
+  filter: drop-shadow(1.5px 2px 1.2px var(--clock-hand-shadow));
 }
 
 .mechanical-clock__hand--minute path {
-  stroke: color-mix(in srgb, #dbeafe 76%, transparent);
+  fill: #4774d2;
 }
 
 .mechanical-clock__hand--second path {
-  stroke: color-mix(in srgb, #ffe4e6 74%, transparent);
-  stroke-width: 0.4;
-  paint-order: stroke fill;
-  filter:
-    drop-shadow(1px 1.4px 0.7px color-mix(in srgb, #7f1d1d 68%, transparent))
-    drop-shadow(-0.35px -0.5px 0.3px color-mix(in srgb, #ffe4e6 62%, transparent));
+  fill: #eb5967;
+  stroke: none;
+  filter: drop-shadow(1px 1.4px 0.7px var(--clock-hand-shadow));
 }
 
 .mechanical-clock__pin-halo {
@@ -293,6 +295,14 @@
   .mechanical-clock { width: min(58vw, 210px); }
   .mechanical-clock__roman-numerals { font-size: 9.5px; }
   .mechanical-clock__gear-edge { stroke-width: 1.5; }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) .mechanical-clock {
+    --clock-shadow-far: rgba(255, 255, 255, 0.28);
+    --clock-shadow-near: rgba(255, 255, 255, 0.18);
+    --clock-hand-shadow: rgba(255, 255, 255, 0.38);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
