@@ -10,12 +10,12 @@ import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { SakuraFall } from "@/components/sakura-fall";
+import { MechanicalClock } from "@/components/mechanical-clock";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel, getPrimaryTag } from "@/lib/blog-utils";
 import { GITHUB_AVATAR, SITE_COPYRIGHT, SITE_NAME } from "@/lib/site-config";
-import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 // Keep the home page focused; the archive page contains the complete list.
 const RECENT_POST_LIMIT = 2;
@@ -124,8 +124,8 @@ export function BlogHome({ posts }: { posts: Post[] }) {
                   <button type="button" onClick={() => window.dispatchEvent(new Event("sknblog:open-about"))}>关于我</button>
                 </div>
               </div>
-              <figure className="sakura-hero-portrait">
-                <Image src={SPRING_ASSETS.hero} alt="樱花树下眺望海岸的银发女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
+              <figure className="sakura-hero-portrait mechanical-clock-frame">
+                <MechanicalClock />
               </figure>
             </section>
 

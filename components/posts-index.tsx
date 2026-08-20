@@ -7,12 +7,12 @@ import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { SakuraFall } from "@/components/sakura-fall";
+import { MechanicalClock } from "@/components/mechanical-clock";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { useMemo, useState } from "react";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
-import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 const MONTH_LABELS = ["12", "11", "10", "09", "08", "07", "06", "05", "04", "03", "02", "01"];
 
@@ -89,8 +89,8 @@ export function PostsIndex({ posts }: { posts: Post[] }) {
             <h1 id="archive-title">文章归档</h1>
             <p><Icon icon="solar:stars-line-linear" aria-hidden="true" />记录每一刻的思考</p>
           </div>
-          <figure className="archive-banner-portrait">
-            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
+          <figure className="archive-banner-portrait mechanical-clock-frame">
+            <MechanicalClock />
           </figure>
           </section>
 

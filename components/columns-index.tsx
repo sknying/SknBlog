@@ -8,12 +8,12 @@ import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { SakuraFall } from "@/components/sakura-fall";
+import { MechanicalClock } from "@/components/mechanical-clock";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { formatCompactNumber, getColumnGroups, type ColumnDefinition, type ColumnGroup } from "@/lib/column-data";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
-import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 function ColumnCover({ group }: { group: ColumnGroup }) {
   const [failed, setFailed] = useState(false);
@@ -99,8 +99,8 @@ export function ColumnsIndex({ posts, columnDefinitions }: { posts: Post[]; colu
               <span><Icon icon="solar:text-linear" aria-hidden="true" />{formatCompactNumber(totalWords)} 字</span>
             </div>
           </div>
-          <figure className="columns-hero-portrait">
-            <Image src={SPRING_ASSETS.hero} alt="樱花窗边的写作桌" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
+          <figure className="columns-hero-portrait mechanical-clock-frame">
+            <MechanicalClock />
           </figure>
         </section>
 

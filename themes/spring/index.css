@@ -18,5 +18,6 @@
 @import "./styles/components/site-sidebar.css";
 @import "./styles/components/tags-index.css";
 @import "./styles/responsive.css";
+@import "./styles/components/mechanical-clock.css";
 @import "./styles/site-background.css";
 @import "./styles/sakura-fall.css";

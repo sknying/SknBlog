@@ -9,11 +9,11 @@ import { SiteSearch } from "@/components/site-search";
 import { SiteSidebar } from "@/components/site-sidebar";
 import { SiteFooterBrand } from "@/components/site-footer-brand";
 import { SakuraFall } from "@/components/sakura-fall";
+import { MechanicalClock } from "@/components/mechanical-clock";
 import { ThemeToggle } from "@/components/theme-toggle";
 import type { Post } from "@/lib/blog-types";
 import { getPostTimeLabel } from "@/lib/blog-utils";
 import { SITE_COPYRIGHT } from "@/lib/site-config";
-import { SPRING_ASSETS } from "@/themes/spring/theme";
 
 function TagArticle({ post }: { post: Post }) {
   return (
@@ -90,8 +90,8 @@ export function TagsIndex({ posts }: { posts: Post[] }) {
             <p>勾选标签，筛出文章。</p>
             <p>多选时取交集。</p>
           </div>
-          <figure className="tags-hero-portrait">
-            <Image src={SPRING_ASSETS.hero} alt="樱花海岸与写作女孩" fill sizes="(max-width: 420px) 102px, (max-width: 700px) 132px, 220px" priority />
+          <figure className="tags-hero-portrait mechanical-clock-frame">
+            <MechanicalClock />
           </figure>
         </section>
 
